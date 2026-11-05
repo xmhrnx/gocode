@@ -1,0 +1,99 @@
+package gemini
+
+import (
+	"bytes"
+	"encoding/json"
+	"strings"
+
+	"gocode/internal/llm"
+)
+
+// convertContents turns history into Gemini turns, dropping empty turns
+// and merging consecutive turns by the same role.
+func convertContents(history []llm.Message) []wireContent {
+	var out []wireContent
+	for _, msg := range history {
+		role, parts := "user", userParts(msg)
+		if msg.Role == llm.RoleAssistant {
+			role, parts = "model", modelParts(msg)
+		}
+		if len(parts) == 0 {
+			continue
+		}
+		if n := len(out); n > 0 && out[n-1].Role == role {
+			out[n-1].Parts = append(out[n-1].Parts, parts...)
+			continue
+		}
+		out = append(out, wireContent{Role: role, Parts: parts})
+	}
+	return out
+}
+
+// modelParts reproduces the reply's parts in order, each with the thought
+// signature it arrived with, as the API requires.
+func modelParts(msg llm.Message) []wirePart {
+	var parts []wirePart
+	for _, part := range msg.Parts {
+		switch {
+		case part.Kind == llm.PartReasoning && (part.Text != "" || part.Signature != ""):
+			parts = append(parts, wirePart{Text: textPtr(part.Text), Thought: true, ThoughtSignature: part.Signature})
+		case part.Kind == llm.PartText && (part.Text != "" || part.Signature != ""):
+			parts = append(parts, wirePart{Text: textPtr(part.Text), ThoughtSignature: part.Signature})
+		case part.Kind == llm.PartToolCall && part.ToolCall != nil:
+			call := part.ToolCall
+			parts = append(parts, wirePart{
+				FunctionCall:     &functionCall{ID: providerID(call.ID), Name: call.Name, Args: objectOrEmpty(call.Arguments)},
+				ThoughtSignature: call.Signature,
+			})
+		}
+	}
+	return parts
+}
+
+// userParts puts function responses first, answering the previous turn's
+// calls, then the user's text and images.
+func userParts(msg llm.Message) []wirePart {
+	var responses, rest []wirePart
+	for _, part := range msg.Parts {
+		switch {
+		case part.Kind == llm.PartToolResult && part.ToolResult != nil:
+			responses = append(responses, wirePart{FunctionResponse: toFunctionResponse(*part.ToolResult)})
+		case part.Kind == llm.PartText && part.Text != "":
+			rest = append(rest, wirePart{Text: textPtr(part.Text)})
+		case part.Kind == llm.PartImage && part.Image != nil:
+			rest = append(rest, wirePart{InlineData: &inlineData{MimeType: part.Image.MediaType, Data: part.Image.Data}})
+		}
+	}
+	return append(responses, rest...)
+}
+
+func toFunctionResponse(result llm.ToolResult) *functionResponse {
+	key := "content"
+	if result.IsError {
+		key = "error"
+	}
+	return &functionResponse{
+		ID:       providerID(result.CallID),
+		Name:     result.Name,
+		Response: map[string]any{key: result.Content},
+	}
+}
+
+// providerID drops ids this adapter invented for calls that came without
+// one, so the API never sees ids it didn't issue.
+func providerID(id string) string {
+	if strings.HasPrefix(id, generatedIDPrefix) {
+		return ""
+	}
+	return id
+}
+
+// objectOrEmpty returns arguments when they are a JSON object, else {}:
+// args must be an object.
+func objectOrEmpty(arguments json.RawMessage) json.RawMessage {
+	trimmed := bytes.TrimSpace(arguments)
+	if len(trimmed) > 0 && trimmed[0] == '{' && json.Valid(trimmed) {
+		return trimmed
+	}
+	return json.RawMessage("{}")
+}

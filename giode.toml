@@ -1,0 +1,8 @@
+[app]
+name = "GoCode"
+id = "dev.gocode.app"
+version = "0.1.0"
+build = 1
+icon = "assets/icon.png"
+package = "."
+description = "A native, lightweight coding agent and terminal."
