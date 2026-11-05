@@ -9,11 +9,10 @@ func chatEntries(s *core.Services) []entry {
 	c := &s.Settings.Chat
 	sendKeys := []option[settings.SendKey]{
 		{settings.SendEnter, "Enter"},
-		{settings.SendShiftEnter, "Shift + Enter"},
 		{settings.SendCtrlEnter, "Ctrl/⌘ + Enter"},
 	}
 	return []entry{
-		{title: "Send message with", description: "The other Enter combinations insert a new line.",
+		{title: "Send message with", description: "Shift+Enter always inserts a new line. With Ctrl/⌘+Enter, plain Enter inserts one too, so a message can't go out by accident.",
 			keywords: "send key enter shift ctrl newline submit keyboard", control: choice(s, &c.SendKey, sendKeys)},
 		{title: "Show reasoning", description: "Show the model's thinking, collapsed, above its answer.",
 			keywords: "thinking reasoning thoughts", control: switchControl(s, &c.ShowReasoning)},

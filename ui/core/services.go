@@ -31,7 +31,9 @@ type Services struct {
 	MCP *mcp.Manager
 	// SkillsDir is where installed skills live.
 	SkillsDir string
-	Toasts    *toaster.Toaster
+	// TabsPath is where the open tabs are remembered.
+	TabsPath string
+	Toasts   *toaster.Toaster
 
 	saveTimer   *time.Timer
 	listeners   map[int]func()

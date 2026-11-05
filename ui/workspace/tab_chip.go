@@ -31,6 +31,7 @@ func (c *tabChip) content(state giode.PressState) giode.Element {
 		return giode.Box(giode.Styles{})
 	}
 	tab := c.workspace.entries[index].tab
+	c.press.Label(tab.Title())
 	active := c.id == c.workspace.activeID
 	background, color := "", theme.Muted
 	switch {

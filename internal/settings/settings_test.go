@@ -18,7 +18,7 @@ func TestLoadMissingFileReturnsDefaults(t *testing.T) {
 func TestSaveLoadRoundTrip(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "s.json")
 	s := Default()
-	s.Chat.SendKey = SendShiftEnter
+	s.Chat.SendKey = SendCtrlEnter
 	s.Models.MarkUsed("openai/gpt-5")
 	if err := Save(path, s); err != nil {
 		t.Fatal(err)
@@ -27,7 +27,7 @@ func TestSaveLoadRoundTrip(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if got.Chat.SendKey != SendShiftEnter || got.Models.Recent[0] != "openai/gpt-5" {
+	if got.Chat.SendKey != SendCtrlEnter || got.Models.Recent[0] != "openai/gpt-5" {
 		t.Fatalf("round trip lost data: %+v %+v", got.Chat, got.Models)
 	}
 }

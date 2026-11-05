@@ -1,12 +1,17 @@
 package settings
 
 // currentVersion is the settings format written by this build.
-const currentVersion = 2
+const currentVersion = 3
 
 // migrate updates settings written by older builds.
 func (s *Settings) migrate() {
 	if s.Version < 2 {
 		s.migrateLimits()
+	}
+	if s.Version < 3 && s.Chat.SendKey == "shift+enter" {
+		// Shift+Enter as the send key isn't offered any more; Ctrl+Enter
+		// keeps the point of it: plain Enter never sends.
+		s.Chat.SendKey = SendCtrlEnter
 	}
 	s.Version = currentVersion
 }

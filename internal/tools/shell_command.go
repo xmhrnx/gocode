@@ -1,22 +1,9 @@
 package tools
 
 import (
-	"os"
 	"path/filepath"
-	"runtime"
 	"strings"
 )
-
-// defaultShell picks the shell when Env.Shell is empty.
-func defaultShell() string {
-	if runtime.GOOS == "windows" {
-		return "powershell.exe"
-	}
-	if shell := os.Getenv("SHELL"); shell != "" {
-		return shell
-	}
-	return "/bin/bash"
-}
 
 // shellArgs returns the arguments that make shell run command, according
 // to the shell's calling convention.

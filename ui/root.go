@@ -32,7 +32,7 @@ func New(services *core.Services) *Root {
 	r := &Root{services: services}
 	r.workspace = workspace.New(workspace.Factory{
 		Chat:     func(workDir, prompt string) core.Tab { return chat.New(services, workDir, prompt) },
-		Terminal: func() core.Tab { return terminal.New(services) },
+		Terminal: func(workDir string) core.Tab { return terminal.New(services, workDir) },
 		Settings: func(category string) core.Tab { return settingsview.New(services, category) },
 	})
 	services.SetOpenFactory(r.workspace)
@@ -41,7 +41,10 @@ func New(services *core.Services) *Root {
 	r.bar = r.newTitleBar()
 	services.OnSettingsChanged(r.applyAppearance)
 	r.applyAppearance()
-	r.workspace.OpenChat("", "")
+	if !r.restoreTabs() {
+		r.workspace.OpenChat("", "")
+	}
+	r.workspace.OnChange(r.SaveTabs)
 	r.refreshModelLists()
 	return r
 }

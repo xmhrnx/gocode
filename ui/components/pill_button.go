@@ -1,13 +1,9 @@
 package components
 
 import (
-	"image"
-
-	"gioui.org/f32"
 	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 	"github.com/xmhrnx/giode/components/tooltip"
-	"github.com/xmhrnx/giode/elements"
 
 	"gocode/ui/theme"
 )
@@ -16,8 +12,6 @@ import (
 // chevron, for choosers such as the model and mode pickers.
 type PillButton struct {
 	icon, label string
-	origin      image.Point
-	height      int
 	press       *giode.PressableElement
 	tip         *tooltip.Tooltip
 }
@@ -36,19 +30,8 @@ func (b *PillButton) SetLabel(label string) *PillButton { b.label = label; retur
 // SetIcon replaces the icon.
 func (b *PillButton) SetIcon(icon string) *PillButton { b.icon = icon; return b }
 
-// Below returns the window point just under the pill, where a menu it
-// opens should appear.
-func (b *PillButton) Below() f32.Point {
-	return f32.Pt(float32(b.origin.X), float32(b.origin.Y+b.height+4))
-}
-
 // Layout lays the pill out.
-func (b *PillButton) Layout(gtx layout.Context) layout.Dimensions {
-	elements.TrackPosition(&b.origin)
-	dims := b.tip.Layout(gtx)
-	b.height = dims.Size.Y
-	return dims
-}
+func (b *PillButton) Layout(gtx layout.Context) layout.Dimensions { return b.tip.Layout(gtx) }
 
 func (b *PillButton) content(state giode.PressState) giode.Element {
 	color, background := theme.Muted, ""

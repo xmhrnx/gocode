@@ -28,6 +28,10 @@ type Config struct {
 	ContextWindow    int
 	CompactAtPercent int
 	CompactPrompt    string
+
+	// Inbox, when set, returns (and forgets) messages the user sent while
+	// the run was going; they reach the model at its next step.
+	Inbox func() []llm.Message
 }
 
 func (c Config) request(history []llm.Message) llm.Request {
@@ -40,4 +44,16 @@ func (c Config) request(history []llm.Message) llm.Request {
 		req.Tools = c.Tools.Specs(c.ToolEnabled)
 	}
 	return req
+}
+
+// drainInbox returns the parts of the messages waiting in the inbox.
+func (c Config) drainInbox() []llm.Part {
+	if c.Inbox == nil {
+		return nil
+	}
+	var parts []llm.Part
+	for _, msg := range c.Inbox() {
+		parts = append(parts, msg.Parts...)
+	}
+	return parts
 }

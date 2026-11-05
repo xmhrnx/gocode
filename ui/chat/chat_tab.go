@@ -11,6 +11,7 @@ import (
 	"gocode/internal/catalog"
 	"gocode/internal/llm"
 	"gocode/internal/session"
+	"gocode/internal/settings"
 	"gocode/internal/tools"
 	"gocode/ui/core"
 )
@@ -26,7 +27,9 @@ type ChatTab struct {
 
 	unsubscribe func()
 
-	run     *activeRun
+	run *activeRun
+	// queue holds messages sent while the agent works.
+	queue   messageQueue
 	todos   []tools.Todo
 	notices []notice
 	results map[string]*llm.ToolResult
@@ -63,44 +66,18 @@ func newTab(services *core.Services, sess *session.Session, prompt string) *Chat
 		registry: tools.Default(),
 	}
 	sess.Model = c.model.String()
-	c.unsubscribe = services.OnSettingsChanged(func() { c.perms.SetPolicies(services.Settings.Agent); c.changed() })
+	c.unsubscribe = services.OnSettingsChanged(func() {
+		c.perms.SetPolicies(services.Settings.Agent)
+		c.composer.applySettings()
+		c.changed()
+	})
 	c.header = newHeader(c)
 	c.transcript = newTranscript(c)
 	c.composer = newComposer(c)
 	c.composer.editor.SetText(prompt)
+	c.composer.applySettings()
 	return c
 }
-
-// Title implements core.Tab.
-func (c *ChatTab) Title() string {
-	if c.session.Title != "" {
-		return c.session.Title
-	}
-	return "New chat"
-}
-
-// Empty reports whether nothing was sent yet, so the tab can be reused.
-func (c *ChatTab) Empty() bool {
-	return len(c.session.Messages) == 0 && c.run == nil && c.composer.isEmpty()
-}
-
-// Icon implements core.Tab.
-func (c *ChatTab) Icon() string { return "message-square" }
-
-// Busy implements core.Tab.
-func (c *ChatTab) Busy() bool { return c.run != nil }
-
-// Close implements core.Tab.
-func (c *ChatTab) Close() {
-	c.stop()
-	c.unsubscribe()
-}
-
-// Focus implements core.Focusable.
-func (c *ChatTab) Focus() { c.composer.editor.Focus() }
-
-// DropFiles implements core.FileDropTarget.
-func (c *ChatTab) DropFiles(paths []string) { c.composer.attachPaths(paths) }
 
 // View implements core.Tab.
 func (c *ChatTab) View() giode.Element {
@@ -108,6 +85,9 @@ func (c *ChatTab) View() giode.Element {
 		giode.Shortcut("Mod+K", c.composer.picker.Open),
 		giode.Shortcut("Esc", c.stop),
 	)
+	if c.services.Settings.Chat.SendKey == settings.SendCtrlEnter {
+		giode.Shortcuts(giode.Shortcut("Mod+Enter", c.send))
+	}
 	return giode.Stack(giode.Styles{Width: -1, Height: -1, Background: "theme.background"},
 		c.header,
 		giode.Box(giode.Styles{Width: -1, FlexGrow: 1}, c.transcript.element()),

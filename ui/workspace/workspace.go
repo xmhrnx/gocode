@@ -16,7 +16,7 @@ type entry struct {
 // Factory creates the kinds of tabs the workspace can open.
 type Factory struct {
 	Chat     func(workDir, prompt string) core.Tab
-	Terminal func() core.Tab
+	Terminal func(workDir string) core.Tab
 	Settings func(category string) core.Tab
 }
 
@@ -28,6 +28,8 @@ type Workspace struct {
 	nextID   int
 	// settingsID is the settings tab's ID, or 0 when it is closed.
 	settingsID int
+	// onChange runs after tabs open, close or switch.
+	onChange func()
 }
 
 // New returns an empty workspace.
@@ -38,7 +40,7 @@ func New(factory Factory) *Workspace { return &Workspace{factory: factory} }
 func (w *Workspace) OpenChat(workDir, prompt string) { w.Add(w.factory.Chat(workDir, prompt)) }
 
 // OpenTerminal opens a new terminal tab.
-func (w *Workspace) OpenTerminal() { w.Add(w.factory.Terminal()) }
+func (w *Workspace) OpenTerminal() { w.Add(w.factory.Terminal("")) }
 
 // OpenSettings shows the settings tab, opening it on first use.
 func (w *Workspace) OpenSettings(category string) {
@@ -104,8 +106,14 @@ func (w *Workspace) Active() core.Tab {
 	return nil
 }
 
+// OnChange sets a function to run after tabs open, close or switch.
+func (w *Workspace) OnChange(fn func()) { w.onChange = fn }
+
 func (w *Workspace) activate(id int) {
 	w.activeID = id
+	if w.onChange != nil {
+		w.onChange()
+	}
 	if focusable, ok := w.Active().(core.Focusable); ok {
 		focusable.Focus()
 	}
