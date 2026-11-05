@@ -1,6 +1,10 @@
 package core
 
-import "github.com/xmhrnx/giode"
+import (
+	"github.com/xmhrnx/giode"
+
+	"gocode/internal/tabstate"
+)
 
 // Tab is one page in the window's tab strip.
 type Tab interface {
@@ -14,6 +18,11 @@ type Tab interface {
 	View() giode.Element
 	// Close stops the tab's work; the tab is not shown again.
 	Close()
+}
+
+// Restorable is implemented by tabs that can be reopened on the next start.
+type Restorable interface {
+	Snapshot() tabstate.Tab
 }
 
 // FileDropTarget is implemented by tabs that accept dropped files.

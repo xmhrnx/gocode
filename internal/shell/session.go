@@ -35,7 +35,7 @@ type Result struct {
 // on Unix, PowerShell on Windows.
 func NewSession(shell, workDir string) *Session {
 	if shell == "" {
-		shell = defaultShell()
+		shell = Default()
 	}
 	return &Session{shell: shell, workDir: workDir}
 }

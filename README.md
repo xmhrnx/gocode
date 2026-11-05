@@ -12,6 +12,14 @@ webview or JavaScript runtime inside. The UI is drawn straight to the GPU.
   that repeats the same tool call 3 times in a row pauses for your approval.
   Failed requests are retried with backoff. Esc stops a run, and the agent's
   plan shows above the composer.
+- **Messages while it works**: send messages while the agent is running.
+  They're queued and reach the model at its next step, with no need to stop
+  it first.
+- **Tabs reopen** where you left off: chats, terminals and settings
+  (Settings → General).
+- **Shell**: commands run in `$SHELL`. On Windows they run in Git Bash when
+  it's installed, then PowerShell 7, then Windows PowerShell. The model is
+  told which shell it has.
 - **Context compaction**: when the conversation nears the model's context
   window, or the provider rejects it as too long, GoCode summarizes it and
   carries on. The transcript stays visible, the header shows how full the
@@ -47,7 +55,7 @@ webview or JavaScript runtime inside. The UI is drawn straight to the GPU.
 - **Messages**: copy, retry, and edit-and-resend. Replies render as Markdown
   with code blocks you can copy. Reasoning is shown collapsed.
 - **Settings** are grouped into categories and searchable. They include the send
-  key (Enter, Shift+Enter or Ctrl+Enter), 9 themes plus System, text sizes,
+  key (Enter, or Ctrl+Enter so plain Enter never sends), 9 themes plus System, text sizes,
   editable system prompts, per-tool switches and network retries.
 - **History**: chats are saved as JSON and can be reopened from the history
   dialog (Ctrl/⌘+H).

@@ -4,10 +4,11 @@ package terminal
 
 import (
 	"github.com/xmhrnx/giode"
+	"github.com/xmhrnx/giode/components/input"
 	"github.com/xmhrnx/giode/components/lazylist"
 
-	"gocode/internal/settings"
 	"gocode/internal/shell"
+	"gocode/internal/tabstate"
 	"gocode/ui/components"
 	"gocode/ui/core"
 	"gocode/ui/theme"
@@ -19,19 +20,23 @@ type Tab struct {
 	session  *shell.Session
 	blocks   []*block
 	nextID   int
-	input    *components.PromptEditor
+	input    *input.Input
 	history  commandHistory
 	list     *lazylist.List
 	views    *giode.KeyedCache[int, *blockView]
 }
 
-// New returns a terminal starting in the default folder.
-func New(services *core.Services) *Tab {
+// New returns a terminal starting in workDir, or in the default folder
+// when it is empty.
+func New(services *core.Services, workDir string) *Tab {
 	t := &Tab{services: services, views: giode.NewKeyedCache[int, *blockView]()}
 	cfg := services.Settings
-	t.session = shell.NewSession(cfg.Terminal.Shell, startDir(cfg.General.DefaultWorkDir))
-	t.input = components.NewPromptEditor("Type a command…", func() settings.SendKey { return settings.SendEnter }, t.submit).
-		OnArrow(t.recall).Monospace()
+	if workDir == "" {
+		workDir = startDir(cfg.General.DefaultWorkDir)
+	}
+	t.session = shell.NewSession(cfg.Terminal.Shell, workDir)
+	t.input = components.NewMessageField("Type a command…", true).
+		SubmitOn(giode.SubmitEnterUnlessShift).Submit(func(string) { t.submit() })
 	t.list = giode.LazyList(
 		func() int { return len(t.blocks) },
 		func(i int) any { return t.blocks[i].id },
@@ -45,6 +50,11 @@ func New(services *core.Services) *Tab {
 
 // Title implements core.Tab.
 func (t *Tab) Title() string { return "Terminal · " + baseName(t.session.WorkDir()) }
+
+// Snapshot implements core.Restorable.
+func (t *Tab) Snapshot() tabstate.Tab {
+	return tabstate.Tab{Kind: tabstate.KindTerminal, WorkDir: t.session.WorkDir()}
+}
 
 // Icon implements core.Tab.
 func (t *Tab) Icon() string { return "terminal" }
@@ -60,7 +70,8 @@ func (t *Tab) Focus() { t.input.Focus() }
 
 // View implements core.Tab.
 func (t *Tab) View() giode.Element {
-	giode.Shortcuts(giode.Shortcut("Esc", t.stop), giode.Shortcut("Mod+L", t.clear))
+	giode.Shortcuts(giode.Shortcut("Esc", t.stop), giode.Shortcut("Mod+L", t.clear),
+		giode.Shortcut("Up", func() { t.recall(true) }), giode.Shortcut("Down", func() { t.recall(false) }))
 	content := giode.Element(welcome())
 	if len(t.blocks) > 0 {
 		content = t.list

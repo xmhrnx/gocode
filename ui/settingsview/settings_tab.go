@@ -7,6 +7,7 @@ import (
 	"github.com/xmhrnx/giode/components/input"
 	"github.com/xmhrnx/giode/components/scroll"
 
+	"gocode/internal/tabstate"
 	"gocode/ui/core"
 	"gocode/ui/theme"
 )
@@ -68,6 +69,9 @@ func (t *Tab) ShowCategory(name string) {
 
 // Title implements core.Tab.
 func (t *Tab) Title() string { return "Settings" }
+
+// Snapshot implements core.Restorable.
+func (t *Tab) Snapshot() tabstate.Tab { return tabstate.Tab{Kind: tabstate.KindSettings} }
 
 // Icon implements core.Tab.
 func (t *Tab) Icon() string { return "settings" }

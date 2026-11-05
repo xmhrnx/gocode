@@ -50,9 +50,15 @@ func (r *runner) loop(ctx context.Context) error {
 			return err
 		}
 		if len(calls) == 0 {
-			return nil
+			if !r.deliverInbox() {
+				return nil
+			}
+			continue
 		}
 		results, err := runToolCalls(ctx, r.cfg, calls, &r.guard, r.emit)
+		// Messages sent meanwhile ride along with the results, after them,
+		// as providers require tool results first.
+		results.Parts = append(results.Parts, r.cfg.drainInbox()...)
 		r.append(results)
 		if err != nil {
 			return err
@@ -60,6 +66,17 @@ func (r *runner) loop(ctx context.Context) error {
 	}
 	r.emit(Event{Kind: EventNotice, Text: fmt.Sprintf("Stopped after %d steps (the limit set in Settings → Agent). Send a message to continue.", r.cfg.MaxSteps)})
 	return nil
+}
+
+// deliverInbox adds messages the user sent while the model was replying,
+// reporting whether there were any, so the run goes on to answer them.
+func (r *runner) deliverInbox() bool {
+	parts := r.cfg.drainInbox()
+	if len(parts) == 0 {
+		return false
+	}
+	r.append(llm.Message{Role: llm.RoleUser, Parts: parts})
+	return true
 }
 
 // callModel streams one reply. A request rejected as too long for the

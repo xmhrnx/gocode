@@ -2,12 +2,13 @@ package chat
 
 import (
 	"slices"
+	"strings"
 
 	"github.com/xmhrnx/giode"
+	"github.com/xmhrnx/giode/components/input"
 
 	"gocode/internal/attach"
 	"gocode/internal/llm"
-	"gocode/internal/settings"
 	"gocode/ui/components"
 	"gocode/ui/modelpicker"
 	"gocode/ui/theme"
@@ -17,7 +18,7 @@ import (
 // editor, and the toolbar with the mode, model and send controls.
 type composer struct {
 	tab         *ChatTab
-	editor      *components.PromptEditor
+	editor      *input.Input
 	attachments []pendingAttachment
 	nextID      int
 	chips       *giode.KeyedCache[int, *attachmentChip]
@@ -36,10 +37,8 @@ type pendingAttachment struct {
 
 func newComposer(tab *ChatTab) *composer {
 	c := &composer{tab: tab, chips: giode.NewKeyedCache[int, *attachmentChip]()}
-	cfg := tab.services.Settings
-	c.editor = components.NewPromptEditor("Ask anything, or describe a task…", func() settings.SendKey {
-		return cfg.Chat.SendKey
-	}, tab.send)
+	c.editor = components.NewMessageField("Ask anything, or describe a task…", false).
+		Submit(func(string) { tab.send() })
 	c.attachFile = components.NewIconButton("paperclip", "Attach files or images", c.pickFiles)
 	c.send = newSendButton(tab)
 	c.modes = newModeMenu(tab)
@@ -66,9 +65,28 @@ func (c *composer) takeMessage() (llm.Message, bool) {
 	return msg, true
 }
 
+// restoreQueued puts messages that were never delivered back into the
+// editor, after anything typed since.
+func (c *composer) restoreQueued(messages []llm.Message) {
+	texts := []string{}
+	if current := c.editor.Text(); !isBlank(current) {
+		texts = append(texts, current)
+	}
+	for _, msg := range messages {
+		texts = append(texts, msg.Text())
+	}
+	c.editor.SetText(strings.Join(texts, "\n\n"))
+}
+
 // restore puts an unsent message's text back.
 func (c *composer) restore(msg llm.Message) {
 	c.editor.SetText(msg.Text())
+}
+
+// applySettings follows the send key and text size settings.
+func (c *composer) applySettings() {
+	c.editor.SubmitOn(components.SubmitMode(c.tab.services.Settings.Chat.SendKey))
+	c.editor.Styles(components.MessageFieldStyle(false))
 }
 
 func (c *composer) view() giode.Element {
@@ -76,6 +94,7 @@ func (c *composer) view() giode.Element {
 	return giode.Row(giode.Styles{Width: -1, Justify: giode.JustifyCenter, Padding: giode.Inset{Left: 20, Right: 20, Bottom: 16}},
 		giode.Stack(giode.Styles{Width: -1, MaxWidth: chatWidth(c.tab), Gap: 8},
 			todoPanel(c.tab),
+			queuedPanel(c.tab),
 			c.card(),
 			c.picker,
 		),

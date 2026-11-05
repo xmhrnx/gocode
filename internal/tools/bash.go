@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"gocode/internal/llm"
+	"gocode/internal/shell"
 )
 
 // Bash runs a shell command.
@@ -75,12 +76,12 @@ func (Bash) Run(ctx context.Context, env Env, raw json.RawMessage) Result {
 	timeout := commandTimeout(env, args.TimeoutSeconds)
 	runCtx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
-	shell := env.Shell
-	if shell == "" {
-		shell = defaultShell()
+	program := env.Shell
+	if program == "" {
+		program = shell.Default()
 	}
 	output := newHeadTailBuffer(outputLimit(env))
-	cmd := exec.CommandContext(runCtx, shell, shellArgs(shell, args.Command)...)
+	cmd := exec.CommandContext(runCtx, program, shellArgs(program, args.Command)...)
 	cmd.Dir = env.WorkDir
 	cmd.Stdout, cmd.Stderr = output, output
 	cmd.WaitDelay = commandWaitDelay

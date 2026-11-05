@@ -20,7 +20,9 @@ func wrapCommand(shell, commandLine, pwdFile string) []string {
 // even when the command line calls exit, and the exit status is kept.
 // ">|" overrides noclobber, since the temp file already exists.
 func posixScript(commandLine, pwdFile string) string {
-	trap := `printf '%s' "$PWD" >| ` + posixQuote(pwdFile)
+	// Git Bash on Windows reports /c/Users/...; "pwd -W" gives the C:/Users/...
+	// form Windows programs understand, and fails harmlessly elsewhere.
+	trap := `printf '%s' "$(pwd -W 2>/dev/null || pwd)" >| ` + posixQuote(pwdFile)
 	return "trap " + posixQuote(trap) + " EXIT\n" + commandLine
 }
 

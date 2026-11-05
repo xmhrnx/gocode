@@ -63,7 +63,6 @@ type Network struct {
 }
 
 const (
-	SendEnter      SendKey = "enter"
-	SendShiftEnter SendKey = "shift+enter"
-	SendCtrlEnter  SendKey = "ctrl+enter"
+	SendEnter     SendKey = "enter"
+	SendCtrlEnter SendKey = "ctrl+enter"
 )

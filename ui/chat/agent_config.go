@@ -1,12 +1,11 @@
 package chat
 
 import (
-	"os"
-	"runtime"
 	"slices"
 
 	"gocode/internal/agent"
 	"gocode/internal/prompts"
+	"gocode/internal/shell"
 	"gocode/internal/skills"
 	"gocode/internal/tools"
 )
@@ -28,6 +27,7 @@ func (c *ChatTab) agentConfig() agent.Config {
 		MaxSteps: cfg.MaxSteps, MaxTokens: cfg.MaxOutputTokens,
 		ReasoningEffort: cfg.ReasoningEffort, MaxRetries: c.services.Settings.Network.MaxRetries,
 		ContextWindow: c.contextWindow(),
+		Inbox:         c.queue.drain,
 		CompactPrompt: prompts.Or(c.services.Settings.Prompts.Compact, prompts.DefaultCompact()),
 		Env: tools.Env{
 			WorkDir: c.session.WorkDir, Shell: c.shell(),
@@ -81,14 +81,8 @@ func (c *ChatTab) systemPrompt(in promptInputs) string {
 }
 
 func (c *ChatTab) shell() string {
-	if shell := c.services.Settings.Terminal.Shell; shell != "" {
-		return shell
+	if configured := c.services.Settings.Terminal.Shell; configured != "" {
+		return configured
 	}
-	if shell := os.Getenv("SHELL"); shell != "" {
-		return shell
-	}
-	if runtime.GOOS == "windows" {
-		return "powershell.exe"
-	}
-	return "/bin/sh"
+	return shell.Default()
 }

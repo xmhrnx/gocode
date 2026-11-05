@@ -56,7 +56,10 @@ func run() error {
 	if settingsErr != nil {
 		services.Error(settingsErr.Error() + " Using defaults.")
 	}
-	return app.Run(root.View)
+	if err := app.Run(root.View); err != nil {
+		return err
+	}
+	return root.SaveTabsBeforeExit()
 }
 
 // newServices loads the settings and opens the stores. A broken settings
@@ -75,6 +78,7 @@ func newServices(dir string) (*core.Services, error) {
 		HTTP:      platform.NewHTTPClient(timeout),
 		MCP:       mcp.NewManager(),
 		SkillsDir: filepath.Join(dir, "skills"),
+		TabsPath:  filepath.Join(dir, "tabs.json"),
 	}, err
 }
 
