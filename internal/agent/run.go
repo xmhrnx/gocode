@@ -26,6 +26,9 @@ type runner struct {
 // returned with ctx's error, and every tool call left has a result, so
 // the conversation stays valid for the next request.
 func Run(ctx context.Context, cfg Config, history []llm.Message, emit func(Event)) ([]llm.Message, error) {
+	if cfg.Subagents && cfg.Tools != nil {
+		cfg.Tools = cfg.Tools.With(taskTool{parent: cfg})
+	}
 	r := &runner{cfg: cfg, history: history, emit: emit}
 	err := r.loop(ctx)
 	return r.added, err

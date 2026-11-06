@@ -22,6 +22,9 @@ type Event struct {
 	Result  *tools.Result
 	Message *llm.Message
 	Usage   *llm.Usage
+	// Parent is the ID of the task call whose sub-agent produced the
+	// event; empty for the main agent's own events.
+	Parent string
 }
 
 // Decision is the user's answer to a permission request.

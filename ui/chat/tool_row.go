@@ -3,6 +3,7 @@ package chat
 import (
 	"github.com/xmhrnx/giode"
 
+	"gocode/internal/agent"
 	"gocode/internal/llm"
 	"gocode/ui/theme"
 )
@@ -47,6 +48,9 @@ func (r *toolRow) call() llm.ToolCall {
 func (r *toolRow) Layout(gtx giode.Context) giode.Dimensions {
 	children := []giode.Element{r.header}
 	result := r.tab.toolResult(r.call().ID)
+	if progress := r.tab.taskProgress(r.call().ID); progress != nil && result == nil {
+		children = append(children, giode.Divider(giode.Styles{Color: theme.SoftBorder}), subagentView(progress))
+	}
 	if r.expanded && result != nil {
 		children = append(children, giode.Divider(giode.Styles{Color: theme.SoftBorder}), r.body(result))
 	}
@@ -92,8 +96,12 @@ func (r *toolRow) statusIcon(callID string, result *llm.ToolResult) giode.Elemen
 
 func (r *toolRow) body(result *llm.ToolResult) giode.Element {
 	content := toolOutput(result.Content, result.IsError)
-	if display := r.tab.session.ToolDisplays[r.call().ID]; display != "" {
-		content = diffView(display)
+	switch {
+	case r.tab.session.ToolDisplays[r.call().ID] != "":
+		content = diffView(r.tab.session.ToolDisplays[r.call().ID])
+	case r.call().Name == agent.TaskToolName && !result.IsError:
+		// A sub-agent's report is prose, so it reads better as Markdown.
+		content = giode.Box(giode.Styles{Width: -1, Padding: giode.SymmetricInset(14, 10)}, markdown(r.tab, result.Content))
 	}
 	return giode.Stack(giode.Styles{Width: -1, Background: theme.CodeBack},
 		content,

@@ -11,6 +11,9 @@ func (c *ChatTab) toolVersion(callID string) int {
 	case c.toolResult(callID) != nil:
 		return 1
 	case c.run != nil && c.run.running[callID]:
+		if progress, ok := c.run.subagents[callID]; ok {
+			return 4 + progress.revision // a task's card shows its sub-agent's progress
+		}
 		return 2
 	}
 	return 3

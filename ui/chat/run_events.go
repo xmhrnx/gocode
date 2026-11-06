@@ -10,6 +10,10 @@ func (c *ChatTab) handleEvent(ev agent.Event) {
 	if run == nil {
 		return
 	}
+	if ev.Parent != "" {
+		c.handleSubagentEvent(ev)
+		return
+	}
 	switch ev.Kind {
 	case agent.EventText:
 		run.draft.AppendText(llm.PartText, ev.Text)

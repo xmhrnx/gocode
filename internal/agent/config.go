@@ -29,6 +29,11 @@ type Config struct {
 	CompactAtPercent int
 	CompactPrompt    string
 
+	// Subagents adds the task tool, which runs a sub-agent; SubagentPrompt
+	// is added to the sub-agent's system prompt.
+	Subagents      bool
+	SubagentPrompt string
+
 	// Inbox, when set, returns (and forgets) messages the user sent while
 	// the run was going; they reach the model at its next step.
 	Inbox func() []llm.Message

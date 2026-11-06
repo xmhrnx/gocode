@@ -38,7 +38,10 @@ func runToolCall(ctx context.Context, cfg Config, call llm.ToolCall, repeats int
 	summary := tool.Summary(call.Arguments)
 	emit(Event{Kind: EventToolStarted, Call: &call, Summary: summary})
 	result, approved := authorize(ctx, cfg, tool, call, summary, repeats)
-	if approved {
+	switch runner, isRunner := tool.(callRunner); {
+	case approved && isRunner:
+		result = runner.runCall(ctx, call, emit)
+	case approved:
 		result = tool.Run(ctx, cfg.Env, call.Arguments)
 	}
 	emit(Event{Kind: EventToolFinished, Call: &call, Summary: summary, Result: &result})

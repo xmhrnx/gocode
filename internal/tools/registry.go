@@ -1,6 +1,7 @@
 package tools
 
 import (
+	"slices"
 	"sort"
 
 	"gocode/internal/llm"
@@ -37,4 +38,24 @@ func (r *Registry) Specs(include func(Tool) bool) []llm.ToolSpec {
 	}
 	sort.Slice(specs, func(i, j int) bool { return specs[i].Name < specs[j].Name })
 	return specs
+}
+
+// With returns a registry holding these tools and extra.
+func (r *Registry) With(extra ...Tool) *Registry {
+	all := make([]Tool, 0, len(r.byName)+len(extra))
+	for _, tool := range r.byName {
+		all = append(all, tool)
+	}
+	return NewRegistry(append(all, extra...)...)
+}
+
+// Without returns a registry holding these tools except the named ones.
+func (r *Registry) Without(names ...string) *Registry {
+	kept := make([]Tool, 0, len(r.byName))
+	for name, tool := range r.byName {
+		if !slices.Contains(names, name) {
+			kept = append(kept, tool)
+		}
+	}
+	return NewRegistry(kept...)
 }

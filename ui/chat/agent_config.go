@@ -26,9 +26,10 @@ func (c *ChatTab) agentConfig() agent.Config {
 		Model: c.model.Model, Permissions: c.perms, Ask: c.ask,
 		MaxSteps: cfg.MaxSteps, MaxTokens: cfg.MaxOutputTokens,
 		ReasoningEffort: c.effort, MaxRetries: c.services.Settings.Network.MaxRetries,
-		ContextWindow: c.contextWindow(),
-		Inbox:         c.queue.drain,
-		CompactPrompt: prompts.Or(c.services.Settings.Prompts.Compact, prompts.DefaultCompact()),
+		ContextWindow:  c.contextWindow(),
+		Inbox:          c.queue.drain,
+		SubagentPrompt: prompts.DefaultSubagent(),
+		CompactPrompt:  prompts.Or(c.services.Settings.Prompts.Compact, prompts.DefaultCompact()),
 		Env: tools.Env{
 			WorkDir: c.session.WorkDir, Shell: c.shell(),
 			CommandTimeoutSeconds: cfg.CommandTimeoutSeconds,
@@ -50,6 +51,7 @@ func (c *ChatTab) agentConfig() agent.Config {
 		c.registry = c.toolRegistry()
 		run.Tools = c.registry
 		run.ToolEnabled = func(t tools.Tool) bool { return !slices.Contains(disabled, t.Spec().Name) }
+		run.Subagents = !slices.Contains(disabled, agent.TaskToolName)
 	}
 	return run
 }

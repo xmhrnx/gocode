@@ -22,6 +22,11 @@ webview or JavaScript runtime inside. The UI is drawn straight to the GPU.
 - **Shell**: commands run in `$SHELL`. On Windows they run in Git Bash when
   it's installed, then PowerShell 7, then Windows PowerShell. The model is
   told which shell it has.
+- **Sub-agents**: the `task` tool hands a self-contained job (a broad search,
+  a review, an investigation) to a sub-agent with a fresh context and the same
+  tools and permissions. Only its report reaches the main conversation, which
+  keeps that conversation's context small. Its steps show live in the task's
+  card. It can be switched off in Settings → Permissions.
 - **Context compaction**: when the conversation nears the model's context
   window, or the provider rejects it as too long, GoCode summarizes it and
   carries on. The transcript stays visible, the header shows how full the

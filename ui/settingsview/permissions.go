@@ -3,6 +3,7 @@ package settingsview
 import (
 	"github.com/xmhrnx/giode"
 
+	"gocode/internal/agent"
 	"gocode/internal/settings"
 	"gocode/internal/tools"
 	"gocode/ui/core"
@@ -26,7 +27,7 @@ func permissionEntries(s *core.Services) []entry {
 		{title: "Fetching web pages", description: "Downloading pages and documentation from the internet.",
 			keywords: "web fetch network internet permission", control: choice(s, &a.NetworkPolicy, policies)},
 	}
-	for _, spec := range tools.Default().Specs(nil) {
+	for _, spec := range append(tools.Default().Specs(nil), agent.TaskSpec()) {
 		entries = append(entries, entry{
 			title: "Tool: " + spec.Name, description: firstSentence(spec.Description),
 			keywords: "tool enable disable " + spec.Name, control: toolSwitch(s, spec.Name),

@@ -23,6 +23,8 @@ type activeRun struct {
 	callUsage llm.Usage
 	status    string
 	ask       *pendingPermission
+	// subagents holds the progress of running tasks, by task call ID.
+	subagents map[string]*subagentProgress
 }
 
 // send adds the composer's content as a user message and starts a run.
