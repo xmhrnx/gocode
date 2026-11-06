@@ -109,7 +109,7 @@ func TestRunSetsTermDumb(t *testing.T) {
 func TestPosixWrapperQuotesPwdFile(t *testing.T) {
 	dir := t.TempDir()
 	pwdFile := filepath.Join(dir, "it's here")
-	cmd := exec.Command("/bin/sh", wrapCommand("/bin/sh", "cd /", pwdFile)...)
+	cmd := exec.Command("/bin/sh", "-c", wrapScript("/bin/sh", "cd /", pwdFile))
 	if out, err := cmd.CombinedOutput(); err != nil {
 		t.Fatalf("%v: %s", err, out)
 	}

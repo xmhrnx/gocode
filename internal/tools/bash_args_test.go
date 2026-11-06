@@ -2,27 +2,9 @@ package tools
 
 import (
 	"encoding/json"
-	"reflect"
 	"testing"
 	"time"
 )
-
-func TestShellArgs(t *testing.T) {
-	tests := []struct {
-		shell string
-		want  []string
-	}{
-		{"/bin/bash", []string{"-c", "x"}},
-		{"powershell.exe", []string{"-NoProfile", "-NonInteractive", "-Command", "x"}},
-		{"pwsh", []string{"-NoProfile", "-NonInteractive", "-Command", "x"}},
-		{"cmd.exe", []string{"/C", "x"}},
-	}
-	for _, tt := range tests {
-		if got := shellArgs(tt.shell, "x"); !reflect.DeepEqual(got, tt.want) {
-			t.Errorf("shellArgs(%q) = %v, want %v", tt.shell, got, tt.want)
-		}
-	}
-}
 
 func TestCommandTimeout(t *testing.T) {
 	tests := []struct {

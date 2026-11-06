@@ -1,7 +1,10 @@
 package workspace
 
 import (
+	"image"
+
 	"github.com/xmhrnx/giode"
+	"github.com/xmhrnx/giode/elements"
 
 	"gocode/ui/components"
 	"gocode/ui/theme"
@@ -13,16 +16,31 @@ type tabChip struct {
 	id        int
 	press     *giode.PressableElement
 	closer    *components.IconButton
+	// origin and width place the chip in the window, in pixels, for
+	// finding which tab a drag is over.
+	origin image.Point
+	width  int
 }
 
-func newTabChip(w *Workspace, id int) *tabChip {
+func newTabChip(s *TabStrip, id int) *tabChip {
+	w := s.workspace
 	c := &tabChip{workspace: w, id: id}
 	c.closer = components.NewIconButton("x", "Close tab", func() { w.Close(id) }).SetSize(13)
-	c.press = giode.Pressable(c.content).Label("Tab").OnClick(func(giode.ClickEvent) { w.activate(id) })
+	c.press = giode.Pressable(c.content).Label("Tab").
+		OnClick(func(giode.ClickEvent) { w.activate(id) }).
+		OnSecondaryClick(func(e giode.ClickEvent) { s.menu.openFor(id, e) }).
+		OnLongPress(func(e giode.ClickEvent) { s.menu.openFor(id, e) }).
+		OnDragStart(func(giode.DragEvent) { w.activate(id) }).
+		OnDragMove(func(e giode.DragEvent) { s.dragOver(id, e.WindowPosition.X) })
 	return c
 }
 
-func (c *tabChip) Layout(gtx giode.Context) giode.Dimensions { return c.press.Layout(gtx) }
+func (c *tabChip) Layout(gtx giode.Context) giode.Dimensions {
+	elements.TrackPosition(&c.origin)
+	dims := c.press.Layout(gtx)
+	c.width = dims.Size.X
+	return dims
+}
 
 func (c *tabChip) content(state giode.PressState) giode.Element {
 	index := c.workspace.indexOf(c.id)
@@ -34,6 +52,8 @@ func (c *tabChip) content(state giode.PressState) giode.Element {
 	active := c.id == c.workspace.activeID
 	background, color := "", theme.Muted
 	switch {
+	case state.Dragging:
+		background, color = theme.Raised, theme.Text
 	case active:
 		background, color = theme.Canvas, theme.Text
 	case state.Hovered:

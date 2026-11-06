@@ -51,16 +51,35 @@ func (w *Workspace) indexOf(id int) int {
 	return -1
 }
 
-// MoveActive moves the shown tab by delta places (-1 left, 1 right),
-// stopping at the ends.
-func (w *Workspace) MoveActive(delta int) {
-	from := w.indexOf(w.activeID)
-	to := from + delta
-	if from < 0 || to < 0 || to >= len(w.entries) {
+// MoveActive moves the shown tab by delta places (-1 left, 1 right).
+func (w *Workspace) MoveActive(delta int) { w.Move(w.activeID, delta) }
+
+// Move moves a tab by delta places, stopping at the ends.
+func (w *Workspace) Move(id, delta int) {
+	if from := w.indexOf(id); from >= 0 {
+		w.MoveTo(id, from+delta)
+	}
+}
+
+// MoveTo puts a tab at position index, shifting the tabs between.
+func (w *Workspace) MoveTo(id, index int) {
+	from := w.indexOf(id)
+	if from < 0 || index < 0 || index >= len(w.entries) || index == from {
 		return
 	}
-	w.entries[from], w.entries[to] = w.entries[to], w.entries[from]
+	moved := w.entries[from]
+	w.entries = append(w.entries[:from], w.entries[from+1:]...)
+	w.entries = append(w.entries[:index], append([]entry{moved}, w.entries[index:]...)...)
 	if w.onChange != nil {
 		w.onChange()
+	}
+}
+
+// CloseOthers closes every tab but one.
+func (w *Workspace) CloseOthers(id int) {
+	for _, e := range w.entries {
+		if e.id != id {
+			w.Close(e.id)
+		}
 	}
 }

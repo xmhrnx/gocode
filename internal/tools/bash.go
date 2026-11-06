@@ -37,7 +37,8 @@ func (Bash) Spec() llm.ToolSpec {
 			"Each call starts a fresh shell: `cd` and environment changes do not carry over, so chain steps with && instead. " +
 			"Stdin is closed, so interactive commands fail; pass non-interactive flags. Long output is truncated in the middle, keeping the start and the end. " +
 			"Commands are killed, with any processes they started, after the timeout. " +
-			"Prefer read_file, list_dir, glob and grep over cat, ls, find and grep for reading and searching.",
+			"Prefer read_file, list_dir, glob and grep over cat, ls, find and grep for reading and searching. " +
+			"Never create or change files with the shell (heredocs, echo or printf redirection, sed -i): use write_file and edit_file, which write the exact bytes.",
 		Parameters: json.RawMessage(`{
   "type": "object",
   "properties": {
@@ -81,13 +82,18 @@ func (Bash) Run(ctx context.Context, env Env, raw json.RawMessage) Result {
 		program = shell.Default()
 	}
 	output := newHeadTailBuffer(outputLimit(env))
-	cmd := exec.CommandContext(runCtx, program, shellArgs(program, args.Command)...)
+	scriptArgs, cleanup, err := shell.ScriptArgs(program, args.Command)
+	if err != nil {
+		return Errorf("cannot prepare the command: %v", err)
+	}
+	defer cleanup()
+	cmd := exec.CommandContext(runCtx, program, scriptArgs...)
 	cmd.Dir = env.WorkDir
 	cmd.Stdout, cmd.Stderr = output, output
 	cmd.WaitDelay = commandWaitDelay
 	startInOwnGroup(cmd)
 	cmd.Cancel = func() error { return killGroup(cmd) }
-	err := cmd.Run()
+	err = cmd.Run()
 	return commandResult(runCtx, ctx, output.String(), err, timeout)
 }
 

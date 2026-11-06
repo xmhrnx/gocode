@@ -41,7 +41,11 @@ func newModeMenu(tab *ChatTab) *modeMenu {
 	for _, option := range modeOptions {
 		m.menu.RadioItem(option.label, func() bool { return m.current() == option }, func() { m.choose(option) })
 	}
-	m.trigger = m.menu.Trigger(modeLabel{menu: m})
+	// The box is made once so it can track hover; its content is drawn
+	// fresh each frame from the current mode.
+	button := giode.Box(giode.Styles{BorderRadius: 8, Cursor: giode.CursorPointer}, modeLabel{menu: m}).
+		OnHover(giode.Styles{Background: theme.Hover})
+	m.trigger = m.menu.Trigger(button)
 	return m
 }
 
@@ -67,7 +71,7 @@ func (m *modeMenu) Layout(gtx giode.Context) giode.Dimensions {
 func (l modeLabel) Layout(gtx giode.Context) giode.Dimensions {
 	option := l.menu.current()
 	return giode.Row(giode.Styles{Align: giode.AlignCenter, Gap: 6, Wrap: giode.WrapNoWrap,
-		Padding: giode.SymmetricInset(9, 6), Cursor: giode.CursorPointer},
+		Padding: giode.SymmetricInset(9, 6)},
 		theme.Icon(option.icon, 14, theme.Muted),
 		giode.Text(option.label, giode.Styles{Color: theme.Muted, FontSize: theme.Sizes.Small, FontWeight: giode.FontWeightMedium}),
 		theme.Icon("chevron-down", 12, theme.Muted),

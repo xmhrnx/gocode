@@ -24,7 +24,12 @@ func (s *Session) Run(ctx context.Context, commandLine string, onOutput func(chu
 	}
 	defer os.Remove(pwdFile)
 
-	cmd := exec.CommandContext(ctx, s.shell, wrapCommand(s.shell, commandLine, pwdFile)...)
+	args, cleanup, err := ScriptArgs(s.shell, wrapScript(s.shell, commandLine, pwdFile))
+	if err != nil {
+		return Result{ExitCode: -1, WorkDir: s.WorkDir()}, err
+	}
+	defer cleanup()
+	cmd := exec.CommandContext(ctx, s.shell, args...)
 	cmd.Dir = s.WorkDir()
 	cmd.Env = append(os.Environ(), "TERM=dumb")
 	startInOwnGroup(cmd)

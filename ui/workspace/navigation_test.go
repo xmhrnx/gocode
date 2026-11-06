@@ -41,3 +41,14 @@ func TestMoveActiveSwapsWithNeighbourAndStopsAtEnds(t *testing.T) {
 		t.Fatal("the moved tab should stay shown")
 	}
 }
+
+func TestMoveToShiftsTheTabsBetween(t *testing.T) {
+	w := New(Factory{})
+	for _, title := range []string{"a", "b", "c", "d"} {
+		w.Add(stubTab{title})
+	}
+	w.MoveTo(w.entries[0].id, 2)
+	if got := titles(w); got[0] != "b" || got[1] != "c" || got[2] != "a" || got[3] != "d" {
+		t.Fatalf("got %v", got)
+	}
+}

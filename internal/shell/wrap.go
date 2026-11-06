@@ -1,19 +1,16 @@
 package shell
 
-import (
-	"path/filepath"
-	"strings"
-)
+import "strings"
 
-// wrapCommand returns the arguments that make shell run commandLine and
-// then write its final working directory to pwdFile, out of band so the
+// wrapScript returns a script that runs commandLine in shell and then
+// writes its final working directory to pwdFile, out of band so the
 // user's output stays untouched. PowerShell gets its own syntax; every
 // other shell is assumed to be POSIX-compatible.
-func wrapCommand(shell, commandLine, pwdFile string) []string {
-	if isPowerShell(shell) {
-		return []string{"-NoProfile", "-NonInteractive", "-Command", powerShellScript(commandLine, pwdFile)}
+func wrapScript(shell, commandLine, pwdFile string) string {
+	if KindOf(shell) == KindPowerShell {
+		return powerShellScript(commandLine, pwdFile)
 	}
-	return []string{"-c", posixScript(commandLine, pwdFile)}
+	return posixScript(commandLine, pwdFile)
 }
 
 // posixScript records $PWD from an EXIT trap, so the directory is captured
@@ -31,12 +28,6 @@ func posixScript(commandLine, pwdFile string) string {
 func powerShellScript(commandLine, pwdFile string) string {
 	return "try {\n" + commandLine + "\n} finally { [IO.File]::WriteAllText(" + powerShellQuote(pwdFile) +
 		", (Get-Location).ProviderPath) }\nif ($LASTEXITCODE) { exit $LASTEXITCODE }"
-}
-
-// isPowerShell reports whether shell is Windows PowerShell or pwsh.
-func isPowerShell(shell string) bool {
-	name := strings.ToLower(strings.TrimSuffix(filepath.Base(shell), filepath.Ext(shell)))
-	return name == "powershell" || name == "pwsh"
 }
 
 // posixQuote single-quotes s for a POSIX shell.
