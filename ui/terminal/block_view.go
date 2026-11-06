@@ -3,7 +3,6 @@ package terminal
 import (
 	"fmt"
 
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 
 	"gocode/ui/components"
@@ -36,7 +35,7 @@ func newBlockView(t *Tab, b *block) *blockView {
 	return v
 }
 
-func (v *blockView) Layout(gtx layout.Context) layout.Dimensions {
+func (v *blockView) Layout(gtx giode.Context) giode.Dimensions {
 	b := v.block
 	children := []giode.Element{v.header()}
 	if text := b.text(); text != "" {
@@ -44,7 +43,7 @@ func (v *blockView) Layout(gtx layout.Context) layout.Dimensions {
 		if b.dropped > 0 {
 			children = append(children, giode.Text(fmt.Sprintf("… %d earlier lines not kept", b.dropped), theme.Caption()))
 		}
-		children = append(children, giode.Text(text, output).Selectable(b.id))
+		children = append(children, giode.Text(text, output))
 	}
 	border := theme.SoftBorder
 	if !b.running && b.exitCode != 0 {

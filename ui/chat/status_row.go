@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"time"
 
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 	"github.com/xmhrnx/giode/components/kit"
 
@@ -28,10 +27,10 @@ func (r *statusRow) elapsed() time.Duration {
 	return time.Since(r.tab.run.started)
 }
 
-func (r *statusRow) Layout(gtx layout.Context) layout.Dimensions {
+func (r *statusRow) Layout(gtx giode.Context) giode.Dimensions {
 	run := r.tab.run
 	if run == nil || run.ask != nil {
-		return layout.Dimensions{}
+		return giode.Dimensions{}
 	}
 	label := "Working"
 	if run.status != "" {

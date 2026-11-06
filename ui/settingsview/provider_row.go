@@ -1,7 +1,6 @@
 package settingsview
 
 import (
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 	"github.com/xmhrnx/giode/components/toggle"
 
@@ -47,7 +46,7 @@ func (r *providerRow) definition() providers.Definition {
 	return def
 }
 
-func (r *providerRow) Layout(gtx layout.Context) layout.Dimensions {
+func (r *providerRow) Layout(gtx giode.Context) giode.Dimensions {
 	children := []giode.Element{
 		giode.Row(giode.Styles{Width: -1, Align: giode.AlignCenter, Gap: 12, Wrap: giode.WrapNoWrap, Padding: giode.Inset{Left: 12}},
 			r.enabled, giode.Box(giode.Styles{FlexGrow: 1}, r.header)),

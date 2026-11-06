@@ -1,7 +1,6 @@
 package settingsview
 
 import (
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 
 	"gocode/internal/mcp"
@@ -33,7 +32,7 @@ func newMCPPage(s *core.Services) *mcpPage {
 	return p
 }
 
-func (p *mcpPage) Layout(gtx layout.Context) layout.Dimensions {
+func (p *mcpPage) Layout(gtx giode.Context) giode.Dimensions {
 	statuses := map[string]mcp.ServerStatus{}
 	for _, status := range p.services.MCP.Status() {
 		statuses[status.Name] = status

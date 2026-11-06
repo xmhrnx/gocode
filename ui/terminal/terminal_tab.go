@@ -74,7 +74,7 @@ func (t *Tab) View() giode.Element {
 		giode.Shortcut("Up", func() { t.recall(true) }), giode.Shortcut("Down", func() { t.recall(false) }))
 	content := giode.Element(welcome())
 	if len(t.blocks) > 0 {
-		content = t.list
+		content = giode.SelectionArea(t, t.list) // select across blocks
 	}
 	return giode.Stack(giode.Styles{Width: -1, Height: -1, Background: theme.Canvas},
 		giode.Box(giode.Styles{Width: -1, FlexGrow: 1}, content),

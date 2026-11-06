@@ -5,15 +5,15 @@ import (
 	"embed"
 	"fmt"
 
-	"gioui.org/font"
-	"gioui.org/font/opentype"
 	"github.com/xmhrnx/giode"
+	"github.com/xmhrnx/giode/styles/properties"
 )
 
+// fontFile names an embedded font and the family and weight it provides.
 type fontFile struct {
 	path   string
 	family string
-	weight font.Weight
+	weight properties.FontWeight
 }
 
 //go:embed fonts/*.ttf icons/*.svg
@@ -31,43 +31,30 @@ const (
 )
 
 var fontFiles = []fontFile{
-	{"fonts/Inter-Regular.ttf", UIFont, font.Normal},
-	{"fonts/Inter-Medium.ttf", UIFont, font.Medium},
-	{"fonts/Inter-SemiBold.ttf", UIFont, font.SemiBold},
-	{"fonts/Inter-Bold.ttf", UIFont, font.Bold},
-	{"fonts/JetBrainsMono-Regular.ttf", CodeFont, font.Normal},
-	{"fonts/JetBrainsMono-Bold.ttf", CodeFont, font.Bold},
+	{"fonts/Inter-Regular.ttf", UIFont, giode.FontWeightNormal},
+	{"fonts/Inter-Medium.ttf", UIFont, giode.FontWeightMedium},
+	{"fonts/Inter-SemiBold.ttf", UIFont, giode.FontWeightSemiBold},
+	{"fonts/Inter-Bold.ttf", UIFont, giode.FontWeightBold},
+	{"fonts/JetBrainsMono-Regular.ttf", CodeFont, giode.FontWeightNormal},
+	{"fonts/JetBrainsMono-Bold.ttf", CodeFont, giode.FontWeightBold},
 }
 
 // Load registers the fonts and icons with Giode. Icons are named after
 // their file, e.g. "copy" for icons/copy.svg.
 func Load() error {
-	var faces []font.FontFace
+	fonts := make([]giode.FontFile, 0, len(fontFiles))
 	for _, f := range fontFiles {
-		face, err := loadFace(f)
+		data, err := files.ReadFile(f.path)
 		if err != nil {
-			return err
+			return fmt.Errorf("read %s: %w", f.path, err)
 		}
-		faces = append(faces, face)
+		fonts = append(fonts, giode.FontFile{Family: f.family, Weight: f.weight, Data: data})
 	}
-	giode.RegisterFonts(faces)
+	if err := giode.RegisterFont(fonts...); err != nil {
+		return fmt.Errorf("load fonts: %w", err)
+	}
 	if err := giode.RegisterIconsFS(files, "icons"); err != nil {
 		return fmt.Errorf("load icons: %w", err)
 	}
 	return nil
-}
-
-func loadFace(f fontFile) (font.FontFace, error) {
-	data, err := files.ReadFile(f.path)
-	if err != nil {
-		return font.FontFace{}, fmt.Errorf("read %s: %w", f.path, err)
-	}
-	face, err := opentype.Parse(data)
-	if err != nil {
-		return font.FontFace{}, fmt.Errorf("parse %s: %w", f.path, err)
-	}
-	return font.FontFace{
-		Font: font.Font{Typeface: font.Typeface(f.family), Weight: f.weight},
-		Face: face,
-	}, nil
 }

@@ -1,9 +1,6 @@
 package chat
 
 import (
-	"fmt"
-
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 
 	"gocode/internal/attach"
@@ -34,13 +31,13 @@ func newUserRow(tab *ChatTab, it item) *userRow {
 
 func (r *userRow) version() int { return 0 }
 
-func (r *userRow) Layout(gtx layout.Context) layout.Dimensions {
+func (r *userRow) Layout(gtx giode.Context) giode.Dimensions {
 	msg := r.tab.message(r.it)
 	var content []giode.Element
 	if len(r.images) > 0 {
 		content = append(content, giode.Row(giode.Styles{Gap: 6}, r.images...))
 	}
-	for index, part := range msg.Parts {
+	for _, part := range msg.Parts {
 		if part.Kind != llm.PartText {
 			continue
 		}
@@ -48,7 +45,7 @@ func (r *userRow) Layout(gtx layout.Context) layout.Dimensions {
 			content = append(content, fileChip(name))
 			continue
 		}
-		content = append(content, giode.Text(part.Text, theme.Body()).Selectable(fmt.Sprint(r.it.key, "/", index)))
+		content = append(content, giode.Text(part.Text, theme.Body()))
 	}
 	bubble := giode.Stack(giode.Styles{
 		Gap: 8, Padding: giode.SymmetricInset(14, 10), BorderRadius: 14,

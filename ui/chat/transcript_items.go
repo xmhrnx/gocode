@@ -21,6 +21,8 @@ type item struct {
 	// message, where the copy and retry actions go.
 	turnEnd bool
 	version int
+	// text is a streaming reply's segment, for draft text rows.
+	text string
 }
 
 const (
@@ -66,6 +68,10 @@ func (c *ChatTab) appendMessageItems(items []item, msg llm.Message, index int, d
 		it := item{key: fmt.Sprintf("m%dp%d", index, p), message: index, part: p, draft: draft}
 		switch part.Kind {
 		case llm.PartText:
+			if draft {
+				items = appendStreamSegments(items, it, part.Text)
+				continue
+			}
 			it.kind = itemText
 		case llm.PartReasoning:
 			if part.Text == "" {
@@ -122,4 +128,16 @@ func hasUserContent(msg llm.Message) bool {
 		}
 	}
 	return false
+}
+
+// appendStreamSegments adds a streaming reply as one row per segment. A
+// segment's version is its length, so only the growing one is redrawn.
+func appendStreamSegments(items []item, base item, text string) []item {
+	for n, segment := range streamSegments(text, streamSegmentSize) {
+		it := base
+		it.kind, it.text, it.version = itemText, segment, len(segment)
+		it.key = fmt.Sprintf("%ss%d", base.key, n)
+		items = append(items, it)
+	}
+	return items
 }

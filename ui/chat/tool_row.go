@@ -1,7 +1,6 @@
 package chat
 
 import (
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 
 	"gocode/internal/llm"
@@ -45,7 +44,7 @@ func (r *toolRow) call() llm.ToolCall {
 	return *part.ToolCall
 }
 
-func (r *toolRow) Layout(gtx layout.Context) layout.Dimensions {
+func (r *toolRow) Layout(gtx giode.Context) giode.Dimensions {
 	children := []giode.Element{r.header}
 	result := r.tab.toolResult(r.call().ID)
 	if r.expanded && result != nil {
@@ -92,7 +91,7 @@ func (r *toolRow) statusIcon(callID string, result *llm.ToolResult) giode.Elemen
 }
 
 func (r *toolRow) body(result *llm.ToolResult) giode.Element {
-	content := toolOutput(r.it.key, result.Content, result.IsError)
+	content := toolOutput(result.Content, result.IsError)
 	if display := r.tab.session.ToolDisplays[r.call().ID]; display != "" {
 		content = diffView(display)
 	}

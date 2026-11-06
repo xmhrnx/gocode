@@ -2,7 +2,6 @@
 package components
 
 import (
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 	"github.com/xmhrnx/giode/components/tooltip"
 
@@ -59,7 +58,7 @@ func (b *IconButton) SetDisabled(disabled bool) *IconButton {
 func (b *IconButton) Hovered() bool { return b.press.Hovered() }
 
 // Layout lays the button out.
-func (b *IconButton) Layout(gtx layout.Context) layout.Dimensions { return b.tip.Layout(gtx) }
+func (b *IconButton) Layout(gtx giode.Context) giode.Dimensions { return b.tip.Layout(gtx) }
 
 func (b *IconButton) content(state giode.PressState) giode.Element {
 	color, background := theme.Muted, ""

@@ -1,7 +1,6 @@
 package chat
 
 import (
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 
 	"gocode/internal/attach"
@@ -26,7 +25,7 @@ func newAttachmentChip(c *composer, att pendingAttachment) *attachmentChip {
 	return chip
 }
 
-func (a *attachmentChip) Layout(gtx layout.Context) layout.Dimensions {
+func (a *attachmentChip) Layout(gtx giode.Context) giode.Dimensions {
 	preview := a.thumbnail
 	if preview == nil {
 		preview = giode.Box(giode.Styles{Width: 28, Height: 28, BorderRadius: 5, Background: theme.Hover,

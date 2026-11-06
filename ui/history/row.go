@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"time"
 
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 
 	"gocode/internal/session"
@@ -26,7 +25,7 @@ func newRow(d *Dialog, s session.Summary) *row {
 	return r
 }
 
-func (r *row) Layout(gtx layout.Context) layout.Dimensions { return r.press.Layout(gtx) }
+func (r *row) Layout(gtx giode.Context) giode.Dimensions { return r.press.Layout(gtx) }
 
 func (r *row) content(state giode.PressState) giode.Element {
 	background := ""

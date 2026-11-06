@@ -1,7 +1,6 @@
 package settingsview
 
 import (
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 	"github.com/xmhrnx/giode/components/toggle"
 
@@ -40,7 +39,7 @@ func newSkillRow(p *skillsPage, skill skills.Skill) *skillRow {
 	return r
 }
 
-func (r *skillRow) Layout(gtx layout.Context) layout.Dimensions {
+func (r *skillRow) Layout(gtx giode.Context) giode.Dimensions {
 	source := "your skill"
 	actions := []giode.Element{r.enabled, r.remove}
 	if r.skill.Source == skills.SourceProject {

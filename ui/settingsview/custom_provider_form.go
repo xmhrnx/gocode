@@ -3,7 +3,6 @@ package settingsview
 import (
 	"strings"
 
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 	"github.com/xmhrnx/giode/components/dropdown"
 	"github.com/xmhrnx/giode/components/input"
@@ -66,7 +65,7 @@ func (f *customProviderForm) submit() {
 	f.open = false
 }
 
-func (f *customProviderForm) Layout(gtx layout.Context) layout.Dimensions {
+func (f *customProviderForm) Layout(gtx giode.Context) giode.Dimensions {
 	if !f.open {
 		return f.show.Layout(gtx)
 	}

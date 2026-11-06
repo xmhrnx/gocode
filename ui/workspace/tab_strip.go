@@ -1,7 +1,6 @@
 package workspace
 
 import (
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 
 	"gocode/ui/components"
@@ -27,7 +26,7 @@ func NewTabStrip(w *Workspace) *TabStrip {
 }
 
 // Layout lays the strip out.
-func (s *TabStrip) Layout(gtx layout.Context) layout.Dimensions {
+func (s *TabStrip) Layout(gtx giode.Context) giode.Dimensions {
 	items := make([]giode.Element, 0, len(s.workspace.entries)+2)
 	for _, e := range s.workspace.entries {
 		id := e.id

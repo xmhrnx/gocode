@@ -2,16 +2,24 @@ package chat
 
 import "strings"
 
-// maxLiveReasoning bounds the reasoning shown while it streams: drawing
-// only the tail keeps each frame cheap however long the reasoning gets.
-const maxLiveReasoning = 1500
+const (
+	// maxLiveReasoning bounds the reasoning shown while it streams: drawing
+	// only the tail keeps each frame cheap however long the reasoning gets.
+	maxLiveReasoning = 1500
+	// streamSegmentSize is about how much finished text one transcript row
+	// holds while a reply streams.
+	streamSegmentSize = 3000
+)
 
-// splitSettled splits streaming Markdown into a settled head, made of
-// complete blocks that won't change, and the tail still being written.
-// The head's source stays identical between frames, so its parse is
-// served from cache and only the short tail is parsed again.
-func splitSettled(text string) (settled, tail string) {
-	cut, inFence, previousBlank := -1, false, false
+// streamSegments cuts a streaming Markdown reply into rows: finished
+// segments of about size bytes, each ending at a paragraph break outside a
+// code block, then the rest. A finished segment never changes again, so
+// its row is laid out once and replayed from cache; each frame only lays
+// out the last segment, however long the reply grows. Cuts depend only on
+// the text before them, so they stay put as the reply grows.
+func streamSegments(text string, size int) []string {
+	var segments []string
+	segmentStart, inFence := 0, false
 	for start := 0; start < len(text); {
 		end := strings.IndexByte(text[start:], '\n')
 		if end < 0 {
@@ -21,17 +29,14 @@ func splitSettled(text string) (settled, tail string) {
 		if strings.HasPrefix(strings.TrimSpace(line), "```") {
 			inFence = !inFence
 		}
-		blank := strings.TrimSpace(line) == ""
-		if blank && !previousBlank && !inFence && start > 0 {
-			cut = start - 1 // the newline ending the block before
+		lineEnd := start + end + 1
+		if strings.TrimSpace(line) == "" && !inFence && lineEnd-segmentStart >= size {
+			segments = append(segments, text[segmentStart:lineEnd])
+			segmentStart = lineEnd
 		}
-		previousBlank = blank
-		start += end + 1
+		start = lineEnd
 	}
-	if cut <= 0 {
-		return "", text
-	}
-	return text[:cut], strings.TrimLeft(text[cut:], "\n")
+	return append(segments, text[segmentStart:])
 }
 
 // liveTail returns the end of text, starting at a line boundary, so a

@@ -3,7 +3,6 @@ package settingsview
 import (
 	"strings"
 
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 	"github.com/xmhrnx/giode/components/input"
 	"github.com/xmhrnx/giode/components/segmented"
@@ -77,7 +76,7 @@ func validateServer(existing []settings.MCPServer, server settings.MCPServer) st
 	return ""
 }
 
-func (f *mcpServerForm) Layout(gtx layout.Context) layout.Dimensions {
+func (f *mcpServerForm) Layout(gtx giode.Context) giode.Dimensions {
 	if !f.open {
 		return f.show.Layout(gtx)
 	}

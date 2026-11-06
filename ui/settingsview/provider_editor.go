@@ -3,7 +3,6 @@ package settingsview
 import (
 	"strings"
 
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 	"github.com/xmhrnx/giode/components/input"
 
@@ -59,7 +58,7 @@ func (e *providerEditor) storeKey() {
 	e.page.saveKey(e.id, value)
 }
 
-func (e *providerEditor) Layout(gtx layout.Context) layout.Dimensions {
+func (e *providerEditor) Layout(gtx giode.Context) giode.Dimensions {
 	def, _ := e.page.find(e.id)
 	keyActions := []giode.Element{e.saveKey}
 	if def.KeyURL != "" {

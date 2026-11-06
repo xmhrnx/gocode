@@ -1,7 +1,6 @@
 package ui
 
 import (
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 	"github.com/xmhrnx/giode/components/dialog"
 
@@ -37,7 +36,7 @@ func (c *closeConfirmation) allow(busy bool) bool {
 	return false
 }
 
-func (c *closeConfirmation) Layout(gtx layout.Context) layout.Dimensions { return c.dialog.Layout(gtx) }
+func (c *closeConfirmation) Layout(gtx giode.Context) giode.Dimensions { return c.dialog.Layout(gtx) }
 
 func (c *closeConfirmation) content() giode.Element {
 	return giode.Stack(giode.Styles{Width: 380, Gap: 12},

@@ -1,7 +1,6 @@
 package chat
 
 import (
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 
 	"gocode/ui/theme"
@@ -29,9 +28,9 @@ func (r *reasoningRow) version() int {
 	return 0
 }
 
-func (r *reasoningRow) Layout(gtx layout.Context) layout.Dimensions {
+func (r *reasoningRow) Layout(gtx giode.Context) giode.Dimensions {
 	if !r.tab.services.Settings.Chat.ShowReasoning {
-		return layout.Dimensions{}
+		return giode.Dimensions{}
 	}
 	part, _ := r.tab.part(r.it)
 	children := []giode.Element{r.toggle}
@@ -44,7 +43,7 @@ func (r *reasoningRow) Layout(gtx layout.Context) layout.Dimensions {
 			Gap: 12, Align: giode.AlignStretch, Wrap: giode.WrapNoWrap, Margin: giode.Inset{Left: 6},
 		}, giode.Box(giode.Styles{Width: 2, Background: theme.SoftBorder}),
 			giode.Text(text, giode.Styles{Color: theme.Muted, FontSize: theme.Sizes.Small, FlexGrow: 1,
-				LineHeight: theme.Body().LineHeight - 3}).Selectable(r.it.key)))
+				LineHeight: theme.Body().LineHeight - 3})))
 	}
 	return giode.Stack(giode.Styles{Width: -1, Gap: 6, Padding: giode.SymmetricInset(0, 4)}, children...).Layout(gtx)
 }

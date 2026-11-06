@@ -4,7 +4,6 @@
 package modelpicker
 
 import (
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 	"github.com/xmhrnx/giode/components/dialog"
 	"github.com/xmhrnx/giode/components/input"
@@ -81,7 +80,7 @@ func (p *Picker) Open() {
 }
 
 // Layout lays out the dialog; it takes no space.
-func (p *Picker) Layout(gtx layout.Context) layout.Dimensions { return p.dialog.Layout(gtx) }
+func (p *Picker) Layout(gtx giode.Context) giode.Dimensions { return p.dialog.Layout(gtx) }
 
 // showProvider switches to a provider's models, or to the provider list
 // for "".

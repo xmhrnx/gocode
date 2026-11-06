@@ -70,3 +70,14 @@ func Preview(data []byte, side int) (image.Image, error) {
 	}
 	return scaleToFit(img, side), nil
 }
+
+// FromImage makes an image attachment from a decoded image, such as one
+// pasted from the clipboard, scaled down like a file would be.
+func FromImage(name string, img image.Image) (Attachment, error) {
+	data, mediaType, err := encode(scaleToFit(img, maxImageSide))
+	if err != nil {
+		return Attachment{}, fmt.Errorf("encode %s: %w", name, err)
+	}
+	return Attachment{Name: name, Kind: KindImage, MediaType: mediaType, Data: data,
+		Thumbnail: scaleToFit(img, thumbnailSide)}, nil
+}

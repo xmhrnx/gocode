@@ -1,7 +1,6 @@
 package settingsview
 
 import (
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 	"github.com/xmhrnx/giode/components/checkbox"
 	"github.com/xmhrnx/giode/components/input"
@@ -48,7 +47,7 @@ func (p *modelsPage) refreshOpen() {
 	}
 }
 
-func (p *modelsPage) Layout(gtx layout.Context) layout.Dimensions {
+func (p *modelsPage) Layout(gtx giode.Context) giode.Dimensions {
 	if p.providerID == "" {
 		return p.providerList().Layout(gtx)
 	}

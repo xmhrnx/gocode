@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 
 	"gocode/internal/catalog"
@@ -51,7 +50,7 @@ func (p *providersPage) find(id string) (providers.Definition, bool) {
 	return catalog.Find(p.services.Settings, id)
 }
 
-func (p *providersPage) Layout(gtx layout.Context) layout.Dimensions {
+func (p *providersPage) Layout(gtx giode.Context) giode.Dimensions {
 	groups := []struct{ title, category string }{
 		{"Model labs", providers.CategoryCloud}, {"Routers and hosts", providers.CategoryRouter},
 		{"On this computer", providers.CategoryLocal}, {"Custom", "custom"},

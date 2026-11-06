@@ -50,8 +50,11 @@ webview or JavaScript runtime inside. The UI is drawn straight to the GPU.
 - **Model picker** on every chat (Ctrl/⌘+K): recent models and the connected
   providers. Each provider opens its own searchable model list. Models you
   don't use can be hidden in Settings → Models.
-- **Attachments**: files and images through the paperclip button or by dropping
-  them on the window. Large images are scaled down before sending.
+- **Attachments**: files and images through the paperclip button, by dropping
+  them on the window, or pasted from the clipboard (image button or
+  Ctrl/⌘+Shift+V). Large images are scaled down before sending.
+- **Selecting text**: drag across the conversation or the terminal to select
+  text, even across messages or blocks, and copy it with Ctrl/⌘+C.
 - **Messages**: copy, retry, and edit-and-resend. Replies render as Markdown
   with code blocks you can copy. Reasoning is shown collapsed.
 - **Settings** are grouped into categories and searchable. They include the send

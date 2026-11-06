@@ -1,18 +1,32 @@
 package chat
 
-import "testing"
+import (
+	"strings"
+	"testing"
+)
 
-func TestSplitSettled(t *testing.T) {
-	cases := []struct{ text, settled, tail string }{
-		{"one paragraph", "", "one paragraph"},
-		{"first\n\nsecond", "first", "second"},
-		{"intro\n\n```go\nx\n\ny", "intro", "```go\nx\n\ny"},
-		{"a\n\n```\ncode\n```\n\nb", "a\n\n```\ncode\n```", "b"},
+func TestStreamSegmentsCutAtParagraphsOutsideCode(t *testing.T) {
+	text := "aaaa\n\nbbbb\n\n```\ncode\n\nmore code\n```\n\ntail"
+	segments := streamSegments(text, 4)
+	if strings.Join(segments, "") != text {
+		t.Fatalf("segments lose text: %q", segments)
 	}
-	for _, c := range cases {
-		settled, tail := splitSettled(c.text)
-		if settled != c.settled || tail != c.tail {
-			t.Errorf("splitSettled(%q) = %q, %q; want %q, %q", c.text, settled, tail, c.settled, c.tail)
+	for _, segment := range segments[:len(segments)-1] {
+		if strings.Count(segment, "```")%2 != 0 {
+			t.Errorf("segment cuts a code block: %q", segment)
+		}
+	}
+	if got := segments[len(segments)-1]; got != "tail" {
+		t.Errorf("last segment = %q", got)
+	}
+}
+
+func TestStreamSegmentsStayPutAsTextGrows(t *testing.T) {
+	short := streamSegments("one\n\ntwo\n\nthr", 3)
+	long := streamSegments("one\n\ntwo\n\nthree\n\nfour", 3)
+	for i := 0; i < len(short)-1; i++ {
+		if short[i] != long[i] {
+			t.Fatalf("segment %d moved: %q vs %q", i, short[i], long[i])
 		}
 	}
 }

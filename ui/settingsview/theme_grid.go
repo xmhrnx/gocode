@@ -1,7 +1,6 @@
 package settingsview
 
 import (
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 
 	"gocode/ui/core"
@@ -22,7 +21,7 @@ func newThemeGrid(s *core.Services) *themeGrid {
 	return g
 }
 
-func (g *themeGrid) Layout(gtx layout.Context) layout.Dimensions {
+func (g *themeGrid) Layout(gtx giode.Context) giode.Dimensions {
 	return giode.Row(giode.Styles{Width: -1, Gap: 10}, g.cards...).Layout(gtx)
 }
 

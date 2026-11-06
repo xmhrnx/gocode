@@ -1,7 +1,6 @@
 package chat
 
 import (
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 
 	"gocode/ui/theme"
@@ -25,7 +24,7 @@ func newSendButton(tab *ChatTab) *sendButton {
 	return b
 }
 
-func (b *sendButton) Layout(gtx layout.Context) layout.Dimensions {
+func (b *sendButton) Layout(gtx giode.Context) giode.Dimensions {
 	label := "Send"
 	if b.tab.run != nil && b.tab.composer.isEmpty() {
 		label = "Stop"

@@ -84,6 +84,7 @@ func (c *ChatTab) View() giode.Element {
 	giode.Shortcuts(
 		giode.Shortcut("Mod+K", c.composer.picker.Open),
 		giode.Shortcut("Esc", c.stop),
+		giode.Shortcut("Mod+Shift+V", c.composer.pasteImage),
 	)
 	if c.services.Settings.Chat.SendKey == settings.SendCtrlEnter {
 		giode.Shortcuts(giode.Shortcut("Mod+Enter", c.send))

@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"strings"
 
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 	"github.com/xmhrnx/giode/components/input"
 
@@ -56,7 +55,7 @@ func (p *skillsPage) refresh() {
 	}()
 }
 
-func (p *skillsPage) Layout(gtx layout.Context) layout.Dimensions {
+func (p *skillsPage) Layout(gtx giode.Context) giode.Dimensions {
 	children := []giode.Element{
 		giode.Row(giode.Styles{Gap: 8}, p.fromFolder, p.fromZip),
 		giode.Row(giode.Styles{Width: -1, Gap: 8, Align: giode.AlignCenter, Wrap: giode.WrapNoWrap},

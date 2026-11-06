@@ -7,7 +7,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 
 	"gocode/ui/components"
@@ -28,7 +27,7 @@ func newHeader(tab *ChatTab) *header {
 	return h
 }
 
-func (h *header) Layout(gtx layout.Context) layout.Dimensions {
+func (h *header) Layout(gtx giode.Context) giode.Dimensions {
 	h.folder.SetLabel(shortPath(h.tab.session.WorkDir))
 	return giode.Row(giode.Styles{Width: -1, Align: giode.AlignCenter, Wrap: giode.WrapNoWrap,
 		Padding: giode.Inset{Left: 12, Right: 12, Top: 6, Bottom: 2}},

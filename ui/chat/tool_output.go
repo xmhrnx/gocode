@@ -10,14 +10,14 @@ import (
 )
 
 // toolOutput shows a tool's text output in a monospace block.
-func toolOutput(key, text string, isError bool) giode.Element {
+func toolOutput(text string, isError bool) giode.Element {
 	shown, hidden := clipLines(text, maxShownLines)
 	style := theme.Mono()
 	style.FontSize = theme.Sizes.Code - 1
 	if isError {
 		style.Color = theme.Danger
 	}
-	children := []giode.Element{giode.Text(shown, style).Selectable(key)}
+	children := []giode.Element{giode.Text(shown, style)}
 	if hidden > 0 {
 		children = append(children, hiddenLinesNote(hidden))
 	}

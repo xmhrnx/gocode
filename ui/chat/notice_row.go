@@ -1,7 +1,6 @@
 package chat
 
 import (
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 
 	"gocode/ui/theme"
@@ -17,7 +16,7 @@ func newNoticeRow(n notice) *noticeRow { return &noticeRow{notice: n} }
 
 func (r *noticeRow) version() int { return 0 }
 
-func (r *noticeRow) Layout(gtx layout.Context) layout.Dimensions {
+func (r *noticeRow) Layout(gtx giode.Context) giode.Dimensions {
 	icon, color, background := "info", theme.Muted, ""
 	if r.notice.kind == noticeError {
 		icon, color, background = "triangle-alert", theme.Danger, theme.DangerSoft
@@ -26,7 +25,7 @@ func (r *noticeRow) Layout(gtx layout.Context) layout.Dimensions {
 		giode.Row(giode.Styles{Width: -1, Gap: 10, Align: giode.AlignStart, Wrap: giode.WrapNoWrap,
 			Padding: giode.SymmetricInset(12, 8), BorderRadius: 9, Background: background},
 			theme.Icon(icon, 15, color),
-			giode.Text(r.notice.text, giode.Styles{Color: color, FontSize: theme.Sizes.Small, FlexGrow: 1}).Selectable(r.notice.id),
+			giode.Text(r.notice.text, giode.Styles{Color: color, FontSize: theme.Sizes.Small, FlexGrow: 1}),
 		),
 	).Layout(gtx)
 }

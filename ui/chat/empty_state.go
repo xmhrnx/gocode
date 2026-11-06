@@ -1,7 +1,6 @@
 package chat
 
 import (
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 
 	"gocode/ui/theme"
@@ -33,7 +32,7 @@ func newEmptyState(tab *ChatTab) *emptyState {
 	return e
 }
 
-func (e *emptyState) Layout(gtx layout.Context) layout.Dimensions {
+func (e *emptyState) Layout(gtx giode.Context) giode.Dimensions {
 	return giode.Stack(giode.Styles{Width: -1, Height: -1, Align: giode.AlignCenter, Justify: giode.JustifyCenter, Gap: 14,
 		Padding: giode.UniformInset(24)},
 		giode.Box(giode.Styles{Width: 52, Height: 52, BorderRadius: 16, Background: theme.PrimarySoft,

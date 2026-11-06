@@ -2,7 +2,6 @@
 package history
 
 import (
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 	"github.com/xmhrnx/giode/components/dialog"
 	"github.com/xmhrnx/giode/components/input"
@@ -58,7 +57,7 @@ func (d *Dialog) Open() {
 }
 
 // Layout lays out the dialog; it takes no space.
-func (d *Dialog) Layout(gtx layout.Context) layout.Dimensions { return d.dialog.Layout(gtx) }
+func (d *Dialog) Layout(gtx giode.Context) giode.Dimensions { return d.dialog.Layout(gtx) }
 
 func (d *Dialog) content() giode.Element {
 	return giode.Stack(giode.Styles{Width: 620, Gap: 10},

@@ -1,7 +1,6 @@
 package chat
 
 import (
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 	"github.com/xmhrnx/giode/components/input"
 
@@ -43,10 +42,10 @@ func (r *permissionRow) answer(decision agent.Decision) {
 	r.feedback.SetText("")
 }
 
-func (r *permissionRow) Layout(gtx layout.Context) layout.Dimensions {
+func (r *permissionRow) Layout(gtx giode.Context) giode.Dimensions {
 	pending := r.tab.pendingRequest()
 	if pending == nil {
-		return layout.Dimensions{}
+		return giode.Dimensions{}
 	}
 	req := pending.request
 	r.always.Label("Always allow " + req.Call.Name)
@@ -55,7 +54,7 @@ func (r *permissionRow) Layout(gtx layout.Context) layout.Dimensions {
 			theme.Icon("shield-alert", 17, theme.Warning),
 			giode.Text(accessQuestion(req.Access), giode.Styles{Color: theme.Text, FontWeight: giode.FontWeightSemiBold})),
 		giode.Box(giode.Styles{Width: -1, Background: theme.CodeBack, BorderRadius: 8, Padding: giode.SymmetricInset(12, 8)},
-			giode.Text(req.Summary, theme.Mono()).Selectable("permission-summary")),
+			giode.Text(req.Summary, theme.Mono())),
 	}
 	if req.Preview != "" {
 		children = append(children, giode.Box(giode.Styles{Width: -1, BorderRadius: 8, Background: theme.CodeBack,

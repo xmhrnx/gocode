@@ -45,3 +45,14 @@ func TestFileBlockRoundTrip(t *testing.T) {
 		t.Fatalf("parts = %+v", msg.Parts)
 	}
 }
+
+func TestFromImageEncodesAndScales(t *testing.T) {
+	att, err := FromImage("pasted.png", image.NewRGBA(image.Rect(0, 0, 3000, 100)))
+	if err != nil || att.Kind != KindImage || att.Thumbnail.Bounds().Dx() != thumbnailSide {
+		t.Fatalf("att=%+v err=%v", att, err)
+	}
+	decoded, _, err := image.Decode(bytes.NewReader(att.Data))
+	if err != nil || decoded.Bounds().Dx() != maxImageSide {
+		t.Fatalf("decoded width %v, err %v", decoded.Bounds(), err)
+	}
+}

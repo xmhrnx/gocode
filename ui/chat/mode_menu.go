@@ -1,7 +1,6 @@
 package chat
 
 import (
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 	"github.com/xmhrnx/giode/components/menu"
 
@@ -61,11 +60,11 @@ func (m *modeMenu) choose(option modeOption) {
 	m.tab.composer.editor.Focus()
 }
 
-func (m *modeMenu) Layout(gtx layout.Context) layout.Dimensions {
+func (m *modeMenu) Layout(gtx giode.Context) giode.Dimensions {
 	return giode.Stack(giode.Styles{}, m.trigger, m.menu).Layout(gtx)
 }
 
-func (l modeLabel) Layout(gtx layout.Context) layout.Dimensions {
+func (l modeLabel) Layout(gtx giode.Context) giode.Dimensions {
 	option := l.menu.current()
 	return giode.Row(giode.Styles{Align: giode.AlignCenter, Gap: 6, Wrap: giode.WrapNoWrap,
 		Padding: giode.SymmetricInset(9, 6), Cursor: giode.CursorPointer},

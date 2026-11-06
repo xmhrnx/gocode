@@ -64,7 +64,9 @@ func (t *transcript) element() giode.Element {
 	if len(t.items) == 0 {
 		return t.empty
 	}
-	return t.list
+	// One selection area over the whole conversation, so a selection can
+	// run across messages, as on a web page.
+	return giode.SelectionArea("transcript/"+t.tab.session.ID, t.list)
 }
 
 func (t *transcript) row(i int) giode.Element {

@@ -1,7 +1,6 @@
 package workspace
 
 import (
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 
 	"gocode/ui/components"
@@ -23,7 +22,7 @@ func newTabChip(w *Workspace, id int) *tabChip {
 	return c
 }
 
-func (c *tabChip) Layout(gtx layout.Context) layout.Dimensions { return c.press.Layout(gtx) }
+func (c *tabChip) Layout(gtx giode.Context) giode.Dimensions { return c.press.Layout(gtx) }
 
 func (c *tabChip) content(state giode.PressState) giode.Element {
 	index := c.workspace.indexOf(c.id)

@@ -5,7 +5,6 @@ import (
 	"runtime"
 	"time"
 
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 	"github.com/xmhrnx/giode/components/kit"
 
@@ -36,7 +35,7 @@ func aboutEntries(s *core.Services) []entry {
 	}
 }
 
-func (m *memoryLabel) Layout(gtx layout.Context) layout.Dimensions {
+func (m *memoryLabel) Layout(gtx giode.Context) giode.Dimensions {
 	if time.Since(m.updated) > 3*time.Second {
 		var stats runtime.MemStats
 		runtime.ReadMemStats(&stats)

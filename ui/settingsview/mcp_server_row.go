@@ -5,7 +5,6 @@ import (
 	"slices"
 	"strings"
 
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 	"github.com/xmhrnx/giode/components/toggle"
 
@@ -56,10 +55,10 @@ func (r *mcpServerRow) config() *settings.MCPServer {
 	return nil
 }
 
-func (r *mcpServerRow) Layout(gtx layout.Context) layout.Dimensions {
+func (r *mcpServerRow) Layout(gtx giode.Context) giode.Dimensions {
 	server := r.config()
 	if server == nil {
-		return layout.Dimensions{}
+		return giode.Dimensions{}
 	}
 	return giode.Row(giode.Styles{Width: -1, Gap: 12, Align: giode.AlignCenter, Wrap: giode.WrapNoWrap, Padding: giode.SymmetricInset(4, 6)},
 		r.enabled,

@@ -1,7 +1,6 @@
 package components
 
 import (
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 	"github.com/xmhrnx/giode/components/tooltip"
 
@@ -31,7 +30,7 @@ func (b *PillButton) SetLabel(label string) *PillButton { b.label = label; retur
 func (b *PillButton) SetIcon(icon string) *PillButton { b.icon = icon; return b }
 
 // Layout lays the pill out.
-func (b *PillButton) Layout(gtx layout.Context) layout.Dimensions { return b.tip.Layout(gtx) }
+func (b *PillButton) Layout(gtx giode.Context) giode.Dimensions { return b.tip.Layout(gtx) }
 
 func (b *PillButton) content(state giode.PressState) giode.Element {
 	color, background := theme.Muted, ""

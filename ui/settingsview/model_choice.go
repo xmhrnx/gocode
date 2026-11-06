@@ -1,7 +1,6 @@
 package settingsview
 
 import (
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 
 	"gocode/ui/components"
@@ -26,7 +25,7 @@ func newModelChoice(s *core.Services, value *string, empty string) *modelChoice 
 	return m
 }
 
-func (m *modelChoice) Layout(gtx layout.Context) layout.Dimensions {
+func (m *modelChoice) Layout(gtx giode.Context) giode.Dimensions {
 	label := *m.value
 	if label == "" {
 		label = m.empty

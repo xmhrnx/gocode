@@ -3,7 +3,6 @@ package chat
 import (
 	"context"
 
-	"gioui.org/layout"
 	"github.com/xmhrnx/giode"
 
 	"gocode/ui/components"
@@ -32,12 +31,16 @@ func (r *textRow) version() int {
 	return 0
 }
 
-func (r *textRow) Layout(gtx layout.Context) layout.Dimensions {
-	part, _ := r.tab.part(r.it)
-	if isBlank(part.Text) {
-		return layout.Dimensions{}
+func (r *textRow) Layout(gtx giode.Context) giode.Dimensions {
+	text := r.it.text
+	if !r.it.draft {
+		part, _ := r.tab.part(r.it)
+		text = part.Text
 	}
-	children := r.content(part.Text)
+	if isBlank(text) {
+		return giode.Dimensions{}
+	}
+	children := []giode.Element{markdown(r.tab, text)}
 	if r.it.turnEnd && r.tab.run == nil {
 		children = append(children, giode.Row(giode.Styles{Gap: 2, Align: giode.AlignCenter, Margin: giode.Inset{Left: -6}},
 			r.copy, r.retry))
@@ -45,26 +48,12 @@ func (r *textRow) Layout(gtx layout.Context) layout.Dimensions {
 	return giode.Stack(giode.Styles{Width: -1, Gap: 6, Padding: giode.SymmetricInset(0, 6)}, children...).Layout(gtx)
 }
 
-// content renders the text. While it streams, the settled blocks and the
-// growing tail are separate documents, so only the tail is parsed again.
-func (r *textRow) content(text string) []giode.Element {
-	if !r.it.draft {
-		return []giode.Element{markdown(r.tab, text, r.it.key)}
-	}
-	settled, tail := splitSettled(text)
-	if settled == "" {
-		return []giode.Element{markdown(r.tab, tail, r.it.key+"/tail")}
-	}
-	return []giode.Element{markdown(r.tab, settled, r.it.key+"/settled"), markdown(r.tab, tail, r.it.key+"/tail")}
-}
-
 // markdown renders assistant text in the chat's style.
-func markdown(tab *ChatTab, text, key string) giode.Element {
+func markdown(tab *ChatTab, text string) giode.Element {
 	return giode.Markdown(text, giode.MarkdownOptions{
 		Styles:         theme.Body(),
 		CodeFont:       "JetBrains Mono",
 		CodeBackground: theme.CodeBack,
-		Selectable:     key,
 		OnLink: func(url string) {
 			go func() {
 				if err := tab.services.App.OpenURL(context.Background(), url); err != nil {

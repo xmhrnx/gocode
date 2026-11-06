@@ -3,6 +3,12 @@ module gocode
 go 1.26.6
 
 require (
+	github.com/xmhrnx/giode v0.2.1-alpha.1
+	golang.org/x/image v0.26.0
+	golang.org/x/net v0.48.0
+)
+
+require (
 	fyne.io/systray v1.12.2 // indirect
 	gioui.org v0.10.2 // indirect
 	gioui.org/shader v1.0.9 // indirect
@@ -14,11 +20,8 @@ require (
 	github.com/go-text/typesetting v0.3.4 // indirect
 	github.com/godbus/dbus/v5 v5.1.0 // indirect
 	github.com/srwiley/rasterx v0.0.0-20220730225603-2ab79fcdd4ef // indirect
-	github.com/xmhrnx/giode v0.2.0-alpha.1 // indirect
 	github.com/yuin/goldmark v1.4.13 // indirect
 	golang.org/x/exp/shiny v0.0.0-20250408133849-7e4ce0ab07d0 // indirect
-	golang.org/x/image v0.26.0 // indirect
-	golang.org/x/net v0.48.0 // indirect
 	golang.org/x/sys v0.39.0 // indirect
 	golang.org/x/text v0.32.0 // indirect
 )
