@@ -7,6 +7,7 @@ webview or JavaScript runtime inside. The UI is drawn straight to the GPU.
 ## Features
 
 - **Tabs** in a custom title bar: agent chats, Warp-style terminals and settings.
+  Move the current tab with Ctrl/⌘+Shift+Page Up / Page Down.
 - **Agent loop**: the model streams a reply, calls tools, sees their results and
   continues until the task is done. There is no step limit by default. A run
   that repeats the same tool call 3 times in a row pauses for your approval.

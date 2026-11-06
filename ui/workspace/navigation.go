@@ -50,3 +50,17 @@ func (w *Workspace) indexOf(id int) int {
 	}
 	return -1
 }
+
+// MoveActive moves the shown tab by delta places (-1 left, 1 right),
+// stopping at the ends.
+func (w *Workspace) MoveActive(delta int) {
+	from := w.indexOf(w.activeID)
+	to := from + delta
+	if from < 0 || to < 0 || to >= len(w.entries) {
+		return
+	}
+	w.entries[from], w.entries[to] = w.entries[to], w.entries[from]
+	if w.onChange != nil {
+		w.onChange()
+	}
+}

@@ -91,6 +91,8 @@ func (w *Workspace) Close(id int) {
 		}
 		if id == w.activeID {
 			w.activate(w.entries[min(index, len(w.entries)-1)].id)
+		} else if w.onChange != nil {
+			w.onChange()
 		}
 	})
 }

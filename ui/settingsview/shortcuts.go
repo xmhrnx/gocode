@@ -12,6 +12,8 @@ var shortcutList = []struct{ keys, action string }{
 	{"Mod+W", "Close tab"},
 	{"Ctrl+Tab", "Next tab"},
 	{"Ctrl+Shift+Tab", "Previous tab"},
+	{"Mod+Shift+PageUp", "Move tab left"},
+	{"Mod+Shift+PageDown", "Move tab right"},
 	{"Mod+1", "Go to tab 1 (through 9)"},
 	{"Mod+K", "Choose a model"},
 	{"Mod+H", "Chat history"},

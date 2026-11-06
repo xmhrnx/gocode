@@ -14,6 +14,7 @@ type IconButton struct {
 	icon     string
 	size     int
 	active   bool
+	quiet    bool
 	disabled bool
 	press    *giode.PressableElement
 	tip      *tooltip.Tooltip
@@ -47,6 +48,9 @@ func (b *IconButton) SetSize(size int) *IconButton { b.size = size; return b }
 // SetActive highlights the button, for toggles.
 func (b *IconButton) SetActive(active bool) *IconButton { b.active = active; return b }
 
+// SetQuiet draws the icon faintly until the pointer is over it.
+func (b *IconButton) SetQuiet(quiet bool) *IconButton { b.quiet = quiet; return b }
+
 // SetDisabled dims the button and ignores clicks.
 func (b *IconButton) SetDisabled(disabled bool) *IconButton {
 	b.disabled = disabled
@@ -69,6 +73,8 @@ func (b *IconButton) content(state giode.PressState) giode.Element {
 		color, background = theme.Text, theme.Pressed
 	case state.Hovered || b.active:
 		color, background = theme.Text, theme.Hover
+	case b.quiet:
+		color = theme.Faint
 	}
 	return giode.Box(giode.Styles{
 		Padding: giode.UniformInset(6), BorderRadius: 7, Background: background,

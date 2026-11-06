@@ -17,6 +17,8 @@ func (r *Root) registerShortcuts() {
 		giode.Shortcut("Mod+H", r.history.Open),
 		giode.Shortcut("Ctrl+Tab", w.Next),
 		giode.Shortcut("Ctrl+Shift+Tab", w.Previous),
+		giode.Shortcut("Mod+Shift+PageUp", func() { w.MoveActive(-1) }),
+		giode.Shortcut("Mod+Shift+PageDown", func() { w.MoveActive(1) }),
 	}
 	for i := 1; i <= 9; i++ {
 		index := i - 1

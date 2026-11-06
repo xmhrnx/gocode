@@ -39,10 +39,10 @@ func (c *tabChip) content(state giode.PressState) giode.Element {
 	case state.Hovered:
 		background, color = theme.Hover, theme.Text
 	}
-	closer := giode.Element(giode.Box(giode.Styles{Width: 25}))
-	if active || state.Hovered || c.closer.Hovered() {
-		closer = c.closer
-	}
+	// The close button is always there, so a click on it can't miss
+	// while the pointer moves from the tab onto it; it's faint until the
+	// tab is active or hovered.
+	c.closer.SetQuiet(!active && !state.Hovered)
 	return giode.Row(giode.Styles{
 		Align: giode.AlignCenter, Gap: 7, Wrap: giode.WrapNoWrap,
 		Padding: giode.Inset{Left: 12, Right: 3}, Height: 30, MaxWidth: 220,
@@ -52,7 +52,7 @@ func (c *tabChip) content(state giode.PressState) giode.Element {
 			Color: color, FontSize: theme.Sizes.Small, FontWeight: giode.FontWeightMedium,
 			TextOverflow: giode.TextOverflowEllipsis, MaxWidth: 150,
 		}),
-		closer,
+		c.closer,
 	)
 }
 
