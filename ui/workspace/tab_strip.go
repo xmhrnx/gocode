@@ -14,6 +14,7 @@ type TabStrip struct {
 	newChat     *components.IconButton
 	newTerminal *components.IconButton
 	menu        *tabMenu
+	drag        *tabDrag
 }
 
 // NewTabStrip returns the tab strip for w.
@@ -43,22 +44,4 @@ func (s *TabStrip) Layout(gtx giode.Context) giode.Dimensions {
 
 func (s *TabStrip) chip(id int) *tabChip {
 	return s.chips.Get(id, func() *tabChip { return newTabChip(s, id) })
-}
-
-// dragOver moves the dragged tab past a neighbour once the pointer
-// crosses the neighbour's middle, so the tabs rearrange live and a wide
-// neighbour doesn't swap back and forth under the pointer.
-func (s *TabStrip) dragOver(id, pointerX int) {
-	from := s.workspace.indexOf(id)
-	target := from
-	for index, e := range s.workspace.entries {
-		middle := s.chip(e.id).origin.X + s.chip(e.id).width/2
-		switch {
-		case index < from && pointerX < middle && target == from:
-			target = index // the first tab passed on the left
-		case index > from && pointerX > middle:
-			target = index // the last tab passed on the right
-		}
-	}
-	s.workspace.MoveTo(id, target)
 }

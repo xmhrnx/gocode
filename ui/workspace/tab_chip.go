@@ -1,10 +1,7 @@
 package workspace
 
 import (
-	"image"
-
 	"github.com/xmhrnx/giode"
-	"github.com/xmhrnx/giode/elements"
 
 	"gocode/ui/components"
 	"gocode/ui/theme"
@@ -16,10 +13,8 @@ type tabChip struct {
 	id        int
 	press     *giode.PressableElement
 	closer    *components.IconButton
-	// origin and width place the chip in the window, in pixels, for
-	// finding which tab a drag is over.
-	origin image.Point
-	width  int
+	// width is the chip's width in pixels, for placing a dragged tab.
+	width int
 }
 
 func newTabChip(s *TabStrip, id int) *tabChip {
@@ -30,13 +25,13 @@ func newTabChip(s *TabStrip, id int) *tabChip {
 		OnClick(func(giode.ClickEvent) { w.activate(id) }).
 		OnSecondaryClick(func(e giode.ClickEvent) { s.menu.openFor(id, e) }).
 		OnLongPress(func(e giode.ClickEvent) { s.menu.openFor(id, e) }).
-		OnDragStart(func(giode.DragEvent) { w.activate(id) }).
-		OnDragMove(func(e giode.DragEvent) { s.dragOver(id, e.WindowPosition.X) })
+		OnDragStart(func(giode.DragEvent) { s.startDrag(id) }).
+		OnDragMove(func(e giode.DragEvent) { s.moveDrag(id, e.DeltaDp.X) }).
+		OnDragEnd(func(giode.DragEvent) { s.endDrag() })
 	return c
 }
 
 func (c *tabChip) Layout(gtx giode.Context) giode.Dimensions {
-	elements.TrackPosition(&c.origin)
 	dims := c.press.Layout(gtx)
 	c.width = dims.Size.X
 	return dims
@@ -68,10 +63,12 @@ func (c *tabChip) content(state giode.PressState) giode.Element {
 		Padding: giode.Inset{Left: 12, Right: 3}, Height: 30, MaxWidth: 220,
 		Background: background, BorderRadii: giode.TopCorners(9),
 	}, c.icon(tab.Busy(), tab.Icon(), color),
-		giode.Text(tab.Title(), giode.Styles{
+		// The box caps the title's width, so a long title ends in "…"
+		// instead of pushing the close button out of the tab.
+		giode.Box(giode.Styles{MaxWidth: 150}, giode.Text(tab.Title(), giode.Styles{
 			Color: color, FontSize: theme.Sizes.Small, FontWeight: giode.FontWeightMedium,
-			TextOverflow: giode.TextOverflowEllipsis, MaxWidth: 150,
-		}),
+			TextOverflow: giode.TextOverflowEllipsis,
+		})),
 		c.closer,
 	)
 }
