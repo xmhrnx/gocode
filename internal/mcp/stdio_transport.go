@@ -3,8 +3,11 @@ package mcp
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"gocode/internal/proc"
 	"io"
+	"os"
 	"os/exec"
 	"sync"
 	"time"
@@ -93,7 +96,9 @@ func (t *stdioTransport) close() error {
 		case <-t.done:
 		case <-time.After(closeGrace):
 		}
-		t.closeErr = killGroup(t.cmd)
+		if err := proc.KillGroup(t.cmd); !errors.Is(err, os.ErrProcessDone) {
+			t.closeErr = err
+		}
 		<-t.done
 	})
 	return t.closeErr

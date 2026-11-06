@@ -3,6 +3,7 @@ package shell
 import (
 	"context"
 	"errors"
+	"gocode/internal/proc"
 	"os"
 	"os/exec"
 	"strings"
@@ -32,8 +33,8 @@ func (s *Session) Run(ctx context.Context, commandLine string, onOutput func(chu
 	cmd := exec.CommandContext(ctx, s.shell, args...)
 	cmd.Dir = s.WorkDir()
 	cmd.Env = append(os.Environ(), "TERM=dumb")
-	startInOwnGroup(cmd)
-	cmd.Cancel = func() error { return killGroup(cmd) }
+	proc.StartGroup(cmd)
+	cmd.Cancel = func() error { return proc.KillGroup(cmd) }
 	waitErr := runStreaming(cmd, onOutput)
 
 	if dir, err := os.ReadFile(pwdFile); err == nil && len(dir) > 0 {

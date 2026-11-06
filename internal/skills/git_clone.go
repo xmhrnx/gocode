@@ -3,6 +3,7 @@ package skills
 import (
 	"context"
 	"fmt"
+	"gocode/internal/proc"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -20,6 +21,7 @@ func cloneRepo(ctx context.Context, source repoSource, dir string) (string, erro
 	// "--" stops a URL that starts with "-" from being read as an option.
 	args = append(args, "--", source.CloneURL, dest)
 	cmd := exec.CommandContext(ctx, "git", args...)
+	proc.Hide(cmd)
 	// Without a terminal, a credential prompt for a private or missing
 	// repository would hang the install instead of failing.
 	cmd.Env = append(os.Environ(), "GIT_TERMINAL_PROMPT=0")

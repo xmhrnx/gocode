@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"gocode/internal/proc"
 	"os/exec"
 	"time"
 
@@ -91,8 +92,8 @@ func (Bash) Run(ctx context.Context, env Env, raw json.RawMessage) Result {
 	cmd.Dir = env.WorkDir
 	cmd.Stdout, cmd.Stderr = output, output
 	cmd.WaitDelay = commandWaitDelay
-	startInOwnGroup(cmd)
-	cmd.Cancel = func() error { return killGroup(cmd) }
+	proc.StartGroup(cmd)
+	cmd.Cancel = func() error { return proc.KillGroup(cmd) }
 	err = cmd.Run()
 	return commandResult(runCtx, ctx, output.String(), err, timeout)
 }

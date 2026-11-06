@@ -3,6 +3,7 @@ package mcp
 import (
 	"errors"
 	"fmt"
+	"gocode/internal/proc"
 	"os"
 	"os/exec"
 	"sort"
@@ -18,7 +19,7 @@ func startStdio(server settings.MCPServer, events serverEvents) (transport, erro
 	cmd := exec.Command(server.Command, server.Args...)
 	cmd.Env = append(os.Environ(), envList(server.Env)...)
 	cmd.WaitDelay = pipeDrainDelay
-	startInOwnGroup(cmd)
+	proc.StartGroup(cmd)
 	t := &stdioTransport{cmd: cmd, stderr: newTailBuffer(stderrTailBytes), events: events,
 		pending: make(map[string]chan message), done: make(chan struct{})}
 	cmd.Stderr = t.stderr

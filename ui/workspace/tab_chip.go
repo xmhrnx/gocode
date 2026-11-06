@@ -60,11 +60,12 @@ func (c *tabChip) content(state giode.PressState) giode.Element {
 	c.closer.SetQuiet(!active && !state.Hovered)
 	return giode.Row(giode.Styles{
 		Align: giode.AlignCenter, Gap: 7, Wrap: giode.WrapNoWrap,
-		Padding: giode.Inset{Left: 12, Right: 3}, Height: 30, MaxWidth: 220,
+		Padding: giode.Inset{Left: 12, Right: 3}, Height: 30,
 		Background: background, BorderRadii: giode.TopCorners(9),
 	}, c.icon(tab.Busy(), tab.Icon(), color),
-		// The box caps the title's width, so a long title ends in "…"
-		// instead of pushing the close button out of the tab.
+		// Only the title's width is capped: a cap on the whole tab could
+		// cut off the close button once each part is rounded to pixels at
+		// fractional display scaling.
 		giode.Box(giode.Styles{MaxWidth: 150}, giode.Text(tab.Title(), giode.Styles{
 			Color: color, FontSize: theme.Sizes.Small, FontWeight: giode.FontWeightMedium,
 			TextOverflow: giode.TextOverflowEllipsis,
