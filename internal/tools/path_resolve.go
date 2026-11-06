@@ -11,7 +11,7 @@ import (
 // Relative paths resolve against the project root and "~/" against the
 // user's home directory.
 func resolvePath(env Env, path string) (string, error) {
-	path = strings.TrimSpace(path)
+	path = nativePath(strings.TrimSpace(path))
 	if path == "" {
 		return "", errors.New("path is required")
 	}

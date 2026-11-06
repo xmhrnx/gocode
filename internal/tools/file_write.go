@@ -1,9 +1,13 @@
 package tools
 
 import (
+	"errors"
+	"fmt"
 	"io/fs"
 	"os"
 	"path/filepath"
+
+	"gocode/internal/fsretry"
 )
 
 // existingFile is what a write needs to know about the file it replaces.
@@ -41,8 +45,8 @@ func writeText(abs, content string, mode fs.FileMode) error {
 	if err := os.MkdirAll(filepath.Dir(abs), 0o755); err != nil {
 		return err
 	}
-	if err := os.WriteFile(abs, []byte(content), mode); err != nil {
-		return err
+	if err := fsretry.Do(func() error { return os.WriteFile(abs, []byte(content), mode) }); err != nil {
+		return explainWriteError(err)
 	}
 	// WriteFile only applies mode to new files; an existing file keeps its
 	// own, so set it explicitly in case the umask or a prior chmod differs.
@@ -58,4 +62,15 @@ func fileDiff(env Env, abs string, before existingFile, after string) string {
 		oldName = "/dev/null"
 	}
 	return unifiedDiff(oldName, "b/"+name, before.content, after)
+}
+
+// explainWriteError adds what the model can do about a refused write, so
+// it doesn't retry the same way or fall back to writing through the shell.
+func explainWriteError(err error) error {
+	if !errors.Is(err, fs.ErrPermission) {
+		return err
+	}
+	return fmt.Errorf("%w. The file may be read-only, open in a program that locks it, or in a folder the system "+
+		"protects (Windows' Controlled Folder Access blocks unknown apps from Documents and Desktop). "+
+		"Tell the user; writing through the shell will fail the same way", err)
 }
