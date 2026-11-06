@@ -7,7 +7,7 @@ func Default() Settings {
 		General: General{RestoreTabs: true, ConfirmCloseBusy: true, AutoTitle: true},
 		Appearance: Appearance{
 			Theme: "midnight", UIFontSize: 14, CodeFontSize: 13, ChatWidth: 820,
-			TitleBarStyle: "windows",
+			TitleBarStyle: "windows", MaxFPS: 120,
 		},
 		Chat: Chat{
 			SendKey: SendEnter, ShowReasoning: true, ShowTokenUsage: true,
@@ -33,6 +33,9 @@ func (s *Settings) fillDefaults() {
 	setInt(&s.Appearance.UIFontSize, def.Appearance.UIFontSize)
 	setInt(&s.Appearance.CodeFontSize, def.Appearance.CodeFontSize)
 	setInt(&s.Appearance.ChatWidth, def.Appearance.ChatWidth)
+	if s.Appearance.MaxFPS == 0 {
+		s.Appearance.MaxFPS = def.Appearance.MaxFPS
+	}
 	if s.Chat.SendKey == "" {
 		s.Chat.SendKey = def.Chat.SendKey
 	}

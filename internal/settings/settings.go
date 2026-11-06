@@ -35,6 +35,8 @@ type Appearance struct {
 	ChatWidth     int    `json:"chat_width"`
 	Compact       bool   `json:"compact"`
 	TitleBarStyle string `json:"title_bar_style"` // "windows" or "mac"
+	// MaxFPS caps the frame rate; NoFrameCap draws at the display's rate.
+	MaxFPS int `json:"max_fps"`
 }
 
 // SendKey is the key combination that sends a message.
@@ -61,6 +63,10 @@ type Network struct {
 	RequestTimeoutSeconds int `json:"request_timeout_seconds"`
 	MaxRetries            int `json:"max_retries"`
 }
+
+// NoFrameCap is the MaxFPS value for drawing at the display's refresh
+// rate; 0 means unset and becomes the default.
+const NoFrameCap = -1
 
 const (
 	SendEnter     SendKey = "enter"

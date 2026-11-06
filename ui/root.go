@@ -78,6 +78,7 @@ func (r *Root) applyAppearance() {
 	appearance := r.services.Settings.Appearance
 	theme.Apply(appearance.Theme)
 	theme.SetBaseSize(appearance.UIFontSize, appearance.CodeFontSize)
+	r.services.App.SetMaxFPS(max(appearance.MaxFPS, 0)) // NoFrameCap (-1) is Giode's 0: no cap
 	if appearance.TitleBarStyle == "mac" {
 		r.bar.Variant(giode.TitleBarMac)
 	} else {

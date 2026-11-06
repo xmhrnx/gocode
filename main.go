@@ -22,11 +22,6 @@ import (
 	"gocode/ui/platform"
 )
 
-// maxFramesPerSecond caps drawing during animation and scrolling: past
-// 120 a coding app looks no smoother, while 144 and 240 Hz displays would
-// otherwise make every spinner and scroll cost proportionally more.
-const maxFramesPerSecond = 120
-
 func main() {
 	if err := run(); err != nil {
 		log.Fatal(err)
@@ -47,7 +42,6 @@ func run() error {
 	app := giode.New(giode.Config{
 		Title: "GoCode", Size: image.Pt(1240, 820), MinWidth: 560, MinHeight: 420,
 		Resizable: true, Frameless: true, Center: true, Background: "theme.background",
-		MaxFPS:     maxFramesPerSecond,
 		Icon:       assets.AppIcon,
 		OnFileDrop: func(paths []string) { root.DropFiles(paths) },
 	})

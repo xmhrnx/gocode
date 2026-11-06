@@ -3,6 +3,7 @@ package settingsview
 import (
 	"fmt"
 
+	"gocode/internal/settings"
 	"gocode/ui/core"
 )
 
@@ -16,6 +17,12 @@ func appearanceEntries(s *core.Services) []entry {
 		return fmt.Sprintf("%d dp", v)
 	}
 	barStyles := []option[string]{{"windows", "Buttons on the right"}, {"mac", "Buttons on the left"}}
+	fps := func(v int) string {
+		if v == settings.NoFrameCap {
+			return "No cap"
+		}
+		return fmt.Sprintf("%d fps", v)
+	}
 	return []entry{
 		{title: "Theme", description: "Pick a look; System follows your OS light or dark mode.",
 			keywords: "theme color dark light palette appearance", wide: true, control: newThemeGrid(s)},
@@ -25,6 +32,8 @@ func appearanceEntries(s *core.Services) []entry {
 			keywords: "font size code monospace", control: intChoice(s, &a.CodeFontSize, []int{11, 12, 13, 14, 15, 16}, points)},
 		{title: "Conversation width", description: "Widest the chat column grows on large windows.",
 			keywords: "width column layout", control: intChoice(s, &a.ChatWidth, []int{680, 820, 960, 1120, 10000}, width)},
+		{title: "Frame rate cap", description: "Most frames a second while something moves; lower saves power. An idle window draws nothing either way.",
+			keywords: "fps frame rate refresh performance battery smooth", control: intChoice(s, &a.MaxFPS, []int{30, 60, 120, 144, 240, settings.NoFrameCap}, fps)},
 		{title: "Window buttons", description: "Where minimize, maximize and close sit in the title bar.",
 			keywords: "title bar window controls mac windows", control: choice(s, &a.TitleBarStyle, barStyles)},
 	}
