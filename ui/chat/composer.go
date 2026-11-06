@@ -23,7 +23,7 @@ type composer struct {
 	nextID      int
 	chips       *giode.KeyedCache[int, *attachmentChip]
 	attachFile  *components.IconButton
-	paste       *components.IconButton
+	pasteButton *components.IconButton
 	send        *sendButton
 	modes       *modeMenu
 	model       *components.PillButton
@@ -41,7 +41,8 @@ func newComposer(tab *ChatTab) *composer {
 	c.editor = components.NewMessageField("Ask anything, or describe a task…", false).
 		Submit(func(string) { tab.send() })
 	c.attachFile = components.NewIconButton("paperclip", "Attach files or images", c.pickFiles)
-	c.paste = components.NewIconButton("image", "Paste an image from the clipboard  ("+giode.FormatShortcut("Mod+Shift+V")+")", c.pasteImage)
+	c.editor.OnPaste(c.paste)
+	c.pasteButton = components.NewIconButton("image", "Paste an image from the clipboard  ("+giode.FormatShortcut("Mod+V")+")", c.pasteImage)
 	c.send = newSendButton(tab)
 	c.modes = newModeMenu(tab)
 	c.picker = modelpicker.New(tab.services, func(ref string) { tab.selectModel(ref) })
@@ -118,7 +119,7 @@ func (c *composer) card() giode.Element {
 func (c *composer) toolbar() giode.Element {
 	return giode.Row(giode.Styles{Width: -1, Align: giode.AlignCenter, Gap: 4, Wrap: giode.WrapNoWrap},
 		c.attachFile,
-		c.paste,
+		c.pasteButton,
 		c.modes,
 		giode.Box(giode.Styles{FlexGrow: 1}),
 		c.model,

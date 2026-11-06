@@ -51,8 +51,8 @@ webview or JavaScript runtime inside. The UI is drawn straight to the GPU.
   providers. Each provider opens its own searchable model list. Models you
   don't use can be hidden in Settings → Models.
 - **Attachments**: files and images through the paperclip button, by dropping
-  them on the window, or pasted from the clipboard (image button or
-  Ctrl/⌘+Shift+V). Large images are scaled down before sending.
+  them on the window, or pasted from the clipboard (Ctrl/⌘+V or the image
+  button). Large images are scaled down before sending.
 - **Selecting text**: drag across the conversation or the terminal to select
   text, even across messages or blocks, and copy it with Ctrl/⌘+C.
 - **Messages**: copy, retry, and edit-and-resend. Replies render as Markdown

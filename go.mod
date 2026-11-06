@@ -3,7 +3,7 @@ module gocode
 go 1.26.6
 
 require (
-	github.com/xmhrnx/giode v0.2.1-alpha.1
+	github.com/xmhrnx/giode v0.2.2-alpha.1
 	golang.org/x/image v0.26.0
 	golang.org/x/net v0.48.0
 )
