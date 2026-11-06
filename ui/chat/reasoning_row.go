@@ -39,11 +39,13 @@ func (r *reasoningRow) Layout(gtx giode.Context) giode.Dimensions {
 		if r.it.draft {
 			text = liveTail(text, maxLiveReasoning)
 		}
-		children = append(children, giode.Row(giode.Styles{
-			Gap: 12, Align: giode.AlignStretch, Wrap: giode.WrapNoWrap, Margin: giode.Inset{Left: 6},
-		}, giode.Box(giode.Styles{Width: 2, Background: theme.SoftBorder}),
-			giode.Text(text, giode.Styles{Color: theme.Muted, FontSize: theme.Sizes.Small, FlexGrow: 1,
-				LineHeight: theme.Body().LineHeight - 3})))
+		// A panel rather than a rule stretched to the text's height: a
+		// stretched sibling makes the text be measured and then laid out
+		// again, doubling the cost of every streamed frame.
+		children = append(children, giode.Box(giode.Styles{
+			Width: -1, Padding: giode.SymmetricInset(12, 8), BorderRadius: 8, Background: theme.Raised,
+		}, giode.Text(text, giode.Styles{Color: theme.Muted, FontSize: theme.Sizes.Small,
+			LineHeight: theme.Body().LineHeight - 3})))
 	}
 	return giode.Stack(giode.Styles{Width: -1, Gap: 6, Padding: giode.SymmetricInset(0, 4)}, children...).Layout(gtx)
 }

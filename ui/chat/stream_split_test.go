@@ -31,8 +31,21 @@ func TestStreamSegmentsStayPutAsTextGrows(t *testing.T) {
 	}
 }
 
-func TestLiveTailStartsAtALine(t *testing.T) {
-	if got := liveTail("aaaa\nbbbb\ncccc", 7); got != "…\ncccc" {
-		t.Fatalf("got %q", got)
+func TestLiveTailStartsAtALineAndStaysBounded(t *testing.T) {
+	text := strings.Repeat("line of text\n", 400)
+	got := liveTail(text, 1000)
+	if !strings.HasPrefix(got, "…\nline") || len(got) > 1000+10 {
+		t.Fatalf("tail of %d bytes starts %q", len(got), got[:12])
+	}
+}
+
+// Between steps the tail only grows at its end, so the lines before stay
+// identical and keep their cached layout.
+func TestLiveTailGrowsAtTheEndBetweenSteps(t *testing.T) {
+	text := strings.Repeat("abcdefghi\n", 140)
+	before := liveTail(text, 1000)
+	after := liveTail(text+"more", 1000)
+	if !strings.HasPrefix(after, before) {
+		t.Fatalf("the shown text moved:\n%q\n%q", before[:30], after[:30])
 	}
 }

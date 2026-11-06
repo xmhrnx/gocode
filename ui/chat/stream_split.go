@@ -39,13 +39,17 @@ func streamSegments(text string, size int) []string {
 	return append(segments, text[segmentStart:])
 }
 
-// liveTail returns the end of text, starting at a line boundary, so a
-// long stream shows its newest part.
+// liveTail returns the end of text, at most about limit bytes, so a long
+// stream shows its newest part. The start moves in steps of half the
+// limit, not with every chunk: between steps the shown text only grows at
+// its end, so the lines already shown keep their cached layout.
 func liveTail(text string, limit int) string {
 	if len(text) <= limit {
 		return text
 	}
-	tail := text[len(text)-limit:]
+	step := max(limit/2, 1)
+	start := (len(text) - limit + step - 1) / step * step
+	tail := text[start:]
 	if newline := strings.IndexByte(tail, '\n'); newline >= 0 {
 		tail = tail[newline+1:]
 	}
