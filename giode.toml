@@ -12,3 +12,6 @@ description = "A native, lightweight coding agent and terminal."
 trigger = "release"
 arch = ["amd64", "arm64"]
 test = "go vet ./... && go test ./..."
+
+[windows.msix]
+publisher = "CN=GoCode"

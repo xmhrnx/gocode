@@ -1,3 +1,4 @@
 /dist/
 /gocode
 *.exe
+*.syso
