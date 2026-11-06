@@ -26,6 +26,7 @@ type composer struct {
 	pasteButton *components.IconButton
 	send        *sendButton
 	modes       *modeMenu
+	effort      *effortMenu
 	model       *components.PillButton
 	picker      *modelpicker.Picker
 }
@@ -45,6 +46,7 @@ func newComposer(tab *ChatTab) *composer {
 	c.pasteButton = components.NewIconButton("image", "Paste an image from the clipboard  ("+giode.FormatShortcut("Mod+V")+")", c.pasteImage)
 	c.send = newSendButton(tab)
 	c.modes = newModeMenu(tab)
+	c.effort = newEffortMenu(tab)
 	c.picker = modelpicker.New(tab.services, func(ref string) { tab.selectModel(ref) })
 	c.picker.Current = tab.model.String
 	c.model = components.NewPillButton("cpu", "Choose a model  ("+giode.FormatShortcut("Mod+K")+")", c.picker.Open)
@@ -121,6 +123,7 @@ func (c *composer) toolbar() giode.Element {
 		c.attachFile,
 		c.pasteButton,
 		c.modes,
+		c.effort,
 		giode.Box(giode.Styles{FlexGrow: 1}),
 		c.model,
 		c.send,

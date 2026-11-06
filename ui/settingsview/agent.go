@@ -6,7 +6,7 @@ func agentEntries(s *core.Services) []entry {
 	a := &s.Settings.Agent
 	efforts := []option[string]{{"", "Model default"}, {"low", "Low"}, {"medium", "Medium"}, {"high", "High"}}
 	return []entry{
-		{title: "Reasoning effort", description: "How hard reasoning models think before answering. Higher is slower and costs more.",
+		{title: "Reasoning effort", description: "The thinking effort new chats start with; each chat can change it in the message box. Higher is slower and costs more.",
 			keywords: "thinking effort reasoning budget", control: choice(s, &a.ReasoningEffort, efforts)},
 		{title: "Step limit", description: "Stop a run after this many model calls. 0 means no limit: the agent works until the task is done. A run that repeats the same tool call 3 times in a row is paused for your approval either way.",
 			keywords: "loop steps iterations limit turns continue", control: number(s, &a.MaxSteps, 0, 100000)},

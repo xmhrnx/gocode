@@ -23,6 +23,9 @@ type ChatTab struct {
 	model    catalog.ModelRef
 	perms    *agent.Permissions
 	useTools bool
+	// effort is this chat's reasoning effort; it starts at the default
+	// from the settings.
+	effort   string
 	registry *tools.Registry
 
 	unsubscribe func()
@@ -60,7 +63,7 @@ func Open(services *core.Services, sess *session.Session) *ChatTab {
 
 func newTab(services *core.Services, sess *session.Session, prompt string) *ChatTab {
 	c := &ChatTab{
-		services: services, session: sess, useTools: true,
+		services: services, session: sess, useTools: true, effort: services.Settings.Agent.ReasoningEffort,
 		model:    initialModel(services, sess),
 		perms:    agent.NewPermissions(agent.ModeAsk, services.Settings.Agent),
 		registry: tools.Default(),

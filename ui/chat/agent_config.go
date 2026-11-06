@@ -25,7 +25,7 @@ func (c *ChatTab) agentConfig() agent.Config {
 	run := agent.Config{
 		Model: c.model.Model, Permissions: c.perms, Ask: c.ask,
 		MaxSteps: cfg.MaxSteps, MaxTokens: cfg.MaxOutputTokens,
-		ReasoningEffort: cfg.ReasoningEffort, MaxRetries: c.services.Settings.Network.MaxRetries,
+		ReasoningEffort: c.effort, MaxRetries: c.services.Settings.Network.MaxRetries,
 		ContextWindow: c.contextWindow(),
 		Inbox:         c.queue.drain,
 		CompactPrompt: prompts.Or(c.services.Settings.Prompts.Compact, prompts.DefaultCompact()),
