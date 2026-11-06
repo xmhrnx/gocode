@@ -93,6 +93,18 @@ The [Giode CLI](https://github.com/xmhrnx/giode-cli) builds packages
 `giode.toml`. It also builds against Giode's patched Gio, which you need for
 dropping files onto the window on Linux.
 
+## Releases and website
+
+Publishing a GitHub release (tag `vX.Y.Z`) runs `.github/workflows/release.yml`,
+written by `giode ci` from the `[ci]` section of `giode.toml`; rerun `giode ci -f`
+after changing it. It tests, then builds Windows installers and MSIX packages
+(x64 and ARM64), Linux `.deb` and `.rpm` packages (x64 and ARM64) and a universal
+macOS `.dmg`, and attaches them to the release.
+
+The website in `website/` is published to GitHub Pages by the `website` workflow,
+run by hand from the Actions tab. Its download button picks the file for the
+visitor's OS and CPU from the latest release.
+
 ## Layout
 
 | Path | What lives there |

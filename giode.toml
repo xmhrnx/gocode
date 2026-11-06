@@ -5,4 +5,10 @@ version = "0.1.0"
 build = 1
 icon = "assets/icon.png"
 package = "."
+platforms = ["windows", "macos", "linux"]
 description = "A native, lightweight coding agent and terminal."
+
+[ci]
+trigger = "release"
+arch = ["amd64", "arm64"]
+test = "go vet ./... && go test ./..."
