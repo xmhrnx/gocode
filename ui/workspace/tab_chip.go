@@ -23,11 +23,10 @@ func newTabChip(s *TabStrip, id int) *tabChip {
 	c.closer = components.NewIconButton("x", "Close tab", func() { w.Close(id) }).SetSize(13)
 	c.press = giode.Pressable(c.content).Label("Tab").
 		OnClick(func(giode.ClickEvent) { w.activate(id) }).
-		OnSecondaryClick(func(e giode.ClickEvent) { s.menu.openFor(id, e) }).
-		OnLongPress(func(e giode.ClickEvent) { s.menu.openFor(id, e) }).
 		OnDragStart(func(giode.DragEvent) { s.startDrag(id) }).
 		OnDragMove(func(e giode.DragEvent) { s.moveDrag(id, e.DeltaDp.X) }).
 		OnDragEnd(func(giode.DragEvent) { s.endDrag() })
+	c.press.Context(newTabMenu(w, id)) // right-click or long-press
 	return c
 }
 
