@@ -46,6 +46,7 @@ type SendKey string
 type Chat struct {
 	SendKey           SendKey `json:"send_key"`
 	ShowReasoning     bool    `json:"show_reasoning"`
+	CollapseReasoning bool    `json:"collapse_reasoning"`
 	ExpandToolOutput  bool    `json:"expand_tool_output"`
 	ShowTokenUsage    bool    `json:"show_token_usage"`
 	MaxAttachmentMB   int     `json:"max_attachment_mb"`

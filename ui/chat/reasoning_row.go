@@ -7,8 +7,8 @@ import (
 )
 
 // reasoningRow shows one segment of the model's reasoning. The first
-// segment carries the header, which folds the whole part away; the
-// reasoning stays open, as it streamed, until the user folds it.
+// segment carries the header, which opens or folds the whole part. It
+// starts open, or folded with the "Keep reasoning collapsed" setting.
 type reasoningRow struct {
 	rowBase
 	toggle *giode.PressableElement
@@ -19,12 +19,14 @@ func newReasoningRow(tab *ChatTab, it item) *reasoningRow {
 	r.toggle = giode.Pressable(r.header).Label("Toggle reasoning").
 		OnClick(func(giode.ClickEvent) {
 			group := r.it.group
-			tab.collapsedReasoning[group] = !tab.collapsedReasoning[group]
+			tab.toggledReasoning[group] = !tab.toggledReasoning[group]
 		})
 	return r
 }
 
-func (r *reasoningRow) collapsed() bool { return r.tab.collapsedReasoning[r.it.group] }
+func (r *reasoningRow) collapsed() bool {
+	return r.tab.services.Settings.Chat.CollapseReasoning != r.tab.toggledReasoning[r.it.group]
+}
 
 func (r *reasoningRow) version() int {
 	if r.collapsed() {

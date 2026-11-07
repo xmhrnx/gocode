@@ -14,8 +14,10 @@ func chatEntries(s *core.Services) []entry {
 	return []entry{
 		{title: "Send message with", description: "Shift+Enter always inserts a new line. With Ctrl/⌘+Enter, plain Enter inserts one too, so a message can't go out by accident.",
 			keywords: "send key enter shift ctrl newline submit keyboard", control: choice(s, &c.SendKey, sendKeys)},
-		{title: "Show reasoning", description: "Show the model's thinking, collapsed, above its answer.",
+		{title: "Show reasoning", description: "Show the model's thinking above its answer.",
 			keywords: "thinking reasoning thoughts", control: switchControl(s, &c.ShowReasoning)},
+		{title: "Keep reasoning collapsed", description: "Show only a \"Thinking…\" line for the model's thinking; click it to open it.",
+			keywords: "thinking reasoning thoughts collapse fold expand", control: switchControl(s, &c.CollapseReasoning)},
 		{title: "Expand tool output", description: "Show each tool call's output or diff without clicking it.",
 			keywords: "tool output diff expand", control: switchControl(s, &c.ExpandToolOutput)},
 		{title: "Show token usage", description: "Show tokens sent and received, and the share served from cache.",

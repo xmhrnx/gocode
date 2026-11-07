@@ -39,9 +39,9 @@ type ChatTab struct {
 	// contextTokens is the size of the last request, for the context gauge.
 	contextTokens int
 	revision      int
-	// collapsedReasoning holds the reasoning parts the user folded, by
-	// their item group.
-	collapsedReasoning map[string]bool
+	// toggledReasoning holds the reasoning parts the user opened or
+	// folded against the setting's default, by their item group.
+	toggledReasoning map[string]bool
 
 	header     *header
 	transcript *transcript
@@ -69,7 +69,7 @@ func newTab(services *core.Services, sess *session.Session, prompt string) *Chat
 		services: services, session: sess, useTools: true, effort: services.Settings.Agent.ReasoningEffort,
 		model:    initialModel(services, sess),
 		perms:    agent.NewPermissions(agent.ModeAsk, services.Settings.Agent),
-		registry: tools.Default(), collapsedReasoning: map[string]bool{},
+		registry: tools.Default(), toggledReasoning: map[string]bool{},
 	}
 	sess.Model = c.model.String()
 	c.unsubscribe = services.OnSettingsChanged(func() {
