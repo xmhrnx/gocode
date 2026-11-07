@@ -58,7 +58,7 @@ func (h *header) pickFolder() {
 			return
 		}
 		services.App.Post(func() {
-			h.tab.session.WorkDir = dir
+			h.tab.session.WorkDir, h.tab.openedFolder = dir, true
 			h.tab.changed()
 		})
 	}()

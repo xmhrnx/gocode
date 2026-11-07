@@ -17,9 +17,12 @@ func (c *ChatTab) Empty() bool {
 
 // Snapshot implements core.Restorable.
 func (c *ChatTab) Snapshot() tabstate.Tab {
-	tab := tabstate.Tab{Kind: tabstate.KindChat, WorkDir: c.session.WorkDir}
-	if len(c.session.Messages) > 0 {
-		tab.SessionID = c.session.ID
+	tab := tabstate.Tab{Kind: tabstate.KindChat}
+	switch {
+	case len(c.session.Messages) > 0:
+		tab.SessionID, tab.WorkDir = c.session.ID, c.session.WorkDir
+	case c.openedFolder:
+		tab.WorkDir, tab.Opened = c.session.WorkDir, true
 	}
 	return tab
 }

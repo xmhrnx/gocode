@@ -27,7 +27,11 @@ func (r *Root) openSaved(saved tabstate.Tab) core.Tab {
 	switch saved.Kind {
 	case tabstate.KindChat:
 		if saved.SessionID == "" {
-			return chat.New(s, saved.WorkDir, "")
+			workDir := ""
+			if saved.Opened {
+				workDir = saved.WorkDir // else it starts in the default folder
+			}
+			return chat.New(s, workDir, "")
 		}
 		sess, err := s.Sessions.Load(saved.SessionID)
 		if err != nil {

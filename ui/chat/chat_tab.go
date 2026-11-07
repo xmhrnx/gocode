@@ -37,6 +37,8 @@ type ChatTab struct {
 	// contextTokens is the size of the last request, for the context gauge.
 	contextTokens int
 	revision      int
+	// openedFolder is set once the user opens a folder for the chat.
+	openedFolder bool
 	// toggledReasoning holds the reasoning parts the user opened or
 	// folded against the setting's default, by their item group.
 	toggledReasoning map[string]bool
@@ -51,7 +53,9 @@ type ChatTab struct {
 // its first message is sent, unless the user opens one before.
 func New(services *core.Services, workDir, prompt string) *ChatTab {
 	sess := session.New(workDir, services.Settings.Models.Default)
-	return newTab(services, sess, prompt)
+	c := newTab(services, sess, prompt)
+	c.openedFolder = workDir != "" // asked for by whoever opened the chat
+	return c
 }
 
 // Open returns a chat tab continuing a stored session.

@@ -22,6 +22,9 @@ type Tab struct {
 	// messages yet.
 	SessionID string `json:"session_id,omitempty"`
 	WorkDir   string `json:"work_dir,omitempty"`
+	// Opened marks a folder the user opened for a chat with no messages
+	// yet; such a chat otherwise starts in the default folder again.
+	Opened bool `json:"opened,omitempty"`
 }
 
 // State is the open tabs, in order, and which one was shown.
