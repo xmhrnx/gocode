@@ -5,7 +5,6 @@ import (
 	"gocode/ui/chat"
 	"gocode/ui/core"
 	"gocode/ui/settingsview"
-	"gocode/ui/terminal"
 )
 
 // restoreTabs reopens the tabs open when GoCode last closed, when the
@@ -35,8 +34,6 @@ func (r *Root) openSaved(saved tabstate.Tab) core.Tab {
 			return nil
 		}
 		return chat.Open(s, sess)
-	case tabstate.KindTerminal:
-		return terminal.New(s, saved.WorkDir)
 	case tabstate.KindSettings:
 		return settingsview.New(s, "")
 	}

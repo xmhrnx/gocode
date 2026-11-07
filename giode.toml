@@ -6,7 +6,7 @@ build = 1
 icon = "assets/icon.png"
 package = "."
 platforms = ["windows", "macos", "linux"]
-description = "A native, lightweight coding agent and terminal."
+description = "A native, lightweight coding agent."
 
 [ci]
 trigger = "release"

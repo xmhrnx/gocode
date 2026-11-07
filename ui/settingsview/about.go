@@ -13,7 +13,7 @@ func aboutEntries(s *core.Services) []entry {
 		version = "development build"
 	}
 	return []entry{
-		{title: "GoCode", description: "A native coding agent and terminal, built with Go and Giode. No browser engine inside.",
+		{title: "GoCode", description: "A native coding agent, built with Go and Giode. No browser engine inside.",
 			keywords: "version about", control: giode.Text(version, theme.Caption())},
 		{title: "Settings file", description: "Settings are plain JSON. API keys are kept in the system keychain, not here.",
 			keywords: "config path file json location", control: giode.Text(s.SettingsPath, giode.Styles{

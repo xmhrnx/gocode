@@ -8,7 +8,7 @@ import (
 
 func TestSaveLoadRoundTrip(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "tabs.json")
-	state := State{Tabs: []Tab{{Kind: KindChat, SessionID: "s1"}, {Kind: KindTerminal, WorkDir: "/w"}}, Active: 1}
+	state := State{Tabs: []Tab{{Kind: KindChat, SessionID: "s1"}, {Kind: KindSettings}}, Active: 1}
 	if err := Save(path, state); err != nil {
 		t.Fatal(err)
 	}

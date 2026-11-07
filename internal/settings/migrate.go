@@ -1,7 +1,7 @@
 package settings
 
 // currentVersion is the settings format written by this build.
-const currentVersion = 3
+const currentVersion = 4
 
 // migrate updates settings written by older builds.
 func (s *Settings) migrate() {
@@ -12,6 +12,13 @@ func (s *Settings) migrate() {
 		// Shift+Enter as the send key isn't offered any more; Ctrl+Enter
 		// keeps the point of it: plain Enter never sends.
 		s.Chat.SendKey = SendCtrlEnter
+	}
+	if s.Terminal != nil {
+		// The terminal tab is gone; its shell setting was the agent's too.
+		if s.Agent.Shell == "" {
+			s.Agent.Shell = s.Terminal.Shell
+		}
+		s.Terminal = nil
 	}
 	s.Version = currentVersion
 }

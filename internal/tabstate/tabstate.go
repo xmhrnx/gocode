@@ -32,7 +32,6 @@ type State struct {
 
 const (
 	KindChat     Kind = "chat"
-	KindTerminal Kind = "terminal"
 	KindSettings Kind = "settings"
 )
 

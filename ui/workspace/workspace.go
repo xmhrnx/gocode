@@ -16,7 +16,6 @@ type entry struct {
 // Factory creates the kinds of tabs the workspace can open.
 type Factory struct {
 	Chat     func(workDir, prompt string) core.Tab
-	Terminal func(workDir string) core.Tab
 	Settings func(category string) core.Tab
 }
 
@@ -38,9 +37,6 @@ func New(factory Factory) *Workspace { return &Workspace{factory: factory} }
 // OpenChat opens a new chat tab in workDir (empty: the default folder),
 // starting with prompt in its composer.
 func (w *Workspace) OpenChat(workDir, prompt string) { w.Add(w.factory.Chat(workDir, prompt)) }
-
-// OpenTerminal opens a new terminal tab.
-func (w *Workspace) OpenTerminal() { w.Add(w.factory.Terminal("")) }
 
 // OpenSettings shows the settings tab, opening it on first use.
 func (w *Workspace) OpenSettings(category string) {

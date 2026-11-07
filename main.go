@@ -1,4 +1,4 @@
-// Command gocode is a native, lightweight coding agent and terminal.
+// Command gocode is a native, lightweight coding agent.
 package main
 
 import (

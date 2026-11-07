@@ -15,10 +15,12 @@ type Agent struct {
 	// CompactAtPercent is how full the context may get before compacting.
 	CompactAtPercent int `json:"compact_at_percent"`
 	// ContextWindow is used for models whose provider doesn't report one.
-	ContextWindow         int      `json:"context_window"`
-	Temperature           float64  `json:"temperature"`
-	UseTemperature        bool     `json:"use_temperature"`
-	ReasoningEffort       string   `json:"reasoning_effort"`
+	ContextWindow   int     `json:"context_window"`
+	Temperature     float64 `json:"temperature"`
+	UseTemperature  bool    `json:"use_temperature"`
+	ReasoningEffort string  `json:"reasoning_effort"`
+	// Shell runs the agent's commands; empty picks the platform default.
+	Shell                 string   `json:"shell"`
 	CommandTimeoutSeconds int      `json:"command_timeout_seconds"`
 	MaxToolOutputKB       int      `json:"max_tool_output_kb"`
 	LoadProjectRules      bool     `json:"load_project_rules"`

@@ -97,7 +97,6 @@ h1 { font-size: clamp(38px, 4.9vw, 66px); line-height: 1.02; letter-spacing: -.0
 .tab.active { background: #1b2030; color: var(--text); }
 .tab.add { padding: 5px 8px; }
 .ti { width: 10px; height: 10px; border-radius: 3px; border: 1.5px solid currentColor; }
-.ti.term { border-radius: 2px; }
 .wctl { display: flex; gap: 14px; padding-right: 6px; }
 .wctl b { width: 10px; height: 2px; background: var(--muted); opacity: .6; }
 .body { padding: 20px 20px 16px; display: flex; flex-direction: column; gap: 14px; min-height: 340px; }

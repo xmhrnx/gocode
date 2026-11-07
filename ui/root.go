@@ -13,7 +13,6 @@ import (
 	"gocode/ui/core"
 	"gocode/ui/history"
 	"gocode/ui/settingsview"
-	"gocode/ui/terminal"
 	"gocode/ui/theme"
 	"gocode/ui/workspace"
 )
@@ -32,7 +31,6 @@ func New(services *core.Services) *Root {
 	r := &Root{services: services}
 	r.workspace = workspace.New(workspace.Factory{
 		Chat:     func(workDir, prompt string) core.Tab { return chat.New(services, workDir, prompt) },
-		Terminal: func(workDir string) core.Tab { return terminal.New(services, workDir) },
 		Settings: func(category string) core.Tab { return settingsview.New(services, category) },
 	})
 	services.SetOpenFactory(r.workspace)

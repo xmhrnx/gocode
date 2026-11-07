@@ -8,7 +8,6 @@ import (
 
 var shortcutList = []struct{ keys, action string }{
 	{"Mod+T", "New chat"},
-	{"Mod+Shift+T", "New terminal"},
 	{"Mod+W", "Close tab"},
 	{"Ctrl+Tab", "Next tab"},
 	{"Ctrl+Shift+Tab", "Previous tab"},
@@ -18,8 +17,7 @@ var shortcutList = []struct{ keys, action string }{
 	{"Mod+K", "Choose a model"},
 	{"Mod+H", "Chat history"},
 	{"Mod+,", "Settings"},
-	{"Esc", "Stop the agent or command"},
-	{"Mod+L", "Clear the terminal"},
+	{"Esc", "Stop the agent"},
 }
 
 func shortcutEntries() []entry {

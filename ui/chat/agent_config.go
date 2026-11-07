@@ -83,7 +83,7 @@ func (c *ChatTab) systemPrompt(in promptInputs) string {
 }
 
 func (c *ChatTab) shell() string {
-	if configured := c.services.Settings.Terminal.Shell; configured != "" {
+	if configured := c.services.Settings.Agent.Shell; configured != "" {
 		return configured
 	}
 	return shell.Default()

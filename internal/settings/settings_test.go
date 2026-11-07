@@ -1,6 +1,7 @@
 package settings
 
 import (
+	"os"
 	"path/filepath"
 	"testing"
 )
@@ -65,5 +66,20 @@ func TestMigrateDropsOldDefaultLimits(t *testing.T) {
 	kept.migrate()
 	if kept.Agent.MaxSteps != 200 || kept.Agent.MaxOutputTokens != 8000 {
 		t.Fatalf("user values lost: %+v", kept.Agent)
+	}
+}
+
+func TestMigrateMovesTheTerminalShellToTheAgent(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "settings.json")
+	old := `{"version": 3, "terminal": {"shell": "/bin/zsh", "max_block_lines": 2000}}`
+	if err := os.WriteFile(path, []byte(old), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	s, err := Load(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if s.Agent.Shell != "/bin/zsh" || s.Terminal != nil {
+		t.Fatalf("agent shell %q, terminal %v", s.Agent.Shell, s.Terminal)
 	}
 }

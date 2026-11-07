@@ -22,6 +22,8 @@ func agentEntries(s *core.Services) []entry {
 			keywords: "temperature sampling randomness", control: switchControl(s, &a.UseTemperature)},
 		{title: "Temperature", description: "Used only when the switch above is on. 0 is focused, 1 is creative.",
 			keywords: "temperature sampling randomness", control: decimal(s, &a.Temperature, 0, 2)},
+		{title: "Shell", description: "The program that runs the agent's commands. Empty picks one: $SHELL, or on Windows Git Bash, then PowerShell 7, then Windows PowerShell.",
+			keywords: "bash zsh powershell sh shell program terminal", control: text(s, &a.Shell, "/bin/zsh", 220)},
 		{title: "Command timeout (seconds)", description: "Commands the agent runs are stopped after this long unless it asks for more.",
 			keywords: "bash shell command timeout", control: number(s, &a.CommandTimeoutSeconds, 5, 3600)},
 		{title: "Tool output limit (KB)", description: "Longer tool output is cut before it reaches the model, keeping its start and end.",

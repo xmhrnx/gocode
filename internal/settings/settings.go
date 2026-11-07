@@ -5,12 +5,13 @@ package settings
 // on load, so new fields work with old files.
 type Settings struct {
 	// Version is the settings format, for migrating older files.
-	Version    int                `json:"version"`
-	Appearance Appearance         `json:"appearance"`
-	Chat       Chat               `json:"chat"`
-	Agent      Agent              `json:"agent"`
-	Prompts    Prompts            `json:"prompts"`
-	Terminal   Terminal           `json:"terminal"`
+	Version    int        `json:"version"`
+	Appearance Appearance `json:"appearance"`
+	Chat       Chat       `json:"chat"`
+	Agent      Agent      `json:"agent"`
+	Prompts    Prompts    `json:"prompts"`
+	// Terminal is read only to move its shell to Agent.Shell; see migrate.
+	Terminal   *legacyTerminal    `json:"terminal,omitempty"`
 	Providers  []ProviderSettings `json:"providers"`
 	Models     Models             `json:"models"`
 	Network    Network            `json:"network"`
@@ -53,12 +54,6 @@ type Chat struct {
 	InlineTextFilesKB int     `json:"inline_text_files_kb"`
 }
 
-// Terminal holds the command tab's behavior.
-type Terminal struct {
-	Shell         string `json:"shell"`
-	MaxBlockLines int    `json:"max_block_lines"`
-}
-
 // Network holds HTTP behavior for provider calls.
 type Network struct {
 	RequestTimeoutSeconds int `json:"request_timeout_seconds"`
@@ -73,3 +68,8 @@ const (
 	SendEnter     SendKey = "enter"
 	SendCtrlEnter SendKey = "ctrl+enter"
 )
+
+// legacyTerminal is the settings of the removed terminal tab.
+type legacyTerminal struct {
+	Shell string `json:"shell"`
+}

@@ -11,7 +11,6 @@ func (r *Root) registerShortcuts() {
 	w := r.workspace
 	list := []giode.KeyShortcut{
 		giode.Shortcut("Mod+T", func() { w.OpenChat("", "") }),
-		giode.Shortcut("Mod+Shift+T", w.OpenTerminal),
 		giode.Shortcut("Mod+W", w.CloseActive),
 		giode.Shortcut("Mod+,", func() { w.OpenSettings("") }),
 		giode.Shortcut("Mod+H", r.history.Open),

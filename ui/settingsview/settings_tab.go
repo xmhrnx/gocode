@@ -43,7 +43,7 @@ func allEntries(s *core.Services) []entry {
 		"Permissions": func() []entry { return permissionEntries(s) }, "Prompts": func() []entry { return promptEntries(s) },
 		"Providers": func() []entry { return providerEntries(s) }, "Models": func() []entry { return modelEntries(s) },
 		"Skills": func() []entry { return skillEntries(s) }, "MCP servers": func() []entry { return mcpEntries(s) },
-		"Terminal": func() []entry { return terminalEntries(s) }, "Network": func() []entry { return networkEntries(s) },
+		"Network":   func() []entry { return networkEntries(s) },
 		"Shortcuts": shortcutEntries, "About": func() []entry { return aboutEntries(s) },
 	}
 	var all []entry

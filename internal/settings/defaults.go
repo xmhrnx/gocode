@@ -19,8 +19,7 @@ func Default() Settings {
 			ReadPolicy: PolicyAllow, WritePolicy: PolicyAsk,
 			ExecutePolicy: PolicyAsk, NetworkPolicy: PolicyAsk,
 		},
-		Terminal: Terminal{MaxBlockLines: 2000},
-		Network:  Network{RequestTimeoutSeconds: 300, MaxRetries: 3},
+		Network: Network{RequestTimeoutSeconds: 300, MaxRetries: 3},
 	}
 }
 
@@ -49,7 +48,6 @@ func (s *Settings) fillDefaults() {
 	setPolicy(&s.Agent.WritePolicy, def.Agent.WritePolicy)
 	setPolicy(&s.Agent.ExecutePolicy, def.Agent.ExecutePolicy)
 	setPolicy(&s.Agent.NetworkPolicy, def.Agent.NetworkPolicy)
-	setInt(&s.Terminal.MaxBlockLines, def.Terminal.MaxBlockLines)
 	setInt(&s.Network.RequestTimeoutSeconds, def.Network.RequestTimeoutSeconds)
 }
 

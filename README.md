@@ -1,12 +1,12 @@
 # GoCode
 
-A native coding agent and terminal for the desktop. It's written in Go with
+A native coding agent for the desktop. It's written in Go with
 [Giode](https://github.com/xmhrnx/giode) (on Gio), so there's no browser engine,
 webview or JavaScript runtime inside. The UI is drawn straight to the GPU.
 
 ## Features
 
-- **Tabs** in a custom title bar: agent chats, Warp-style terminals and settings.
+- **Tabs** in a custom title bar: agent chats and settings.
   Drag tabs to reorder them, right-click one to close or move it, or move the
   current tab with Ctrl/⌘+Shift+Page Up / Page Down.
 - **Agent loop**: the model streams a reply, calls tools, sees their results and
@@ -17,9 +17,9 @@ webview or JavaScript runtime inside. The UI is drawn straight to the GPU.
 - **Messages while it works**: send messages while the agent is running.
   They're queued and reach the model at its next step, with no need to stop
   it first.
-- **Tabs reopen** where you left off: chats, terminals and settings
+- **Tabs reopen** where you left off: chats and settings
   (Settings → General).
-- **Shell**: commands run in `$SHELL`. On Windows they run in Git Bash when
+- **Shell**: the agent's commands run in `$SHELL`. On Windows they run in Git Bash when
   it's installed, then PowerShell 7, then Windows PowerShell. The model is
   told which shell it has.
 - **Sub-agents**: the `task` tool hands a self-contained job (a broad search,
@@ -60,7 +60,7 @@ webview or JavaScript runtime inside. The UI is drawn straight to the GPU.
 - **Attachments**: files and images through the paperclip button, by dropping
   them on the window, or pasted from the clipboard (Ctrl/⌘+V or the image
   button). Large images are scaled down before sending.
-- **Selecting text**: drag across the conversation or the terminal to select
+- **Selecting text**: drag across the conversation to select
   text, even across messages or blocks, and copy it with Ctrl/⌘+C.
 - **Messages**: copy, retry, and edit-and-resend. Replies render as Markdown
   with code blocks you can copy. Reasoning is shown collapsed.
@@ -119,8 +119,8 @@ visitor's OS and CPU from the latest release.
 | `internal/skills` | Skill discovery, installation and the `skill` tool |
 | `internal/tools` | The agent's tools |
 | `internal/prompts` | System prompts (defaults in `defaults/*.md`) |
-| `internal/{settings,session,secrets,catalog,attach,shell}` | Preferences, chat storage, keys, model lists, attachments, terminal blocks |
-| `ui/` | Window root, shortcuts; one component per file in `chat/`, `terminal/`, `settingsview/`, `modelpicker/`, `history/`, `workspace/`, `components/`, `theme/` |
+| `internal/{settings,session,secrets,catalog,attach,shell}` | Preferences, chat storage, keys, model lists, attachments, the agent's shell |
+| `ui/` | Window root, shortcuts; one component per file in `chat/`, `settingsview/`, `modelpicker/`, `history/`, `workspace/`, `components/`, `theme/` |
 
 ## Project instructions
 
