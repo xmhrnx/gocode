@@ -3,9 +3,6 @@ package chat
 import "strings"
 
 const (
-	// maxLiveReasoning bounds the reasoning shown while it streams: drawing
-	// only the tail keeps each frame cheap however long the reasoning gets.
-	maxLiveReasoning = 1500
 	// streamSegmentSize is about how much finished text one transcript row
 	// holds while a reply streams.
 	streamSegmentSize = 3000
@@ -39,19 +36,30 @@ func streamSegments(text string, size int) []string {
 	return append(segments, text[segmentStart:])
 }
 
-// liveTail returns the end of text, at most about limit bytes, so a long
-// stream shows its newest part. The start moves in steps of half the
-// limit, not with every chunk: between steps the shown text only grows at
-// its end, so the lines already shown keep their cached layout.
-func liveTail(text string, limit int) string {
-	if len(text) <= limit {
-		return text
+// reasoningSegments cuts reasoning into rows of about size bytes. A cut
+// goes after the first line break past size bytes or, in a line longer
+// than twice that, after the last space before it. Like streamSegments,
+// cuts depend only on the text before them, so finished rows never
+// change while the reasoning grows.
+func reasoningSegments(text string, size int) []string {
+	var segments []string
+	start := 0
+	for len(text)-start > size {
+		window := text[start:min(len(text), start+2*size)]
+		cut := -1
+		if nl := strings.IndexByte(window[size-1:], '\n'); nl >= 0 {
+			cut = size + nl
+		} else if len(window) == 2*size {
+			cut = 2 * size
+			if space := strings.LastIndexByte(window[size:], ' '); space >= 0 {
+				cut = size + space + 1
+			}
+		}
+		if cut < 0 {
+			break // the long line is still being written
+		}
+		segments = append(segments, text[start:start+cut])
+		start += cut
 	}
-	step := max(limit/2, 1)
-	start := (len(text) - limit + step - 1) / step * step
-	tail := text[start:]
-	if newline := strings.IndexByte(tail, '\n'); newline >= 0 {
-		tail = tail[newline+1:]
-	}
-	return "…\n" + tail
+	return append(segments, text[start:])
 }

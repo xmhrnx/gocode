@@ -31,21 +31,32 @@ func TestStreamSegmentsStayPutAsTextGrows(t *testing.T) {
 	}
 }
 
-func TestLiveTailStartsAtALineAndStaysBounded(t *testing.T) {
-	text := strings.Repeat("line of text\n", 400)
-	got := liveTail(text, 1000)
-	if !strings.HasPrefix(got, "…\nline") || len(got) > 1000+10 {
-		t.Fatalf("tail of %d bytes starts %q", len(got), got[:12])
+func TestReasoningSegmentsCutAtLinesAndStayPut(t *testing.T) {
+	text := strings.Repeat("a line of thinking\n", 40)
+	segments := reasoningSegments(text, 100)
+	if strings.Join(segments, "") != text {
+		t.Fatal("segments lost text")
+	}
+	for _, s := range segments[:len(segments)-1] {
+		if !strings.HasSuffix(s, "\n") || len(s) < 100 {
+			t.Fatalf("segment %q isn't cut after a line past the size", s)
+		}
+	}
+	grown := reasoningSegments(text+"more thinking", 100)
+	for i := range segments[:len(segments)-1] {
+		if segments[i] != grown[i] {
+			t.Fatalf("segment %d moved as the text grew", i)
+		}
 	}
 }
 
-// Between steps the tail only grows at its end, so the lines before stay
-// identical and keep their cached layout.
-func TestLiveTailGrowsAtTheEndBetweenSteps(t *testing.T) {
-	text := strings.Repeat("abcdefghi\n", 140)
-	before := liveTail(text, 1000)
-	after := liveTail(text+"more", 1000)
-	if !strings.HasPrefix(after, before) {
-		t.Fatalf("the shown text moved:\n%q\n%q", before[:30], after[:30])
+func TestReasoningSegmentsCutLongLinesAtSpaces(t *testing.T) {
+	text := strings.Repeat("word ", 100) // 500 bytes, no line break
+	segments := reasoningSegments(text, 100)
+	if strings.Join(segments, "") != text || len(segments) < 3 {
+		t.Fatalf("got %d segments", len(segments))
+	}
+	if !strings.HasSuffix(segments[0], " ") || len(segments[0]) > 200 {
+		t.Fatalf("first segment %q", segments[0])
 	}
 }

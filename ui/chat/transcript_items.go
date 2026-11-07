@@ -21,8 +21,12 @@ type item struct {
 	// message, where the copy and retry actions go.
 	turnEnd bool
 	version int
-	// text is a streaming reply's segment, for draft text rows.
+	// text is a segment of a streaming reply or of reasoning.
 	text string
+	// group is the key of the part a reasoning segment belongs to, and
+	// segment its place in it.
+	group   string
+	segment int
 }
 
 const (
@@ -77,7 +81,8 @@ func (c *ChatTab) appendMessageItems(items []item, msg llm.Message, index int, d
 			if part.Text == "" {
 				continue // encrypted or omitted reasoning has nothing to show
 			}
-			it.kind = itemReasoning
+			items = appendReasoningSegments(items, it, part.Text)
+			continue
 		case llm.PartToolCall:
 			it.kind = itemTool
 			it.version = c.toolVersion(part.ToolCall.ID)
@@ -128,6 +133,23 @@ func hasUserContent(msg llm.Message) bool {
 		}
 	}
 	return false
+}
+
+// appendReasoningSegments adds reasoning as one row per segment, while
+// it streams and after: the text stays where it was drawn, and only the
+// growing segment is laid out again.
+func appendReasoningSegments(items []item, base item, text string) []item {
+	for n, segment := range reasoningSegments(text, streamSegmentSize) {
+		it := base
+		it.kind, it.text, it.group, it.segment = itemReasoning, segment, base.key, n
+		it.key = fmt.Sprintf("%sr%d", base.key, n)
+		it.version = len(segment) * 2
+		if n == 0 && base.draft {
+			it.version++ // the header says "Thinking…" until the reply is done
+		}
+		items = append(items, it)
+	}
+	return items
 }
 
 // appendStreamSegments adds a streaming reply as one row per segment. A

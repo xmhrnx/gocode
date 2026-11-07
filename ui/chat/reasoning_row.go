@@ -6,48 +6,50 @@ import (
 	"gocode/ui/theme"
 )
 
-// reasoningRow shows the model's reasoning, collapsed to one line unless
-// the user opens it or it is still streaming.
+// reasoningRow shows one segment of the model's reasoning. The first
+// segment carries the header, which folds the whole part away; the
+// reasoning stays open, as it streamed, until the user folds it.
 type reasoningRow struct {
 	rowBase
-	expanded bool
-	toggle   *giode.PressableElement
+	toggle *giode.PressableElement
 }
 
 func newReasoningRow(tab *ChatTab, it item) *reasoningRow {
 	r := &reasoningRow{rowBase: rowBase{tab: tab, it: it}}
 	r.toggle = giode.Pressable(r.header).Label("Toggle reasoning").
-		OnClick(func(giode.ClickEvent) { r.expanded = !r.expanded })
+		OnClick(func(giode.ClickEvent) {
+			group := r.it.group
+			tab.collapsedReasoning[group] = !tab.collapsedReasoning[group]
+		})
 	return r
 }
 
+func (r *reasoningRow) collapsed() bool { return r.tab.collapsedReasoning[r.it.group] }
+
 func (r *reasoningRow) version() int {
-	if r.expanded {
+	if r.collapsed() {
 		return 1
 	}
 	return 0
 }
 
 func (r *reasoningRow) Layout(gtx giode.Context) giode.Dimensions {
-	if !r.tab.services.Settings.Chat.ShowReasoning {
+	if !r.tab.services.Settings.Chat.ShowReasoning || (r.it.segment > 0 && r.collapsed()) {
 		return giode.Dimensions{}
 	}
-	part, _ := r.tab.part(r.it)
-	children := []giode.Element{r.toggle}
-	if r.expanded || r.it.draft {
-		text := part.Text
-		if r.it.draft {
-			text = liveTail(text, maxLiveReasoning)
-		}
-		// A panel rather than a rule stretched to the text's height: a
-		// stretched sibling makes the text be measured and then laid out
-		// again, doubling the cost of every streamed frame.
-		children = append(children, giode.Box(giode.Styles{
-			Width: -1, Padding: giode.SymmetricInset(12, 8), BorderRadius: 8, Background: theme.Raised,
-		}, giode.Text(text, giode.Styles{Color: theme.Muted, FontSize: theme.Sizes.Small,
-			LineHeight: theme.Body().LineHeight - 3})))
+	// Indented under the header's label. Plain text rather than a panel:
+	// the segments are separate rows and must read as one block.
+	text := giode.Box(giode.Styles{Width: -1, Padding: giode.Inset{Left: 20}},
+		giode.Text(r.it.text, giode.Styles{Color: theme.Muted, FontSize: theme.Sizes.Small,
+			LineHeight: theme.Body().LineHeight - 3}))
+	if r.it.segment > 0 {
+		return text.Layout(gtx)
 	}
-	return giode.Stack(giode.Styles{Width: -1, Gap: 6, Padding: giode.SymmetricInset(0, 4)}, children...).Layout(gtx)
+	children := []giode.Element{r.toggle}
+	if !r.collapsed() {
+		children = append(children, text)
+	}
+	return giode.Stack(giode.Styles{Width: -1, Gap: 6, Padding: giode.Inset{Top: 4}}, children...).Layout(gtx)
 }
 
 func (r *reasoningRow) header(state giode.PressState) giode.Element {
@@ -55,12 +57,12 @@ func (r *reasoningRow) header(state giode.PressState) giode.Element {
 	if state.Hovered {
 		color = theme.Text
 	}
-	label, chevron := "Thought", "chevron-right"
+	label, chevron := "Thought", "chevron-down"
 	if r.it.draft {
 		label = "Thinking…"
 	}
-	if r.expanded || r.it.draft {
-		chevron = "chevron-down"
+	if r.collapsed() {
+		chevron = "chevron-right"
 	}
 	return giode.Row(giode.Styles{Gap: 6, Align: giode.AlignCenter, Padding: giode.SymmetricInset(0, 2)},
 		theme.Icon("brain", 14, color),
