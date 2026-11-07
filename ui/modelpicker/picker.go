@@ -12,8 +12,6 @@ import (
 	"gocode/internal/catalog"
 	"gocode/ui/core"
 	"gocode/ui/theme"
-
-	"gocode/ui/components"
 )
 
 // Picker is a dialog choosing a model; choosing one calls onSelect with
@@ -53,7 +51,6 @@ func New(services *core.Services, onSelect func(ref string)) *Picker {
 			p.firstMatch()
 		}
 	})
-	components.AddEditMenu(services.App, p.search, components.EditOptions{})
 	p.list = giode.Scroll(p.listView, giode.Styles{ScrollBar: giode.ScrollBar{Width: 6, AutoHide: true, TrackColor: "transparent"}})
 	p.back = giode.Pressable(backButton).Label("Back to providers").OnClick(func(giode.ClickEvent) { p.showProvider("") })
 	p.manage = giode.Button("Manage providers", giode.Styles{Color: theme.Text, Background: theme.Hover,

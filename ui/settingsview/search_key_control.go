@@ -13,8 +13,6 @@ import (
 	"gocode/internal/secrets"
 	"gocode/internal/websearch"
 	"gocode/ui/core"
-
-	"gocode/ui/components"
 )
 
 // searchKeyControl stores the API key of the chosen search service in the
@@ -32,7 +30,6 @@ const searchTestTimeout = 20 * time.Second
 func newSearchKeyControl(s *core.Services) *searchKeyControl {
 	c := &searchKeyControl{services: s}
 	c.key = giode.Input.Text("Paste the key", fieldStyle(220)).Password(true).Submit(func(string) { c.store() })
-	components.AddEditMenu(s.App, c.key, components.EditOptions{Secret: true})
 	c.save = smallButton("Save key", true).OnClick(c.store)
 	c.test = smallButton("Test", false).OnClick(c.runTest)
 	return c

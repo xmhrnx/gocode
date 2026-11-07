@@ -8,8 +8,6 @@ import (
 
 	"gocode/internal/providers"
 	"gocode/ui/theme"
-
-	"gocode/ui/components"
 )
 
 // providerEditor edits one provider: its key, address and extra models,
@@ -44,9 +42,6 @@ func newProviderEditor(page *providersPage, def providers.Definition) *providerE
 		providerSettings(s, def.ID).ExtraModels = parseModelList(text)
 		s.SettingsChanged()
 	})
-	components.AddEditMenu(s.App, e.key, components.EditOptions{Secret: true})
-	components.AddEditMenu(s.App, e.baseURL, components.EditOptions{})
-	components.AddEditMenu(s.App, e.models, components.EditOptions{})
 	e.saveKey = smallButton("Save key", true).OnClick(e.storeKey)
 	e.test = smallButton("Test connection", false).OnClick(func() { page.test(def.ID) })
 	e.getKey = smallButton("Get a key", false).OnClick(func() { page.openURL(def.KeyURL) })

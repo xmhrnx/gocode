@@ -43,9 +43,6 @@ func newComposer(tab *ChatTab) *composer {
 		Submit(func(string) { tab.send() })
 	c.attachFile = components.NewIconButton("paperclip", "Attach files or images", c.pickFiles)
 	c.editor.OnPaste(c.paste)
-	components.AddEditMenu(tab.services.App, c.editor, components.EditOptions{Paste: func() {
-		c.paste(func() { components.PasteText(tab.services.App, c.editor) })
-	}})
 	c.pasteButton = components.NewIconButton("image", "Paste an image from the clipboard  ("+giode.FormatShortcut("Mod+V")+")", c.pasteImage)
 	c.send = newSendButton(tab)
 	c.modes = newModeMenu(tab)

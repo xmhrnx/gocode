@@ -10,8 +10,6 @@ import (
 	"gocode/internal/session"
 	"gocode/ui/core"
 	"gocode/ui/theme"
-
-	"gocode/ui/components"
 )
 
 // Dialog lists stored chats, newest first, with a search field.
@@ -33,7 +31,6 @@ func New(services *core.Services, onOpen func(*session.Session)) *Dialog {
 	d.search = giode.Input.Text("Search chats…", giode.Styles{
 		Background: theme.Canvas, BorderColor: theme.Border, BorderRadius: 9, Color: theme.Text,
 	})
-	components.AddEditMenu(services.App, d.search, components.EditOptions{})
 	d.list = giode.Scroll(d.listView, giode.Styles{ScrollBar: giode.ScrollBar{Width: 6, AutoHide: true, TrackColor: "transparent"}})
 	d.dialog = giode.Dialog(&d.open, d.content, giode.Styles{
 		Background: theme.Panel, BorderRadius: 14, BorderWidth: 1, BorderColor: theme.Border,

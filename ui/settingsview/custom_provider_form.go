@@ -10,8 +10,6 @@ import (
 	"gocode/internal/providers"
 	"gocode/internal/settings"
 	"gocode/ui/theme"
-
-	"gocode/ui/components"
 )
 
 // customProviderForm adds a provider at any address speaking one of the
@@ -40,11 +38,6 @@ func newCustomProviderForm(page *providersPage) *customProviderForm {
 	f.baseURL = giode.Input.Text("Base URL, e.g. http://192.168.1.20:8000/v1", fieldStyle(-1))
 	f.key = giode.Input.Text("API key (optional)", fieldStyle(-1)).Password(true)
 	f.models = giode.Input.Text("Model IDs, comma separated (optional if the server lists them)", fieldStyle(-1))
-	app := page.services.App
-	components.AddEditMenu(app, f.name, components.EditOptions{})
-	components.AddEditMenu(app, f.baseURL, components.EditOptions{})
-	components.AddEditMenu(app, f.key, components.EditOptions{Secret: true})
-	components.AddEditMenu(app, f.models, components.EditOptions{})
 	labels := make([]string, len(customStyles))
 	for i, s := range customStyles {
 		labels[i] = s.label

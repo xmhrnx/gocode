@@ -6,8 +6,6 @@ import (
 	"gocode/internal/prompts"
 	"gocode/ui/core"
 	"gocode/ui/theme"
-
-	"gocode/ui/components"
 )
 
 func promptEntries(s *core.Services) []entry {
@@ -37,7 +35,6 @@ func promptEntries(s *core.Services) []entry {
 func promptEditor(s *core.Services, value *string, fallback, placeholder string) giode.Element {
 	field := giode.Input.Text(placeholder, giode.Styles{Width: -1, Background: theme.Canvas, BorderColor: theme.Border,
 		BorderRadius: 8, Color: theme.Text, FontSize: theme.Sizes.Small}).Lines(4, 18)
-	components.AddEditMenu(s.App, field, components.EditOptions{})
 	field.SetText(prompts.Or(*value, fallback))
 	field.OnChange(func(text string) {
 		if text == fallback {

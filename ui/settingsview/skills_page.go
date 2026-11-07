@@ -12,8 +12,6 @@ import (
 	"gocode/internal/skills"
 	"gocode/ui/core"
 	"gocode/ui/theme"
-
-	"gocode/ui/components"
 )
 
 // skillsPage lists installed skills, switches them on and off, and
@@ -41,7 +39,6 @@ func skillEntries(s *core.Services) []entry {
 func newSkillsPage(s *core.Services) *skillsPage {
 	p := &skillsPage{services: s, rows: map[string]*skillRow{}}
 	p.url = giode.Input.Text("https://github.com/owner/repo or a .zip URL", fieldStyle(-1)).Submit(func(string) { p.installURL() })
-	components.AddEditMenu(s.App, p.url, components.EditOptions{})
 	p.fromFolder = smallButton("Install from folder…", false).OnClick(p.installFolder)
 	p.fromZip = smallButton("Install from .zip…", false).OnClick(p.installZip)
 	p.fromURL = smallButton("Install", true).OnClick(p.installURL)

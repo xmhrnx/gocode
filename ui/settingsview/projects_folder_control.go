@@ -9,7 +9,6 @@ import (
 	"github.com/xmhrnx/giode/components/input"
 
 	"gocode/internal/projects"
-	"gocode/ui/components"
 	"gocode/ui/core"
 )
 
@@ -26,7 +25,6 @@ func newProjectsFolderControl(s *core.Services) *projectsFolderControl {
 	c.field = giode.Input.Text(projects.Display(projects.Dir("")), fieldStyle(260))
 	c.field.SetText(projects.Display(projects.Dir(s.Settings.General.ProjectsDir)))
 	c.field.OnChange(c.store)
-	components.AddEditMenu(s.App, c.field, components.EditOptions{})
 	c.browse = smallButton("Browse…", false).OnClick(c.pick)
 	return c
 }
