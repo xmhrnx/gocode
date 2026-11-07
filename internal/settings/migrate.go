@@ -1,7 +1,7 @@
 package settings
 
 // currentVersion is the settings format written by this build.
-const currentVersion = 5
+const currentVersion = 6
 
 // migrate updates settings written by older builds.
 func (s *Settings) migrate() {
@@ -27,6 +27,9 @@ func (s *Settings) migrate() {
 			s.General.ProjectsDir = s.General.LegacyWorkDir
 		}
 		s.General.LegacyWorkDir = ""
+	}
+	if s.Version < 6 {
+		s.Sounds = Default().Sounds // new: on, for every event
 	}
 	s.Version = currentVersion
 }

@@ -7,6 +7,7 @@ import (
 
 	"gocode/internal/agent"
 	"gocode/internal/catalog"
+	"gocode/internal/chime"
 	"gocode/internal/llm"
 	"gocode/internal/tools"
 )
@@ -102,10 +103,12 @@ func (c *ChatTab) finishRun(err error) {
 	}
 	switch {
 	case err == nil:
+		c.services.PlaySound(chime.Done)
 	case errors.Is(err, context.Canceled):
 		c.addNotice(noticeInfo, "Stopped.")
 	default:
 		c.addNotice(noticeError, err.Error())
+		c.services.PlaySound(chime.Failure)
 	}
 	c.save()
 	c.changed()

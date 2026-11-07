@@ -97,3 +97,17 @@ func TestMigrateMovesTheDefaultFolderToProjects(t *testing.T) {
 		t.Fatalf("general %+v", s.General)
 	}
 }
+
+func TestMigrateTurnsSoundsOn(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "settings.json")
+	if err := os.WriteFile(path, []byte(`{"version": 5}`), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	s, err := Load(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !s.Sounds.Enabled || !s.Sounds.Done || !s.Sounds.Permission || s.Sounds.Volume != 60 {
+		t.Fatalf("sounds %+v", s.Sounds)
+	}
+}

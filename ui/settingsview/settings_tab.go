@@ -44,6 +44,7 @@ func allEntries(s *core.Services) []entry {
 		"Providers": func() []entry { return providerEntries(s) }, "Models": func() []entry { return modelEntries(s) },
 		"Skills": func() []entry { return skillEntries(s) }, "MCP servers": func() []entry { return mcpEntries(s) },
 		"Web search": func() []entry { return webSearchEntries(s) },
+		"Sounds":     func() []entry { return soundEntries(s) },
 		"Network":    func() []entry { return networkEntries(s) },
 		"Shortcuts":  shortcutEntries, "About": func() []entry { return aboutEntries(s) },
 	}

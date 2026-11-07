@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"gocode/internal/agent"
+	"gocode/internal/chime"
 )
 
 // pendingPermission is a tool call waiting for the user's approval.
@@ -19,6 +20,7 @@ func (c *ChatTab) ask(ctx context.Context, req agent.PermissionRequest) agent.Pe
 	c.services.App.Post(func() {
 		if c.run != nil {
 			c.run.ask = &pendingPermission{request: req, answer: answer}
+			c.services.PlaySound(chime.Attention)
 			c.changed()
 		}
 	})

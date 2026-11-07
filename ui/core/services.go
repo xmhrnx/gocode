@@ -4,6 +4,7 @@ package core
 
 import (
 	"net/http"
+	"sync"
 	"time"
 
 	"github.com/xmhrnx/giode"
@@ -34,6 +35,9 @@ type Services struct {
 	// TabsPath is where the open tabs are remembered.
 	TabsPath string
 	Toasts   *toaster.Toaster
+
+	// soundTrouble reports, once, that sounds can't play.
+	soundTrouble sync.Once
 
 	saveTimer   *time.Timer
 	listeners   map[int]func()

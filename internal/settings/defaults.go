@@ -21,6 +21,7 @@ func Default() Settings {
 		},
 		Network:   Network{RequestTimeoutSeconds: 300, MaxRetries: 3},
 		WebSearch: WebSearch{Results: 5},
+		Sounds:    Sounds{Enabled: true, Done: true, Permission: true, Errors: true, Volume: 60},
 	}
 }
 
