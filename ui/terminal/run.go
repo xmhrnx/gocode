@@ -66,26 +66,23 @@ func (t *Tab) clear() {
 // recall steps through earlier commands with Up and Down.
 func (t *Tab) recall(up bool) {
 	if command, ok := t.history.step(up); ok {
-		t.setLine(command)
+		t.input.SetText(command) // the caret goes to the end
 	}
 }
 
-// complete fills in the last word of the command, as far as the
-// matching files or commands agree, and lists them when there are
-// several.
+// complete fills in the word before the caret, as far as the matching
+// files or commands agree, and lists them when there are several. The
+// text after the caret stays as it is.
 func (t *Tab) complete() {
-	line := t.input.Text()
-	result := shell.Complete(line, t.session.WorkDir())
-	if result.Line != line {
-		t.setLine(result.Line)
+	runes := []rune(t.input.Text())
+	caret := min(t.input.Caret(), len(runes))
+	before, after := string(runes[:caret]), string(runes[caret:])
+	result := shell.Complete(before, t.session.WorkDir())
+	if result.Line != before {
+		t.input.SetText(result.Line + after)
+		t.input.SetCaret(len([]rune(result.Line)))
 	}
 	t.matches = result.Matches
-}
-
-// setLine replaces the command with line, leaving the caret at its end.
-func (t *Tab) setLine(line string) {
-	t.input.SelectAll()
-	t.input.InsertText(line)
 }
 
 func startDir(configured string) string {
