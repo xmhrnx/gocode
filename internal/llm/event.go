@@ -10,8 +10,10 @@ type Event struct {
 	Signature string
 	// Redacted marks a reasoning event whose Signature is an encrypted
 	// reasoning payload rather than a signature over streamed text.
-	Redacted   bool
-	ToolCall   *ToolCall
+	Redacted bool
+	ToolCall *ToolCall
+	// Part is a complete provider part, for EventPart.
+	Part       *Part
 	Usage      *Usage
 	StopReason string
 }
@@ -32,6 +34,8 @@ const (
 	EventReasoning
 	// EventToolCall carries one complete tool call.
 	EventToolCall
+	// EventPart carries a complete PartProvider part in Part.
+	EventPart
 	// EventUsage reports token usage; it may arrive more than once, each
 	// time with the totals so far.
 	EventUsage

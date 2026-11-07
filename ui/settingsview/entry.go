@@ -46,6 +46,7 @@ var categories = []category{
 	{"Models", "cpu"},
 	{"Skills", "sparkles"},
 	{"MCP servers", "server"},
+	{"Web search", "search"},
 	{"Network", "globe"},
 	{"Shortcuts", "keyboard"},
 	{"About", "info"},

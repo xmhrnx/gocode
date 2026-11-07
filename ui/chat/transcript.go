@@ -96,6 +96,8 @@ func (t *transcript) newRow(it item) rowView {
 		return newPermissionRow(t.tab)
 	case itemStatus:
 		return newStatusRow(t.tab)
+	case itemSearch:
+		return newSearchRow(t.tab, it)
 	default:
 		return newNoticeRow(it.notice)
 	}

@@ -19,7 +19,8 @@ func Default() Settings {
 			ReadPolicy: PolicyAllow, WritePolicy: PolicyAsk,
 			ExecutePolicy: PolicyAsk, NetworkPolicy: PolicyAsk,
 		},
-		Network: Network{RequestTimeoutSeconds: 300, MaxRetries: 3},
+		Network:   Network{RequestTimeoutSeconds: 300, MaxRetries: 3},
+		WebSearch: WebSearch{Results: 5},
 	}
 }
 
@@ -27,6 +28,7 @@ func Default() Settings {
 // defaults, so a file written by an older version still loads sensibly.
 func (s *Settings) fillDefaults() {
 	def := Default()
+	s.fillWebSearchDefaults(def)
 	setString(&s.Appearance.Theme, def.Appearance.Theme)
 	setString(&s.Appearance.TitleBarStyle, def.Appearance.TitleBarStyle)
 	setInt(&s.Appearance.UIFontSize, def.Appearance.UIFontSize)
@@ -55,6 +57,10 @@ func setString(field *string, fallback string) {
 	if *field == "" {
 		*field = fallback
 	}
+}
+
+func (s *Settings) fillWebSearchDefaults(def Settings) {
+	setInt(&s.WebSearch.Results, def.WebSearch.Results)
 }
 
 func setInt(field *int, fallback int) {

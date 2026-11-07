@@ -45,6 +45,8 @@ func modelParts(msg llm.Message) []wirePart {
 				FunctionCall:     &functionCall{ID: providerID(call.ID), Name: call.Name, Args: objectOrEmpty(call.Arguments)},
 				ThoughtSignature: call.Signature,
 			})
+		case part.Kind == llm.PartProvider && part.Provider == providerName && len(part.Raw) > 0:
+			parts = append(parts, wirePart{raw: part.Raw})
 		}
 	}
 	return parts

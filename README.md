@@ -40,7 +40,11 @@ webview or JavaScript runtime inside. The UI is drawn straight to the GPU.
   skill's name and description and loads the full skill with the `skill` tool.
 - **Tools**: `read_file`, `write_file`, `edit_file` (exact replacement with a
   diff), `list_dir`, `glob`, `grep`, `bash` (with timeout and process-group
-  kill), `web_fetch` and `todo_write`.
+  kill), `web_fetch`, `web_search` and `todo_write`.
+- **Web search**: the `web_search` tool uses Brave Search, Tavily, Exa or your
+  own SearXNG (Settings → Web search). Anthropic, Gemini 3 and OpenRouter
+  models can use their provider's own search instead, and the MCP server
+  form has presets for the Brave, Tavily and Exa MCP servers.
 - **Permissions**: an inline approval card for each tool call, showing the diff
   for edits. It offers Allow, Always allow (for the session) and Deny with
   feedback for the agent. Each chat has a mode: *Ask*, *Auto-accept edits*,
@@ -118,6 +122,7 @@ visitor's OS and CPU from the latest release.
 | `internal/mcp` | MCP client (stdio and Streamable HTTP) and its tools |
 | `internal/skills` | Skill discovery, installation and the `skill` tool |
 | `internal/tools` | The agent's tools |
+| `internal/websearch` | Search services behind the `web_search` tool |
 | `internal/prompts` | System prompts (defaults in `defaults/*.md`) |
 | `internal/{settings,session,secrets,catalog,attach,shell}` | Preferences, chat storage, keys, model lists, attachments, the agent's shell |
 | `ui/` | Window root, shortcuts; one component per file in `chat/`, `settingsview/`, `modelpicker/`, `history/`, `workspace/`, `components/`, `theme/` |

@@ -6,6 +6,8 @@ import "gocode/internal/llm"
 type replyBuilder struct {
 	parts   llm.PartBuilder
 	started bool
+	// stopReason is why the model stopped, once it has.
+	stopReason string
 }
 
 func newReplyBuilder() *replyBuilder { return &replyBuilder{} }
@@ -18,6 +20,12 @@ func (b *replyBuilder) add(ev llm.Event, emit func(Event)) {
 	case llm.EventToolCall:
 		b.started = true
 		b.parts.AddPart(llm.Part{Kind: llm.PartToolCall, ToolCall: ev.ToolCall})
+	case llm.EventPart:
+		b.started = true
+		b.parts.AddPart(*ev.Part)
+		emit(Event{Kind: EventPart, Part: ev.Part})
+	case llm.EventStop:
+		b.stopReason = ev.StopReason
 	case llm.EventUsage:
 		emit(Event{Kind: EventUsage, Usage: ev.Usage})
 	}

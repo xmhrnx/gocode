@@ -7,6 +7,7 @@ import "gocode/internal/llm/openai"
 func hostedProviders() []Definition {
 	return openAICompatible(CategoryRouter, []Definition{
 		{ID: "openrouter", Name: "OpenRouter", BaseURL: "https://openrouter.ai/api/v1", KeyURL: "https://openrouter.ai/keys",
+			WebSearchTool: "openrouter:web_search",
 			// OpenRouter attributes traffic to apps by these headers.
 			Headers: map[string]string{"HTTP-Referer": "https://github.com/gocode", "X-OpenRouter-Title": "GoCode"}},
 		{ID: "groq", Name: "Groq", BaseURL: "https://api.groq.com/openai/v1", KeyURL: "https://console.groq.com/keys"},

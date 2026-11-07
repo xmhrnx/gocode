@@ -13,7 +13,7 @@ type messagesRequest struct {
 	MaxTokens    int             `json:"max_tokens"`
 	System       string          `json:"system,omitempty"`
 	Messages     []wireMessage   `json:"messages"`
-	Tools        []wireTool      `json:"tools,omitempty"`
+	Tools        []any           `json:"tools,omitempty"`
 	Stream       bool            `json:"stream"`
 	Thinking     *thinkingConfig `json:"thinking,omitempty"`
 	OutputConfig *outputConfig   `json:"output_config,omitempty"`
@@ -51,9 +51,16 @@ func buildRequest(req llm.Request) messagesRequest {
 		MaxTokens:    req.MaxTokens,
 		System:       req.System,
 		Messages:     convertMessages(req.Messages),
-		Tools:        convertTools(req.Tools),
 		Stream:       true,
 		CacheControl: &cacheControl{Type: "ephemeral"},
+	}
+	specs := req.Tools
+	if req.WebSearch {
+		specs = llm.WithoutTool(specs, llm.WebSearchTool)
+	}
+	body.Tools = convertTools(specs)
+	if req.WebSearch {
+		body.Tools = append(body.Tools, webSearchTool(req.Model))
 	}
 	if body.MaxTokens <= 0 {
 		body.MaxTokens = defaultMaxTokens
@@ -65,8 +72,8 @@ func buildRequest(req llm.Request) messagesRequest {
 	return body
 }
 
-func convertTools(specs []llm.ToolSpec) []wireTool {
-	tools := make([]wireTool, 0, len(specs))
+func convertTools(specs []llm.ToolSpec) []any {
+	tools := make([]any, 0, len(specs))
 	for _, spec := range specs {
 		schema := spec.Parameters
 		if len(schema) == 0 {

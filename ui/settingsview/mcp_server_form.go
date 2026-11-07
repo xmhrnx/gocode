@@ -20,6 +20,7 @@ type mcpServerForm struct {
 	name, command     *input.Input
 	env, url, headers *input.Input
 	show, add, cancel *giode.ButtonElement
+	presets           []giode.Element
 }
 
 func newMCPServerForm(p *mcpPage) *mcpServerForm {
@@ -33,7 +34,23 @@ func newMCPServerForm(p *mcpPage) *mcpServerForm {
 	f.show = smallButton("Add MCP server", false).Icon(theme.Icon("plus", 14, "")).OnClick(func() { f.open = true })
 	f.add = smallButton("Add server", true).OnClick(f.submit)
 	f.cancel = smallButton("Cancel", false).OnClick(func() { f.open = false })
+	f.presets = presetButtons(f)
 	return f
+}
+
+// fill puts a preset into the fields.
+func (f *mcpServerForm) fill(preset mcpPreset) {
+	f.name.SetText(preset.name)
+	if preset.url != "" {
+		f.transport.SetSelected(1)
+		f.url.SetText(preset.url)
+		f.headers.SetText("")
+		return
+	}
+	f.transport.SetSelected(0)
+	f.command.SetText(preset.command)
+	f.env.SetText(preset.env)
+	f.env.Focus() // the key goes after the "="
 }
 
 func (f *mcpServerForm) submit() {
@@ -84,8 +101,11 @@ func (f *mcpServerForm) Layout(gtx giode.Context) giode.Dimensions {
 	if f.transport.Selected() == 1 {
 		fields = []giode.Element{field("Name", f.name), field("URL", f.url), field("Headers", f.headers)}
 	}
+	presets := append([]giode.Element{giode.Text("Web search:", giode.Styles{Color: theme.Muted, FontSize: theme.Sizes.Small})}, f.presets...)
 	children := append([]giode.Element{
-		giode.Text("New MCP server", giode.Styles{Color: theme.Text, FontWeight: giode.FontWeightSemiBold}), f.transport,
+		giode.Text("New MCP server", giode.Styles{Color: theme.Text, FontWeight: giode.FontWeightSemiBold}),
+		giode.Row(giode.Styles{Gap: 8, Align: giode.AlignCenter, Wrap: giode.WrapWrap}, presets...),
+		f.transport,
 	}, fields...)
 	children = append(children, giode.Row(giode.Styles{Gap: 8}, f.add, f.cancel))
 	return giode.Stack(giode.Styles{Width: -1, Gap: 12, Padding: giode.UniformInset(16), BorderRadius: 10,

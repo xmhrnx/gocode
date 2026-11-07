@@ -2,6 +2,7 @@ package gemini
 
 import (
 	"encoding/json"
+	"strings"
 
 	"gocode/internal/llm"
 )
@@ -11,12 +12,31 @@ type generateRequest struct {
 	Contents          []wireContent    `json:"contents"`
 	SystemInstruction *wireContent     `json:"systemInstruction,omitempty"`
 	Tools             []wireToolset    `json:"tools,omitempty"`
+	ToolConfig        *toolConfig      `json:"toolConfig,omitempty"`
 	GenerationConfig  generationConfig `json:"generationConfig"`
 }
 
+// wireToolset is one entry of tools: our functions or Google Search.
 type wireToolset struct {
-	FunctionDeclarations []functionDeclaration `json:"functionDeclarations"`
+	FunctionDeclarations []functionDeclaration `json:"functionDeclarations,omitempty"`
+	GoogleSearch         *struct{}             `json:"googleSearch,omitempty"`
 }
+
+// toolConfig lets Google Search run beside our functions: the API then
+// returns the search as parts that must be sent back, and only checks
+// function calls in VALIDATED mode.
+type toolConfig struct {
+	IncludeServerSideToolInvocations bool                   `json:"includeServerSideToolInvocations"`
+	FunctionCallingConfig            *functionCallingConfig `json:"functionCallingConfig,omitempty"`
+}
+
+type functionCallingConfig struct {
+	Mode string `json:"mode"`
+}
+
+// providerName marks the parts this adapter makes, so it sends back only
+// its own.
+const providerName = "gemini"
 
 // functionDeclaration uses parametersJsonSchema rather than parameters,
 // which only accepts an OpenAPI subset of JSON Schema.
@@ -55,10 +75,29 @@ func buildRequest(req llm.Request) generateRequest {
 	if req.System != "" {
 		body.SystemInstruction = &wireContent{Parts: []wirePart{{Text: textPtr(req.System)}}}
 	}
-	if len(req.Tools) > 0 {
-		body.Tools = []wireToolset{{FunctionDeclarations: convertTools(req.Tools)}}
+	specs := req.Tools
+	search := req.WebSearch && canSearch(req.Model, len(specs) > 0)
+	if search {
+		specs = llm.WithoutTool(specs, llm.WebSearchTool)
+	}
+	if len(specs) > 0 {
+		body.Tools = []wireToolset{{FunctionDeclarations: convertTools(specs)}}
+	}
+	if search {
+		body.Tools = append(body.Tools, wireToolset{GoogleSearch: &struct{}{}})
+		if len(specs) > 0 {
+			body.ToolConfig = &toolConfig{IncludeServerSideToolInvocations: true,
+				FunctionCallingConfig: &functionCallingConfig{Mode: "VALIDATED"}}
+		}
 	}
 	return body
+}
+
+// canSearch reports whether Google Search can go in the request: on its
+// own with any model, beside functions only from Gemini 3 on.
+func canSearch(model string, withFunctions bool) bool {
+	model = strings.TrimPrefix(model, "models/")
+	return !withFunctions || strings.HasPrefix(model, "gemini-3")
 }
 
 func convertTools(specs []llm.ToolSpec) []functionDeclaration {

@@ -12,11 +12,14 @@ import (
 
 // streamState turns Messages API events into llm events.
 type streamState struct {
-	emit       func(llm.Event)
-	toolUses   map[int]*pendingToolUse
-	usage      llm.Usage
-	stopReason string
-	stopped    bool
+	emit     func(llm.Event)
+	toolUses map[int]*pendingToolUse
+	// serverBlocks are blocks of the provider's own tools (a web search
+	// and its results), kept whole to be sent back unchanged.
+	serverBlocks map[int]*pendingServerBlock
+	usage        llm.Usage
+	stopReason   string
+	stopped      bool
 }
 
 // pendingToolUse collects a tool_use block whose input arrives as JSON
@@ -26,11 +29,18 @@ type pendingToolUse struct {
 	input    strings.Builder
 }
 
+// pendingServerBlock collects a server tool block; a server_tool_use
+// block's input arrives as JSON fragments, like a tool_use block's.
+type pendingServerBlock struct {
+	raw   json.RawMessage
+	input strings.Builder
+}
+
 // errIncomplete reports a stream that closed before message_stop.
 var errIncomplete = errors.New("stream ended before the reply was complete")
 
 func newStreamState(emit func(llm.Event)) *streamState {
-	return &streamState{emit: emit, toolUses: map[int]*pendingToolUse{}}
+	return &streamState{emit: emit, toolUses: map[int]*pendingToolUse{}, serverBlocks: map[int]*pendingServerBlock{}}
 }
 
 func (s *streamState) handle(event sse.Event) error {
@@ -45,7 +55,11 @@ func (s *streamState) handle(event sse.Event) error {
 	case "message_start":
 		s.updateUsage(payload.Message.Usage)
 	case "content_block_start":
-		s.startBlock(payload.Index, payload.ContentBlock)
+		var block wireBlock
+		if err := json.Unmarshal(payload.ContentBlock, &block); err != nil {
+			return fmt.Errorf("decode content block: %w", err)
+		}
+		s.startBlock(payload.Index, block, payload.ContentBlock)
 	case "content_block_delta":
 		s.applyDelta(payload.Index, payload.Delta)
 	case "content_block_stop":
@@ -62,7 +76,7 @@ func (s *streamState) handle(event sse.Event) error {
 	return nil // ping and unknown future events need no handling
 }
 
-func (s *streamState) startBlock(index int, block wireBlock) {
+func (s *streamState) startBlock(index int, block wireBlock, raw json.RawMessage) {
 	switch block.Type {
 	case "text":
 		s.emitText(llm.EventText, block.Text)
@@ -72,6 +86,8 @@ func (s *streamState) startBlock(index int, block wireBlock) {
 		s.emit(llm.Event{Kind: llm.EventReasoning, Signature: block.Data, Redacted: true})
 	case "tool_use":
 		s.toolUses[index] = &pendingToolUse{id: block.ID, name: block.Name}
+	default: // server_tool_use, web_search_tool_result and the like
+		s.serverBlocks[index] = &pendingServerBlock{raw: append(json.RawMessage(nil), raw...)}
 	}
 }
 
@@ -86,6 +102,8 @@ func (s *streamState) applyDelta(index int, delta wireDelta) {
 	case "input_json_delta":
 		if pending, ok := s.toolUses[index]; ok {
 			pending.input.WriteString(delta.PartialJSON)
+		} else if server, ok := s.serverBlocks[index]; ok {
+			server.input.WriteString(delta.PartialJSON)
 		}
 	}
 }
@@ -94,6 +112,11 @@ func (s *streamState) applyDelta(index int, delta wireDelta) {
 // max_tokens) is not valid JSON and can't be run or sent back, so that
 // call is dropped.
 func (s *streamState) stopBlock(index int) {
+	if server, ok := s.serverBlocks[index]; ok {
+		delete(s.serverBlocks, index)
+		s.emitServerBlock(server)
+		return
+	}
 	pending, ok := s.toolUses[index]
 	if !ok {
 		return

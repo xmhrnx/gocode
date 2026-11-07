@@ -12,19 +12,25 @@ import (
 // streamReply makes one model call, retrying failures that happen before
 // any output arrived, and assembles the reply message.
 func streamReply(ctx context.Context, cfg Config, history []llm.Message, emit func(Event)) (llm.Message, error) {
+	reply, _, err := streamReplyStop(ctx, cfg, history, emit)
+	return reply, err
+}
+
+// streamReplyStop is streamReply that also returns why the model stopped.
+func streamReplyStop(ctx context.Context, cfg Config, history []llm.Message, emit func(Event)) (llm.Message, string, error) {
 	for attempt := 0; ; attempt++ {
 		builder := newReplyBuilder()
 		err := cfg.Client.Stream(ctx, cfg.request(history), func(ev llm.Event) {
 			builder.add(ev, emit)
 		})
 		if err == nil || ctx.Err() != nil || builder.started || !retryable(err) || attempt >= cfg.MaxRetries {
-			return builder.message(), err
+			return builder.message(), builder.stopReason, err
 		}
 		wait := time.Duration(1<<attempt) * time.Second
 		emit(Event{Kind: EventRetry, Text: fmt.Sprintf("%v. Retrying in %s…", err, wait)})
 		select {
 		case <-ctx.Done():
-			return builder.message(), ctx.Err()
+			return builder.message(), "", ctx.Err()
 		case <-time.After(wait):
 		}
 	}

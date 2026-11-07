@@ -22,6 +22,8 @@ type Config struct {
 	Temperature     *float64
 	ReasoningEffort string
 	MaxRetries      int
+	// WebSearch lets the provider search the web itself, where it can.
+	WebSearch bool
 
 	// ContextWindow is the model's context size in tokens; CompactAtPercent
 	// of it triggers compaction (0 turns automatic compaction off).
@@ -43,7 +45,7 @@ func (c Config) request(history []llm.Message) llm.Request {
 	req := llm.Request{
 		Model: c.Model, System: c.System, Messages: history,
 		MaxTokens: c.MaxTokens, Temperature: c.Temperature,
-		ReasoningEffort: c.ReasoningEffort,
+		ReasoningEffort: c.ReasoningEffort, WebSearch: c.WebSearch,
 	}
 	if c.Tools != nil {
 		req.Tools = c.Tools.Specs(c.ToolEnabled)

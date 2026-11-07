@@ -41,7 +41,7 @@ func (r *runner) loop(ctx context.Context) error {
 				return err
 			}
 		}
-		reply, err := r.callModel(ctx)
+		reply, stop, err := r.callModel(ctx)
 		if len(reply.Parts) > 0 {
 			r.append(reply)
 		}
@@ -53,6 +53,9 @@ func (r *runner) loop(ctx context.Context) error {
 			return err
 		}
 		if len(calls) == 0 {
+			if stop == llm.StopPaused {
+				continue // the provider paused its own tool use; sending the reply back resumes it
+			}
 			if !r.deliverInbox() {
 				return nil
 			}
@@ -84,15 +87,15 @@ func (r *runner) deliverInbox() bool {
 
 // callModel streams one reply. A request rejected as too long for the
 // context window is compacted and sent once more.
-func (r *runner) callModel(ctx context.Context) (llm.Message, error) {
-	reply, err := streamReply(ctx, r.cfg, r.history, r.track)
+func (r *runner) callModel(ctx context.Context) (llm.Message, string, error) {
+	reply, stop, err := streamReplyStop(ctx, r.cfg, r.history, r.track)
 	if err == nil || len(reply.Parts) > 0 || r.cfg.CompactAtPercent <= 0 || !isContextOverflow(err) {
-		return reply, err
+		return reply, stop, err
 	}
 	if compactErr := r.compact(ctx); compactErr != nil {
-		return reply, fmt.Errorf("%w (compacting to make it fit failed too: %v)", err, compactErr)
+		return reply, "", fmt.Errorf("%w (compacting to make it fit failed too: %v)", err, compactErr)
 	}
-	return streamReply(ctx, r.cfg, r.history, r.track)
+	return streamReplyStop(ctx, r.cfg, r.history, r.track)
 }
 
 func (r *runner) compact(ctx context.Context) error {

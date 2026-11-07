@@ -10,7 +10,7 @@ import (
 type chatRequest struct {
 	Model               string         `json:"model"`
 	Messages            []chatMessage  `json:"messages"`
-	Tools               []chatTool     `json:"tools,omitempty"`
+	Tools               []any          `json:"tools,omitempty"`
 	Stream              bool           `json:"stream"`
 	StreamOptions       *streamOptions `json:"stream_options,omitempty"`
 	MaxCompletionTokens int            `json:"max_completion_tokens,omitempty"`
@@ -42,10 +42,19 @@ func (c *Client) buildRequest(req llm.Request) chatRequest {
 	body := chatRequest{
 		Model:         req.Model,
 		Messages:      convertMessages(req.System, req.Messages, c.opts.EchoReasoningField),
-		Tools:         convertTools(req.Tools),
 		Stream:        true,
 		StreamOptions: &streamOptions{IncludeUsage: true},
 		Temperature:   req.Temperature,
+	}
+	specs := req.Tools
+	search := req.WebSearch && c.opts.WebSearchTool != ""
+	if search {
+		specs = llm.WithoutTool(specs, llm.WebSearchTool)
+	}
+	body.Tools = convertTools(specs)
+	if search {
+		// The provider runs the search; nothing comes back to replay.
+		body.Tools = append(body.Tools, map[string]string{"type": c.opts.WebSearchTool})
 	}
 	if req.MaxTokens > 0 {
 		if c.opts.MaxTokensField == MaxTokens {
@@ -60,8 +69,8 @@ func (c *Client) buildRequest(req llm.Request) chatRequest {
 	return body
 }
 
-func convertTools(specs []llm.ToolSpec) []chatTool {
-	tools := make([]chatTool, 0, len(specs))
+func convertTools(specs []llm.ToolSpec) []any {
+	tools := make([]any, 0, len(specs))
 	for _, spec := range specs {
 		params := spec.Parameters
 		if len(params) == 0 {

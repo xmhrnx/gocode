@@ -26,6 +26,7 @@ func (c *ChatTab) agentConfig() agent.Config {
 		Model: c.model.Model, Permissions: c.perms, Ask: c.ask,
 		MaxSteps: cfg.MaxSteps, MaxTokens: cfg.MaxOutputTokens,
 		ReasoningEffort: c.effort, MaxRetries: c.services.Settings.Network.MaxRetries,
+		WebSearch:      c.services.Settings.WebSearch.ProviderSearch,
 		ContextWindow:  c.contextWindow(),
 		Inbox:          c.queue.drain,
 		SubagentPrompt: prompts.DefaultSubagent(),

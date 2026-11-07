@@ -11,7 +11,7 @@ import (
 var toolIcons = map[string]string{
 	"read_file": "file-text", "write_file": "file-plus", "edit_file": "file-pen-line",
 	"list_dir": "list-tree", "glob": "folder-open", "grep": "text-search",
-	"bash": "terminal", "web_fetch": "globe", "todo_write": "list-todo",
+	"bash": "terminal", "web_fetch": "globe", "web_search": "search", "todo_write": "list-todo",
 	"task": "bot", "skill": "sparkles",
 }
 

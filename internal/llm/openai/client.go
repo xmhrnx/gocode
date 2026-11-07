@@ -34,6 +34,9 @@ type Options struct {
 	// SendReasoningEffort sends Request.ReasoningEffort as
 	// "reasoning_effort"; servers that don't know it may reject it.
 	SendReasoningEffort bool
+	// WebSearchTool is the type of the provider's own web search tool,
+	// sent when a request asks for web search; "" when there is none.
+	WebSearchTool string
 }
 
 // Client streams chat completions from one provider.

@@ -45,6 +45,8 @@ func assistantBlocks(msg llm.Message) []any {
 		case part.Kind == llm.PartToolCall && part.ToolCall != nil:
 			call := part.ToolCall
 			blocks = append(blocks, toolUseBlock{Type: "tool_use", ID: call.ID, Name: call.Name, Input: objectOrEmpty(call.Arguments)})
+		case part.Kind == llm.PartProvider && part.Provider == providerName && len(part.Raw) > 0:
+			blocks = append(blocks, part.Raw)
 		}
 	}
 	return blocks

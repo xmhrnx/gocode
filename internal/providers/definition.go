@@ -27,10 +27,13 @@ type Definition struct {
 	MaxTokensField string `json:"max_tokens_field,omitempty"`
 	// EchoReasoningField names the assistant-message field in which the
 	// provider expects earlier reasoning back, e.g. "reasoning_content".
-	EchoReasoningField  string   `json:"echo_reasoning_field,omitempty"`
-	SendReasoningEffort bool     `json:"send_reasoning_effort,omitempty"`
-	SuggestedModels     []string `json:"suggested_models,omitempty"`
-	Notes               string   `json:"notes,omitempty"`
+	EchoReasoningField  string `json:"echo_reasoning_field,omitempty"`
+	SendReasoningEffort bool   `json:"send_reasoning_effort,omitempty"`
+	// WebSearchTool names the provider's own web search tool, if it has
+	// one for every model (OpenRouter's "openrouter:web_search").
+	WebSearchTool   string   `json:"web_search_tool,omitempty"`
+	SuggestedModels []string `json:"suggested_models,omitempty"`
+	Notes           string   `json:"notes,omitempty"`
 }
 
 // Supported styles.

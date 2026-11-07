@@ -32,6 +32,10 @@ type Part struct {
 	// Redacted marks an encrypted reasoning part whose opaque payload is in
 	// Signature; it must be sent back but can't be shown.
 	Redacted bool `json:"redacted,omitempty"`
+	// Provider is the adapter that made a PartProvider part, and Raw its
+	// content as that provider sent it.
+	Provider string          `json:"provider,omitempty"`
+	Raw      json.RawMessage `json:"raw,omitempty"`
 }
 
 // Image is an inline image attachment.
@@ -69,4 +73,8 @@ const (
 	PartReasoning  PartKind = "reasoning"
 	PartToolCall   PartKind = "tool_call"
 	PartToolResult PartKind = "tool_result"
+	// PartProvider is content only its provider understands, such as a web
+	// search the provider ran itself. Its adapter sends it back unchanged;
+	// others leave it out. Text, if any, describes it for people.
+	PartProvider PartKind = "provider"
 )

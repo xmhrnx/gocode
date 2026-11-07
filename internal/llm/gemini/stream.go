@@ -77,6 +77,11 @@ func (s *streamState) handle(event sse.Event) error {
 }
 
 func (s *streamState) handlePart(part wirePart) {
+	if description, ok := part.serverDescription(); ok {
+		kept := llm.Part{Kind: llm.PartProvider, Provider: providerName, Raw: part.raw, Text: description}
+		s.emit(llm.Event{Kind: llm.EventPart, Part: &kept})
+		return
+	}
 	switch {
 	case part.FunctionCall != nil:
 		s.emit(llm.Event{Kind: llm.EventToolCall, ToolCall: s.toolCall(part)})

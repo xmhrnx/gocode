@@ -15,6 +15,7 @@ type Settings struct {
 	Providers  []ProviderSettings `json:"providers"`
 	Models     Models             `json:"models"`
 	Network    Network            `json:"network"`
+	WebSearch  WebSearch          `json:"web_search"`
 	General    General            `json:"general"`
 	MCPServers []MCPServer        `json:"mcp_servers"`
 	Skills     Skills             `json:"skills"`

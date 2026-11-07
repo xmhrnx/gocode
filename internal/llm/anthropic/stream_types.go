@@ -1,6 +1,7 @@
 package anthropic
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"gocode/internal/llm"
@@ -9,13 +10,13 @@ import (
 // streamEvent is the union of all streamed event payloads; which fields
 // are set depends on Type.
 type streamEvent struct {
-	Type         string     `json:"type"`
-	Index        int        `json:"index"`
-	Message      wireStart  `json:"message"`
-	ContentBlock wireBlock  `json:"content_block"`
-	Delta        wireDelta  `json:"delta"`
-	Usage        *wireUsage `json:"usage"`
-	Error        wireError  `json:"error"`
+	Type         string          `json:"type"`
+	Index        int             `json:"index"`
+	Message      wireStart       `json:"message"`
+	ContentBlock json.RawMessage `json:"content_block"`
+	Delta        wireDelta       `json:"delta"`
+	Usage        *wireUsage      `json:"usage"`
+	Error        wireError       `json:"error"`
 }
 
 type wireStart struct {

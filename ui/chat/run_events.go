@@ -28,6 +28,8 @@ func (c *ChatTab) handleEvent(ev agent.Event) {
 		if ev.Result.Display != "" {
 			c.session.ToolDisplays[ev.Call.ID] = ev.Result.Display
 		}
+	case agent.EventPart:
+		run.draft.AddPart(*ev.Part)
 	case agent.EventMessage:
 		c.commitMessage(*ev.Message)
 	case agent.EventUsage:
