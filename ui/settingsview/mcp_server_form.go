@@ -9,6 +9,8 @@ import (
 
 	"gocode/internal/settings"
 	"gocode/ui/theme"
+
+	"gocode/ui/components"
 )
 
 // mcpServerForm adds a server started as a program (stdio) or reached at
@@ -31,6 +33,9 @@ func newMCPServerForm(p *mcpPage) *mcpServerForm {
 	f.env = giode.Input.Text("Environment, one KEY=value per line (optional)", fieldStyle(-1)).Lines(1, 6)
 	f.url = giode.Input.Text("URL, e.g. https://mcp.example.com/mcp", fieldStyle(-1))
 	f.headers = giode.Input.Text("Headers, one Name: value per line (optional)", fieldStyle(-1)).Lines(1, 6)
+	for _, field := range []*input.Input{f.name, f.command, f.env, f.url, f.headers} {
+		components.AddEditMenu(p.services.App, field, components.EditOptions{})
+	}
 	f.show = smallButton("Add MCP server", false).Icon(theme.Icon("plus", 14, "")).OnClick(func() { f.open = true })
 	f.add = smallButton("Add server", true).OnClick(f.submit)
 	f.cancel = smallButton("Cancel", false).OnClick(func() { f.open = false })

@@ -51,3 +51,13 @@ func TestDir(t *testing.T) {
 		t.Errorf("absolute %s", got)
 	}
 }
+
+func TestDisplay(t *testing.T) {
+	home, _ := os.UserHomeDir()
+	if got := Display(filepath.Join(home, "GoCode")); got != filepath.Join("~", "GoCode") {
+		t.Errorf("home path shows as %s", got)
+	}
+	if got := Display("/srv/work"); got != "/srv/work" {
+		t.Errorf("other path shows as %s", got)
+	}
+}

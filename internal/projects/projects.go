@@ -37,6 +37,21 @@ func Dir(configured string) string {
 	return configured
 }
 
+// Display shows path with the home folder as "~", the way Dir reads it.
+func Display(path string) string {
+	home, err := os.UserHomeDir()
+	if err != nil || home == "" {
+		return path
+	}
+	if path == home {
+		return "~"
+	}
+	if rest, ok := strings.CutPrefix(path, home+string(filepath.Separator)); ok {
+		return "~" + string(filepath.Separator) + rest
+	}
+	return path
+}
+
 // Create makes a new folder in parent named after the start of message
 // ("Build a snake game" becomes build-a-snake-game), adding -2, -3, ...
 // when the name is taken, and returns its path.

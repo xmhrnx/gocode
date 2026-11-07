@@ -10,6 +10,8 @@ import (
 	"gocode/internal/tabstate"
 	"gocode/ui/core"
 	"gocode/ui/theme"
+
+	"gocode/ui/components"
 )
 
 // Tab is the settings page.
@@ -27,6 +29,7 @@ func New(services *core.Services, category string) *Tab {
 	t := &Tab{services: services, active: categories[0].name}
 	t.search = giode.Input.Text("Search settings…", giode.Styles{Background: theme.Canvas, BorderColor: theme.Border,
 		BorderRadius: 9, Color: theme.Text, FontSize: theme.Sizes.Small})
+	components.AddEditMenu(services.App, t.search, components.EditOptions{})
 	t.entries = allEntries(services)
 	for _, c := range categories {
 		t.nav = append(t.nav, newNavItem(t, c))

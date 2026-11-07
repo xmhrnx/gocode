@@ -7,6 +7,8 @@ import (
 	"gocode/internal/agent"
 	"gocode/internal/tools"
 	"gocode/ui/theme"
+
+	"gocode/ui/components"
 )
 
 // permissionRow asks the user to approve a tool call, showing what it
@@ -24,6 +26,7 @@ func newPermissionRow(tab *ChatTab) *permissionRow {
 	r.feedback = giode.Input.Text("Optional: tell the agent what to do instead", giode.Styles{
 		Background: theme.Canvas, BorderColor: theme.Border, BorderRadius: 8, Color: theme.Text, FontSize: theme.Sizes.Small,
 	}).Submit(func(string) { r.answer(agent.DecisionDeny) })
+	components.AddEditMenu(tab.services.App, r.feedback, components.EditOptions{})
 	r.allow = giode.Button("Allow", giode.Styles{Background: theme.Primary, Color: theme.OnPrimary, BorderRadius: 8,
 		FontSize: theme.Sizes.Small, Padding: giode.SymmetricInset(14, 7)}).OnClick(func() { r.answer(agent.DecisionAllow) })
 	r.always = giode.Button("Always allow", giode.Styles{BorderColor: theme.Border, Color: theme.Text, BorderRadius: 8,

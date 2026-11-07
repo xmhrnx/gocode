@@ -8,6 +8,8 @@ import (
 	"gocode/internal/catalog"
 	"gocode/ui/core"
 	"gocode/ui/theme"
+
+	"gocode/ui/components"
 )
 
 // modelsPage chooses which models the picker offers: a list of the
@@ -28,6 +30,7 @@ func newModelsPage(s *core.Services) *modelsPage {
 	p := &modelsPage{services: s, providers: map[string]*giode.PressableElement{},
 		boxes: giode.NewKeyedCache[string, *checkbox.Checkbox]()}
 	p.search = giode.Input.Text("Search models…", fieldStyle(-1))
+	components.AddEditMenu(s.App, p.search, components.EditOptions{})
 	p.back = smallButton("All providers", false).Icon(theme.Icon("chevron-left", 14, "")).OnClick(func() { p.open("") })
 	p.refresh = smallButton("Refresh list", false).OnClick(p.refreshOpen)
 	return p

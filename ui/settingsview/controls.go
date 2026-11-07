@@ -8,6 +8,8 @@ import (
 
 	"gocode/ui/core"
 	"gocode/ui/theme"
+
+	"gocode/ui/components"
 )
 
 // option is one choice of a string-valued setting.
@@ -44,6 +46,7 @@ func choice[T ~string](s *core.Services, value *T, options []option[T]) giode.El
 // text that isn't a number in range is ignored until it is.
 func number(s *core.Services, value *int, low, high int) giode.Element {
 	field := giode.Input.Text(strconv.Itoa(*value), fieldStyle(110)).Keyboard(giode.KeyboardNumeric)
+	components.AddEditMenu(s.App, field, components.EditOptions{})
 	field.SetText(strconv.Itoa(*value))
 	field.OnChange(func(text string) {
 		if n, err := strconv.Atoi(text); err == nil && n >= low && n <= high {
@@ -58,6 +61,7 @@ func number(s *core.Services, value *int, low, high int) giode.Element {
 func decimal(s *core.Services, value *float64, low, high float64) giode.Element {
 	text := strconv.FormatFloat(*value, 'f', -1, 64)
 	field := giode.Input.Text(text, fieldStyle(110)).Keyboard(giode.KeyboardNumeric)
+	components.AddEditMenu(s.App, field, components.EditOptions{})
 	field.SetText(text)
 	field.OnChange(func(text string) {
 		if n, err := strconv.ParseFloat(text, 64); err == nil && n >= low && n <= high {
@@ -71,6 +75,7 @@ func decimal(s *core.Services, value *float64, low, high float64) giode.Element 
 // text binds a single-line field to a string setting.
 func text(s *core.Services, value *string, placeholder string, width int) giode.Element {
 	field := giode.Input.Text(placeholder, fieldStyle(width))
+	components.AddEditMenu(s.App, field, components.EditOptions{})
 	field.SetText(*value)
 	field.OnChange(func(text string) { *value = text; s.SettingsChanged() })
 	return field

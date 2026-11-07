@@ -25,10 +25,11 @@ func (c *ChatTab) projectsDir() string {
 	return projects.Dir(c.services.Settings.General.ProjectsDir)
 }
 
-// folderLabel names the chat's folder, or where it will go.
+// folderLabel names the chat's folder, or "Default" while it has none:
+// it will get one in the projects folder (Settings → General).
 func (c *ChatTab) folderLabel() string {
 	if c.session.WorkDir == "" {
-		return "New folder in " + shortPath(c.projectsDir())
+		return "Default"
 	}
 	return shortPath(c.session.WorkDir)
 }
