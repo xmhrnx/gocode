@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
+	"gocode/internal/shell"
 )
 
 // submit runs the typed command as a new block.
@@ -15,6 +17,7 @@ func (t *Tab) submit() {
 		return
 	}
 	t.input.SetText("")
+	t.matches = nil
 	t.history.add(command)
 	if command == "clear" || command == "cls" {
 		t.clear()
@@ -63,8 +66,26 @@ func (t *Tab) clear() {
 // recall steps through earlier commands with Up and Down.
 func (t *Tab) recall(up bool) {
 	if command, ok := t.history.step(up); ok {
-		t.input.SetText(command)
+		t.setLine(command)
 	}
+}
+
+// complete fills in the last word of the command, as far as the
+// matching files or commands agree, and lists them when there are
+// several.
+func (t *Tab) complete() {
+	line := t.input.Text()
+	result := shell.Complete(line, t.session.WorkDir())
+	if result.Line != line {
+		t.setLine(result.Line)
+	}
+	t.matches = result.Matches
+}
+
+// setLine replaces the command with line, leaving the caret at its end.
+func (t *Tab) setLine(line string) {
+	t.input.SelectAll()
+	t.input.InsertText(line)
 }
 
 func startDir(configured string) string {

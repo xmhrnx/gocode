@@ -24,6 +24,9 @@ type Tab struct {
 	history  commandHistory
 	list     *lazylist.List
 	views    *giode.KeyedCache[int, *blockView]
+	// matches are the completions offered by the last Tab, shown until
+	// the command changes.
+	matches []string
 }
 
 // New returns a terminal starting in workDir, or in the default folder
@@ -36,7 +39,8 @@ func New(services *core.Services, workDir string) *Tab {
 	}
 	t.session = shell.NewSession(cfg.Terminal.Shell, workDir)
 	t.input = components.NewMessageField("Type a command…", true).
-		SubmitOn(giode.SubmitEnterUnlessShift).Submit(func(string) { t.submit() })
+		SubmitOn(giode.SubmitEnterUnlessShift).Submit(func(string) { t.submit() }).
+		OnChange(func(string) { t.matches = nil })
 	t.list = giode.LazyList(
 		func() int { return len(t.blocks) },
 		func(i int) any { return t.blocks[i].id },
@@ -71,7 +75,8 @@ func (t *Tab) Focus() { t.input.Focus() }
 // View implements core.Tab.
 func (t *Tab) View() giode.Element {
 	giode.Shortcuts(giode.Shortcut("Esc", t.stop), giode.Shortcut("Mod+L", t.clear),
-		giode.Shortcut("Up", func() { t.recall(true) }), giode.Shortcut("Down", func() { t.recall(false) }))
+		giode.Shortcut("Up", func() { t.recall(true) }), giode.Shortcut("Down", func() { t.recall(false) }),
+		giode.Shortcut("Tab", t.complete))
 	content := giode.Element(welcome())
 	if len(t.blocks) > 0 {
 		content = giode.SelectionArea(t, t.list) // select across blocks
