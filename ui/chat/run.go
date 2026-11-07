@@ -44,6 +44,10 @@ func (c *ChatTab) send() {
 		c.services.Error("Pick a model first: click the model button below the message box.")
 		return
 	}
+	if !c.ensureFolder(msg.Text()) {
+		c.composer.restore(msg)
+		return
+	}
 	c.session.Messages = append(c.session.Messages, msg)
 	c.maybeGenerateTitle(msg.Text())
 	c.startRun()

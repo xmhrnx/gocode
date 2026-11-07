@@ -28,7 +28,7 @@ func newHeader(tab *ChatTab) *header {
 }
 
 func (h *header) Layout(gtx giode.Context) giode.Dimensions {
-	h.folder.SetLabel(shortPath(h.tab.session.WorkDir))
+	h.folder.SetLabel(h.tab.folderLabel())
 	return giode.Row(giode.Styles{Width: -1, Align: giode.AlignCenter, Wrap: giode.WrapNoWrap,
 		Padding: giode.Inset{Left: 12, Right: 12, Top: 6, Bottom: 2}},
 		h.folder,
@@ -41,8 +41,15 @@ func (h *header) Layout(gtx giode.Context) giode.Dimensions {
 
 func (h *header) pickFolder() {
 	services := h.tab.services
+	start := h.tab.session.WorkDir
+	if start == "" {
+		start = h.tab.projectsDir()
+	}
+	if info, err := os.Stat(start); err != nil || !info.IsDir() {
+		start = "" // not made yet: let the system choose
+	}
 	go func() {
-		dir, err := services.App.PickFolder(context.Background(), giode.FolderOptions{})
+		dir, err := services.App.PickFolder(context.Background(), giode.FolderOptions{Directory: start})
 		if errors.Is(err, giode.ErrCanceled) || dir == "" {
 			return
 		}

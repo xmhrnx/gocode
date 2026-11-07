@@ -38,7 +38,7 @@ func (e *emptyState) Layout(gtx giode.Context) giode.Dimensions {
 		giode.Box(giode.Styles{Width: 52, Height: 52, BorderRadius: 16, Background: theme.PrimarySoft,
 			Align: giode.AlignCenter, Justify: giode.JustifyCenter}, theme.Icon("square-terminal", 26, theme.Primary)),
 		giode.Text("What are we building?", giode.Styles{Color: theme.Text, FontSize: theme.Sizes.Heading, FontWeight: giode.FontWeightSemiBold}),
-		giode.Text(shortPath(e.tab.session.WorkDir), giode.Styles{Color: theme.Muted, FontSize: theme.Sizes.Small, FontFamily: "JetBrains Mono"}),
+		giode.Text(e.tab.folderLabel(), giode.Styles{Color: theme.Muted, FontSize: theme.Sizes.Small, FontFamily: "JetBrains Mono"}),
 		giode.Row(giode.Styles{Gap: 8, Justify: giode.JustifyCenter, MaxWidth: 760, Margin: giode.Inset{Top: 10}}, e.starters...),
 	).Layout(gtx)
 }

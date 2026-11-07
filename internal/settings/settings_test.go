@@ -83,3 +83,17 @@ func TestMigrateMovesTheTerminalShellToTheAgent(t *testing.T) {
 		t.Fatalf("agent shell %q, terminal %v", s.Agent.Shell, s.Terminal)
 	}
 }
+
+func TestMigrateMovesTheDefaultFolderToProjects(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "settings.json")
+	if err := os.WriteFile(path, []byte(`{"version": 4, "general": {"default_work_dir": "~/code"}}`), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	s, err := Load(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if s.General.ProjectsDir != "~/code" || s.General.LegacyWorkDir != "" {
+		t.Fatalf("general %+v", s.General)
+	}
+}

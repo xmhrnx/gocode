@@ -3,8 +3,6 @@
 package chat
 
 import (
-	"os"
-
 	"github.com/xmhrnx/giode"
 
 	"gocode/internal/agent"
@@ -48,14 +46,11 @@ type ChatTab struct {
 	composer   *composer
 }
 
-// New returns a chat tab in workDir (empty: the default folder) with
-// prompt in the composer.
+// New returns a chat tab in workDir with prompt in the composer. With no
+// workDir, the chat gets a folder of its own in the projects folder when
+// its first message is sent, unless the user opens one before.
 func New(services *core.Services, workDir, prompt string) *ChatTab {
-	cfg := services.Settings
-	if workDir == "" {
-		workDir = defaultWorkDir(cfg.General.DefaultWorkDir)
-	}
-	sess := session.New(workDir, cfg.Models.Default)
+	sess := session.New(workDir, services.Settings.Models.Default)
 	return newTab(services, sess, prompt)
 }
 
@@ -112,17 +107,4 @@ func initialModel(services *core.Services, sess *session.Session) catalog.ModelR
 		return catalog.ParseRef(services.Settings.Models.Recent[0])
 	}
 	return catalog.ModelRef{}
-}
-
-func defaultWorkDir(configured string) string {
-	if configured != "" {
-		return configured
-	}
-	if dir, err := os.Getwd(); err == nil && dir != "/" {
-		return dir
-	}
-	if home, err := os.UserHomeDir(); err == nil {
-		return home
-	}
-	return "."
 }

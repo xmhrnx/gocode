@@ -1,7 +1,7 @@
 package settings
 
 // currentVersion is the settings format written by this build.
-const currentVersion = 4
+const currentVersion = 5
 
 // migrate updates settings written by older builds.
 func (s *Settings) migrate() {
@@ -19,6 +19,14 @@ func (s *Settings) migrate() {
 			s.Agent.Shell = s.Terminal.Shell
 		}
 		s.Terminal = nil
+	}
+	if s.General.LegacyWorkDir != "" {
+		// New chats now get folders of their own; the folder they all
+		// used to start in is where those go.
+		if s.General.ProjectsDir == "" {
+			s.General.ProjectsDir = s.General.LegacyWorkDir
+		}
+		s.General.LegacyWorkDir = ""
 	}
 	s.Version = currentVersion
 }

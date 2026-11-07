@@ -23,7 +23,12 @@ type Settings struct {
 
 // General holds app-wide behavior.
 type General struct {
-	DefaultWorkDir   string `json:"default_work_dir"`
+	// ProjectsDir is where a chat gets a new folder when the user didn't
+	// pick one; empty means ~/GoCode.
+	ProjectsDir string `json:"projects_dir"`
+	// LegacyWorkDir is the old "default project folder", read only to
+	// carry it over; see migrate.
+	LegacyWorkDir    string `json:"default_work_dir,omitempty"`
 	RestoreTabs      bool   `json:"restore_tabs"`
 	ConfirmCloseBusy bool   `json:"confirm_close_busy"`
 	AutoTitle        bool   `json:"auto_title"`

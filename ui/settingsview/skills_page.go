@@ -48,7 +48,7 @@ func newSkillsPage(s *core.Services) *skillsPage {
 
 // refresh rediscovers the installed skills off the UI goroutine.
 func (p *skillsPage) refresh() {
-	userDir, workDir := p.services.SkillsDir, p.services.Settings.General.DefaultWorkDir
+	userDir, workDir := p.services.SkillsDir, "" // project skills show in each chat
 	go func() {
 		found, problems := skills.Discover(userDir, workDir)
 		p.services.App.Post(func() { p.found, p.problems = found, problems })

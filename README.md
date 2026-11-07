@@ -17,6 +17,9 @@ webview or JavaScript runtime inside. The UI is drawn straight to the GPU.
 - **Messages while it works**: send messages while the agent is running.
   They're queued and reach the model at its next step, with no need to stop
   it first.
+- **Project folders**: open a folder for a chat, or just start typing: a chat
+  without one gets its own folder in `~/GoCode` (Settings → General →
+  Projects folder), named after its first message.
 - **Tabs reopen** where you left off: chats and settings
   (Settings → General).
 - **Shell**: the agent's commands run in `$SHELL`. On Windows they run in Git Bash when
