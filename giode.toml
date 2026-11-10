@@ -48,5 +48,5 @@ identity_name = "REPLACE.WithPartnerCenterIdentityName"
 
 [linux]
 categories = ["Development", "Utility"]
-description = "A coding agent and model chat for the desktop, drawn straight to the GPU with no browser engine inside. It works with 34 providers, local models and custom endpoints."
+description = "A coding agent and model chat for the desktop, drawn straight to the GPU with no browser engine inside. It works with over 200 providers, local models and custom endpoints."
 license = "Apache-2.0"

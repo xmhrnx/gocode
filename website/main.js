@@ -175,7 +175,6 @@ const isArm = (name) => /arm64|aarch64/i.test(name);
 function describeAsset(name) {
   const cpu = /universal/i.test(name) ? "Universal" : isArm(name) ? "ARM64" : "x64";
   if (/\.exe$/i.test(name)) return { os: "windows", label: `Windows ${cpu} installer` };
-  if (/\.msix$/i.test(name)) return { os: "windows", label: `Windows ${cpu} MSIX` };
   if (/\.dmg$/i.test(name)) return { os: "macos", label: `macOS ${cpu === "x64" ? "Intel" : cpu === "ARM64" ? "Apple silicon" : "Universal"}` };
   if (/\.deb$/i.test(name)) return { os: "linux", label: `Linux ${cpu} .deb` };
   if (/\.rpm$/i.test(name)) return { os: "linux", label: `Linux ${cpu} .rpm` };
@@ -188,7 +187,7 @@ function pickAsset(assets, { os, arch }) {
   const wantArm = arch === "arm64";
   const sameCpu = (a) => /universal/i.test(a.name) || isArm(a.name) === wantArm;
   const preferences = {
-    windows: [/setup\.exe$/i, /\.exe$/i, /\.msix$/i],
+    windows: [/setup\.exe$/i, /\.exe$/i],
     macos: [/universal\.dmg$/i, /\.dmg$/i],
     linux: [/\.deb$/i, /\.AppImage$/i, /\.rpm$/i],
   }[os] || [];
