@@ -41,7 +41,7 @@ var emptySchema = json.RawMessage(`{"type":"object","properties":{}}`)
 func (c *Client) buildRequest(req llm.Request) chatRequest {
 	body := chatRequest{
 		Model:         req.Model,
-		Messages:      convertMessages(req.System, req.Messages, c.opts.EchoReasoningField),
+		Messages:      convertMessages(req.System, req.Messages, c.opts.EchoReasoningField, c.opts.FileInput),
 		Stream:        true,
 		StreamOptions: &streamOptions{IncludeUsage: true},
 		Temperature:   req.Temperature,

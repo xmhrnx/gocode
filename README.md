@@ -16,7 +16,7 @@ webview or JavaScript runtime inside. The UI is drawn straight to the GPU.
   plan shows above the composer.
 - **Messages while it works**: send messages while the agent is running.
   They're queued and reach the model at its next step, with no need to stop
-  it first.
+  it first; Send now stops the current step and sends them at once.
 - **Project folders**: open a folder for a chat, or just start typing: a chat
   without one gets its own folder in `~/GoCode` (Settings → General →
   Projects folder), named after its first message.
@@ -66,7 +66,11 @@ webview or JavaScript runtime inside. The UI is drawn straight to the GPU.
   don't use can be hidden in Settings → Models.
 - **Attachments**: files and images through the paperclip button, by dropping
   them on the window, or pasted from the clipboard (Ctrl/⌘+V or the image
-  button). Large images are scaled down before sending.
+  button). PDFs go to Anthropic, Gemini, OpenAI, OpenRouter and Azure models
+  as documents, and as their text to the rest. Word, Excel, PowerPoint,
+  OpenDocument and EPUB files are sent as text, as are text and code files
+  (UTF-8 or UTF-16). Images (PNG, JPEG, GIF, WebP, BMP, TIFF) are scaled
+  down before sending.
 - **Selecting text**: drag across the conversation to select
   text, even across messages or blocks, and copy it with Ctrl/⌘+C.
 - **Messages**: copy, retry, and edit-and-resend. Replies render as Markdown

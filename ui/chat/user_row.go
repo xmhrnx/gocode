@@ -38,6 +38,10 @@ func (r *userRow) Layout(gtx giode.Context) giode.Dimensions {
 		content = append(content, giode.Row(giode.Styles{Gap: 6}, r.images...))
 	}
 	for _, part := range msg.Parts {
+		if part.Kind == llm.PartDocument && part.Document != nil {
+			content = append(content, fileChip(part.Document.Name))
+			continue
+		}
 		if part.Kind != llm.PartText {
 			continue
 		}

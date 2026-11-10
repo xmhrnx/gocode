@@ -64,6 +64,8 @@ func userParts(msg llm.Message) []wirePart {
 			rest = append(rest, wirePart{Text: textPtr(part.Text)})
 		case part.Kind == llm.PartImage && part.Image != nil:
 			rest = append(rest, wirePart{InlineData: &inlineData{MimeType: part.Image.MediaType, Data: part.Image.Data}})
+		case part.Kind == llm.PartDocument && part.Document != nil:
+			rest = append(rest, wirePart{InlineData: &inlineData{MimeType: part.Document.MediaType, Data: part.Document.Data}})
 		}
 	}
 	return append(responses, rest...)

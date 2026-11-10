@@ -37,6 +37,9 @@ type ChatTab struct {
 	// contextTokens is the size of the last request, for the context gauge.
 	contextTokens int
 	revision      int
+	// sendNow is set when the user asked to stop the current step and
+	// send the queued messages at once.
+	sendNow bool
 	// openedFolder is set once the user opens a folder for the chat.
 	openedFolder bool
 	// toggledReasoning holds the reasoning parts the user opened or

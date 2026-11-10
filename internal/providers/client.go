@@ -37,6 +37,7 @@ func NewClient(def Definition, apiKey string, httpClient *http.Client) (llm.Clie
 			EchoReasoningField:  def.EchoReasoningField,
 			SendReasoningEffort: def.SendReasoningEffort,
 			WebSearchTool:       def.WebSearchTool,
+			FileInput:           def.FileInput,
 		}), nil
 	}
 	return nil, fmt.Errorf("provider %s has unknown API style %q", def.ID, def.Style)

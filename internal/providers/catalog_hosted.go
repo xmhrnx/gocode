@@ -7,7 +7,7 @@ import "gocode/internal/llm/openai"
 func hostedProviders() []Definition {
 	return openAICompatible(CategoryRouter, []Definition{
 		{ID: "openrouter", Name: "OpenRouter", BaseURL: "https://openrouter.ai/api/v1", KeyURL: "https://openrouter.ai/keys",
-			WebSearchTool: "openrouter:web_search",
+			WebSearchTool: "openrouter:web_search", FileInput: true,
 			// OpenRouter attributes traffic to apps by these headers.
 			Headers: map[string]string{"HTTP-Referer": "https://github.com/gocode", "X-OpenRouter-Title": "GoCode"}},
 		{ID: "groq", Name: "Groq", BaseURL: "https://api.groq.com/openai/v1", KeyURL: "https://console.groq.com/keys"},
@@ -22,7 +22,7 @@ func hostedProviders() []Definition {
 		{ID: "nvidia", Name: "NVIDIA NIM", BaseURL: "https://integrate.api.nvidia.com/v1"},
 		{ID: "perplexity", Name: "Perplexity", BaseURL: "https://api.perplexity.ai"},
 		{ID: "azure-openai", Name: "Azure OpenAI", BaseURL: "https://YOUR-RESOURCE.openai.azure.com/openai/v1",
-			AuthHeader: "api-key", MaxTokensField: openai.MaxCompletionTokens,
+			AuthHeader: "api-key", MaxTokensField: openai.MaxCompletionTokens, FileInput: true,
 			Notes: "Replace YOUR-RESOURCE with your Azure resource name; the model is your deployment name."},
 		{ID: "bedrock", Name: "Amazon Bedrock", BaseURL: "https://bedrock-runtime.us-east-1.amazonaws.com/openai/v1",
 			Notes: "Uses a Bedrock API key. Change the region in the URL to match your account."},

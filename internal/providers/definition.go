@@ -31,7 +31,9 @@ type Definition struct {
 	SendReasoningEffort bool   `json:"send_reasoning_effort,omitempty"`
 	// WebSearchTool names the provider's own web search tool, if it has
 	// one for every model (OpenRouter's "openrouter:web_search").
-	WebSearchTool   string   `json:"web_search_tool,omitempty"`
+	WebSearchTool string `json:"web_search_tool,omitempty"`
+	// FileInput marks a provider that reads PDFs sent as files.
+	FileInput       bool     `json:"file_input,omitempty"`
 	SuggestedModels []string `json:"suggested_models,omitempty"`
 	Notes           string   `json:"notes,omitempty"`
 }

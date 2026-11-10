@@ -26,6 +26,13 @@ type contentPart struct {
 	Type     string    `json:"type"`
 	Text     string    `json:"text,omitempty"`
 	ImageURL *imageURL `json:"image_url,omitempty"`
+	File     *filePart `json:"file,omitempty"`
+}
+
+// filePart is an attached PDF, for servers that read files.
+type filePart struct {
+	Filename string `json:"filename"`
+	FileData string `json:"file_data"`
 }
 
 type imageURL struct {
@@ -61,7 +68,7 @@ func (m chatMessage) MarshalJSON() ([]byte, error) {
 	return json.Marshal(fields)
 }
 
-func convertMessages(system string, history []llm.Message, echoField string) []chatMessage {
+func convertMessages(system string, history []llm.Message, echoField string, fileInput bool) []chatMessage {
 	var out []chatMessage
 	if system != "" {
 		out = append(out, chatMessage{Role: "system", Content: system})
@@ -73,14 +80,15 @@ func convertMessages(system string, history []llm.Message, echoField string) []c
 			}
 			continue
 		}
-		out = append(out, userMessages(msg)...)
+		out = append(out, userMessages(msg, fileInput)...)
 	}
 	return out
 }
 
 // userMessages splits tool results into "tool" messages, which must
 // directly follow the assistant's tool calls, ahead of any user content.
-func userMessages(msg llm.Message) []chatMessage {
+// With fileInput, documents go as files; otherwise as their text.
+func userMessages(msg llm.Message, fileInput bool) []chatMessage {
 	var out []chatMessage
 	var parts []contentPart
 	hasImage := false
@@ -93,6 +101,13 @@ func userMessages(msg llm.Message) []chatMessage {
 		case part.Kind == llm.PartImage && part.Image != nil:
 			hasImage = true
 			parts = append(parts, contentPart{Type: "image_url", ImageURL: &imageURL{URL: dataURL(part.Image)}})
+		case part.Kind == llm.PartDocument && part.Document != nil && fileInput:
+			hasImage = true // needs the content array too
+			doc := part.Document
+			parts = append(parts, contentPart{Type: "file", File: &filePart{Filename: doc.Name,
+				FileData: "data:" + doc.MediaType + ";base64," + base64.StdEncoding.EncodeToString(doc.Data)}})
+		case part.Kind == llm.PartDocument && part.Document != nil:
+			parts = append(parts, contentPart{Type: "text", Text: llm.DocumentText(*part.Document)})
 		}
 	}
 	if len(parts) > 0 {
@@ -102,7 +117,7 @@ func userMessages(msg llm.Message) []chatMessage {
 }
 
 // userContent prefers a plain string, which every server accepts; content
-// arrays are only needed for images.
+// arrays are only needed for images and files.
 func userContent(parts []contentPart, hasImage bool) any {
 	if hasImage {
 		return parts

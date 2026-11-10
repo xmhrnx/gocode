@@ -1,5 +1,7 @@
 // Package attach turns files the user adds to a message into message
-// parts: images are scaled down and re-encoded, text files are inlined.
+// parts: images are scaled down and re-encoded, PDFs are kept as
+// documents with their text extracted, office and e-book files are
+// turned into text, and text files are inlined.
 package attach
 
 import (
@@ -8,7 +10,6 @@ import (
 	"image"
 	"io"
 	"net/http"
-	"unicode/utf8"
 )
 
 // Kind is what an attachment is sent as.
@@ -22,6 +23,8 @@ type Attachment struct {
 	Data      []byte
 	// Thumbnail is a small preview of an image attachment.
 	Thumbnail image.Image
+	// Text is a document's extracted text.
+	Text string
 }
 
 // Limits bounds what can be attached.
@@ -33,9 +36,13 @@ type Limits struct {
 const (
 	KindText Kind = iota
 	KindImage
+	// KindDocument is a PDF, sent as a document where the provider reads
+	// them and as its text elsewhere.
+	KindDocument
 )
 
-// Read reads one attachment from r.
+// Read reads one attachment from r: an image, a PDF, an office or
+// e-book document (as its text), or a text file.
 func Read(name string, r io.Reader, limits Limits) (Attachment, error) {
 	data, err := io.ReadAll(io.LimitReader(r, limits.MaxBytes+1))
 	if err != nil {
@@ -44,36 +51,30 @@ func Read(name string, r io.Reader, limits Limits) (Attachment, error) {
 	if int64(len(data)) > limits.MaxBytes {
 		return Attachment{}, fmt.Errorf("%s is larger than %d MB", name, limits.MaxBytes>>20)
 	}
-	mediaType := http.DetectContentType(data)
-	if isImage(mediaType) {
+	switch {
+	case isImage(data):
 		return readImage(name, data)
+	case bytes.HasPrefix(data, []byte("%PDF-")):
+		return readPDF(name, data, limits)
+	case isPacked(name):
+		text, err := unpackText(name, data)
+		if err != nil {
+			return Attachment{}, fmt.Errorf("read %s: %w", name, err)
+		}
+		return textAttachment(name, []byte(text), limits)
 	}
-	if !looksLikeText(data) {
-		return Attachment{}, fmt.Errorf("%s isn't text or an image (%s)", name, mediaType)
+	text, ok := decodeText(data)
+	if !ok {
+		return Attachment{}, fmt.Errorf("%s can't be attached (%s): attach text, code, images, PDFs, "+
+			"Word, Excel, PowerPoint, OpenDocument or EPUB files", name, http.DetectContentType(data))
 	}
-	if int64(len(data)) > limits.MaxTextBytes {
-		return Attachment{}, fmt.Errorf("%s is larger than %d KB; ask the agent to read it instead", name, limits.MaxTextBytes>>10)
-	}
-	return Attachment{Name: name, Kind: KindText, MediaType: "text/plain", Data: data}, nil
+	return textAttachment(name, text, limits)
 }
 
-func isImage(mediaType string) bool {
-	switch mediaType {
-	case "image/png", "image/jpeg", "image/gif", "image/webp":
-		return true
+// textAttachment inlines text, if it isn't too long to.
+func textAttachment(name string, text []byte, limits Limits) (Attachment, error) {
+	if int64(len(text)) > limits.MaxTextBytes {
+		return Attachment{}, fmt.Errorf("%s has more than %d KB of text; ask the agent to read it instead", name, limits.MaxTextBytes>>10)
 	}
-	return false
-}
-
-func looksLikeText(data []byte) bool {
-	sample := data[:min(len(data), 8192)]
-	return !bytes.Contains(sample, []byte{0}) && utf8.Valid(trimPartialRune(sample))
-}
-
-// trimPartialRune drops a rune cut in half by sampling.
-func trimPartialRune(b []byte) []byte {
-	for i := 0; i < utf8.UTFMax && len(b) > 0 && !utf8.Valid(b); i++ {
-		b = b[:len(b)-1]
-	}
-	return b
+	return Attachment{Name: name, Kind: KindText, MediaType: "text/plain", Data: text}, nil
 }

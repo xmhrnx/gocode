@@ -134,7 +134,7 @@ func markTurnEnds(items []item) {
 // results, which are shown with their calls instead.
 func hasUserContent(msg llm.Message) bool {
 	for _, part := range msg.Parts {
-		if part.Kind == llm.PartText || part.Kind == llm.PartImage {
+		if part.Kind == llm.PartText || part.Kind == llm.PartImage || part.Kind == llm.PartDocument {
 			return true
 		}
 	}

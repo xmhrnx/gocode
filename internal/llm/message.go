@@ -24,6 +24,7 @@ type Part struct {
 	Kind       PartKind    `json:"kind"`
 	Text       string      `json:"text,omitempty"`
 	Image      *Image      `json:"image,omitempty"`
+	Document   *Document   `json:"document,omitempty"`
 	ToolCall   *ToolCall   `json:"tool_call,omitempty"`
 	ToolResult *ToolResult `json:"tool_result,omitempty"`
 	// Signature authenticates a reasoning part; some providers require it
@@ -42,6 +43,16 @@ type Part struct {
 type Image struct {
 	MediaType string `json:"media_type"`
 	Data      []byte `json:"data"`
+}
+
+// Document is an attached document, such as a PDF: sent as is to
+// providers that read it, and as its extracted text to the rest.
+type Document struct {
+	Name      string `json:"name"`
+	MediaType string `json:"media_type"`
+	Data      []byte `json:"data"`
+	// Text is the document's text, for providers that can't read it.
+	Text string `json:"text,omitempty"`
 }
 
 // ToolCall is the model asking to run a tool.
@@ -70,6 +81,7 @@ const (
 const (
 	PartText       PartKind = "text"
 	PartImage      PartKind = "image"
+	PartDocument   PartKind = "document"
 	PartReasoning  PartKind = "reasoning"
 	PartToolCall   PartKind = "tool_call"
 	PartToolResult PartKind = "tool_result"

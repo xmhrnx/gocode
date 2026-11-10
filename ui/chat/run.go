@@ -89,8 +89,23 @@ func (c *ChatTab) stop() {
 	}
 }
 
+// sendQueuedNow stops the step in progress, so the queued messages go to
+// the model at once rather than when the step ends.
+func (c *ChatTab) sendQueuedNow() {
+	if c.run == nil {
+		return
+	}
+	c.sendNow = true
+	c.run.cancel()
+}
+
 func (c *ChatTab) finishRun(err error) {
 	c.run = nil
+	interrupted := c.sendNow && errors.Is(err, context.Canceled)
+	c.sendNow = false
+	if interrupted {
+		err = nil // stopped to send the queue, not by the user
+	}
 	if queued := c.queue.drain(); len(queued) > 0 {
 		if err == nil {
 			// Sent just as the run ended: answer them in a new run.
@@ -102,8 +117,9 @@ func (c *ChatTab) finishRun(err error) {
 		c.composer.restoreQueued(queued) // the run stopped; let the user decide
 	}
 	switch {
-	case err == nil:
+	case err == nil && !interrupted:
 		c.services.PlaySound(chime.Done)
+	case err == nil:
 	case errors.Is(err, context.Canceled):
 		c.addNotice(noticeInfo, "Stopped.")
 	default:

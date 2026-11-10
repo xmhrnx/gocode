@@ -40,6 +40,13 @@ type toolResultBlock struct {
 	IsError   bool   `json:"is_error,omitempty"`
 }
 
+// documentBlock is an attached PDF.
+type documentBlock struct {
+	Type   string      `json:"type"`
+	Source imageSource `json:"source"`
+	Title  string      `json:"title,omitempty"`
+}
+
 type imageBlock struct {
 	Type   string      `json:"type"`
 	Source imageSource `json:"source"`

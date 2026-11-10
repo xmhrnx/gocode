@@ -44,8 +44,11 @@ func (a *attachmentChip) Layout(gtx giode.Context) giode.Dimensions {
 }
 
 func fileIcon(kind attach.Kind) string {
-	if kind == attach.KindImage {
+	switch kind {
+	case attach.KindImage:
 		return "image"
+	case attach.KindDocument:
+		return "file"
 	}
 	return "file-text"
 }

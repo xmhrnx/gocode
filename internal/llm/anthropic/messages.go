@@ -63,6 +63,11 @@ func userBlocks(msg llm.Message) []any {
 			blocks = append(blocks, toolResultBlock{Type: "tool_result", ToolUseID: result.CallID, Content: result.Content, IsError: result.IsError})
 		case part.Kind == llm.PartText && part.Text != "":
 			blocks = append(blocks, textBlock{Type: "text", Text: part.Text})
+		case part.Kind == llm.PartDocument && part.Document != nil:
+			doc := part.Document
+			blocks = append(blocks, documentBlock{Type: "document", Title: doc.Name, Source: imageSource{
+				Type: "base64", MediaType: doc.MediaType, Data: base64.StdEncoding.EncodeToString(doc.Data),
+			}})
 		case part.Kind == llm.PartImage && part.Image != nil:
 			blocks = append(blocks, imageBlock{Type: "image", Source: imageSource{
 				Type: "base64", MediaType: part.Image.MediaType, Data: base64.StdEncoding.EncodeToString(part.Image.Data),

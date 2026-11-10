@@ -8,8 +8,11 @@ import (
 	_ "image/gif" // register decoders for attached images
 	"image/jpeg"
 	"image/png"
+	"net/http"
 
+	_ "golang.org/x/image/bmp" // and BMP, TIFF and WebP, sent as PNG or JPEG
 	xdraw "golang.org/x/image/draw"
+	_ "golang.org/x/image/tiff"
 	_ "golang.org/x/image/webp"
 )
 
@@ -20,6 +23,16 @@ const (
 	thumbnailSide = 120
 )
 
+// isImage reports whether data is an image GoCode can read: PNG, JPEG,
+// GIF, WebP, BMP or TIFF.
+func isImage(data []byte) bool {
+	switch http.DetectContentType(data) {
+	case "image/png", "image/jpeg", "image/gif", "image/webp", "image/bmp":
+		return true
+	}
+	return bytes.HasPrefix(data, []byte("II*\x00")) || bytes.HasPrefix(data, []byte("MM\x00*")) // TIFF
+}
+
 func readImage(name string, data []byte) (Attachment, error) {
 	img, format, err := image.Decode(bytes.NewReader(data))
 	if err != nil {
@@ -27,7 +40,7 @@ func readImage(name string, data []byte) (Attachment, error) {
 	}
 	att := Attachment{Name: name, Kind: KindImage, MediaType: "image/" + format, Data: data,
 		Thumbnail: scaleToFit(img, thumbnailSide)}
-	if longestSide(img) > maxImageSide || format == "webp" || format == "gif" {
+	if longestSide(img) > maxImageSide || (format != "png" && format != "jpeg") {
 		att.Data, att.MediaType, err = encode(scaleToFit(img, maxImageSide))
 		if err != nil {
 			return Attachment{}, fmt.Errorf("encode %s: %w", name, err)

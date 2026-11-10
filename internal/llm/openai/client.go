@@ -37,6 +37,9 @@ type Options struct {
 	// WebSearchTool is the type of the provider's own web search tool,
 	// sent when a request asks for web search; "" when there is none.
 	WebSearchTool string
+	// FileInput sends attached PDFs as files ("file" content parts),
+	// which OpenAI and OpenRouter read; without it they go as their text.
+	FileInput bool
 }
 
 // Client streams chat completions from one provider.
