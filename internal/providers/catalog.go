@@ -7,10 +7,11 @@ import (
 )
 
 // Catalog returns the built-in providers in display order: model labs,
-// then routers and inference hosts, then local servers. Each call returns
-// a fresh slice the caller may modify.
+// then routers and inference hosts (the ones defined here first, then the
+// directory's), then local servers. Each call returns a fresh slice the
+// caller may modify.
 func Catalog() []Definition {
-	return slices.Concat(labProviders(), hostedProviders(), localProviders())
+	return slices.Concat(labProviders(), hostedProviders(), directoryProviders(), localProviders())
 }
 
 // Lookup finds a built-in provider by ID.

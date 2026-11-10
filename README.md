@@ -52,7 +52,10 @@ webview or JavaScript runtime inside. The UI is drawn straight to the GPU.
   for edits. It offers Allow, Always allow (for the session) and Deny with
   feedback for the agent. Each chat has a mode: *Ask*, *Auto-accept edits*,
   *Full access*, *Read-only (plan)* or *Chat only*.
-- **Providers**: 34 built-in, plus any custom endpoint.
+- **Providers**: 218 built-in, plus any custom endpoint. Settings → Providers
+  groups them into labs, hosts, local servers and custom ones, and searches
+  them all. Besides the ones below, 184 come from the models.dev directory
+  (`internal/providers/directory.json`).
   - Native APIs: Anthropic Messages, Google Gemini.
   - OpenAI-compatible: OpenAI, xAI, DeepSeek, Mistral, Moonshot, Z.ai, Qwen,
     MiniMax, Cohere, OpenRouter, Groq, Together, Fireworks, Cerebras, DeepInfra,

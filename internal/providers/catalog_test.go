@@ -81,3 +81,22 @@ func TestNewClientPerStyle(t *testing.T) {
 		t.Error("openai style without base URL accepted")
 	}
 }
+
+func TestDirectoryProvidersAreUsable(t *testing.T) {
+	seen := map[string]bool{}
+	for _, def := range Catalog() {
+		if seen[def.ID] {
+			t.Errorf("duplicate provider id %q", def.ID)
+		}
+		seen[def.ID] = true
+		if def.Name == "" || def.BaseURL == "" || (def.Style != StyleOpenAI && def.Style != StyleAnthropic && def.Style != StyleGemini) {
+			t.Errorf("provider %q is incomplete: %+v", def.ID, def)
+		}
+		if def.Category != CategoryCloud && def.Category != CategoryRouter && def.Category != CategoryLocal {
+			t.Errorf("provider %q has category %q", def.ID, def.Category)
+		}
+	}
+	if len(seen) < 200 {
+		t.Fatalf("only %d providers", len(seen))
+	}
+}

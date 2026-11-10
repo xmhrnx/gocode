@@ -1,0 +1,1481 @@
+{
+ "source": "models.dev, 2026-10-29 snapshot",
+ "providers": [
+  {
+   "id": "ai21",
+   "name": "AI21 Labs",
+   "style": "openai",
+   "base_url": "https://api.ai21.com/studio/v1",
+   "category": "cloud",
+   "key_url": "https://docs.ai21.com/docs/jamba-foundation-models"
+  },
+  {
+   "id": "alibaba-cn",
+   "name": "Alibaba (China)",
+   "style": "openai",
+   "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+   "category": "cloud",
+   "key_url": "https://www.alibabacloud.com/help/en/model-studio/models"
+  },
+  {
+   "id": "alibaba-coding-plan",
+   "name": "Alibaba Coding Plan",
+   "style": "openai",
+   "base_url": "https://coding-intl.dashscope.aliyuncs.com/v1",
+   "category": "cloud",
+   "key_url": "https://www.alibabacloud.com/help/en/model-studio/coding-plan"
+  },
+  {
+   "id": "alibaba-coding-plan-cn",
+   "name": "Alibaba Coding Plan (China)",
+   "style": "openai",
+   "base_url": "https://coding.dashscope.aliyuncs.com/v1",
+   "category": "cloud",
+   "key_url": "https://help.aliyun.com/zh/model-studio/coding-plan"
+  },
+  {
+   "id": "alibaba-token-plan",
+   "name": "Alibaba Token Plan",
+   "style": "openai",
+   "base_url": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
+   "category": "cloud",
+   "key_url": "https://www.alibabacloud.com/help/en/model-studio/token-plan-overview"
+  },
+  {
+   "id": "alibaba-token-plan-cn",
+   "name": "Alibaba Token Plan (China)",
+   "style": "openai",
+   "base_url": "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+   "category": "cloud",
+   "key_url": "https://www.alibabacloud.com/help/zh/model-studio/token-plan-overview"
+  },
+  {
+   "id": "arcee",
+   "name": "Arcee",
+   "style": "openai",
+   "base_url": "https://api.arcee.ai/api/v1",
+   "category": "cloud",
+   "key_url": "https://docs.arcee.ai"
+  },
+  {
+   "id": "bailing",
+   "name": "Bailing",
+   "style": "openai",
+   "base_url": "https://api.tbox.cn/api/llm/v1",
+   "category": "cloud",
+   "key_url": "https://alipaytbox.yuque.com/sxs0ba/ling/intro"
+  },
+  {
+   "id": "inception",
+   "name": "Inception",
+   "style": "openai",
+   "base_url": "https://api.inceptionlabs.ai/v1",
+   "category": "cloud",
+   "key_url": "https://docs.inceptionlabs.ai/get-started/models"
+  },
+  {
+   "id": "kimi-code-plan-global",
+   "name": "Kimi For Coding (kimi.ai)",
+   "style": "openai",
+   "base_url": "https://api.kimi.ai/coding/v1",
+   "category": "cloud",
+   "key_url": "https://www.kimi.ai/code/docs/en/kimi-code/models.html"
+  },
+  {
+   "id": "kimi-code-plan-cn",
+   "name": "Kimi For Coding (kimi.com)",
+   "style": "openai",
+   "base_url": "https://api.kimi.com/coding/v1",
+   "category": "cloud",
+   "key_url": "https://www.kimi.com/code/docs/en/kimi-code/models.html"
+  },
+  {
+   "id": "liquid",
+   "name": "Liquid Inference",
+   "style": "openai",
+   "base_url": "https://router.inference.ai.exchange/v1",
+   "category": "cloud",
+   "key_url": "https://inference.ai.exchange/docs"
+  },
+  {
+   "id": "longcat",
+   "name": "LongCat",
+   "style": "openai",
+   "base_url": "https://api.longcat.chat/openai",
+   "category": "cloud",
+   "key_url": "https://longcat.chat/platform/docs/"
+  },
+  {
+   "id": "minimax-cn",
+   "name": "MiniMax (minimax.cn)",
+   "style": "anthropic",
+   "base_url": "https://api.minimax.cn/anthropic/v1",
+   "category": "cloud",
+   "key_url": "https://platform.minimaxi.com/docs/guides/quickstart"
+  },
+  {
+   "id": "minimax-cn-coding-plan",
+   "name": "MiniMax Token Plan (minimax.cn)",
+   "style": "anthropic",
+   "base_url": "https://api.minimax.cn/anthropic/v1",
+   "category": "cloud",
+   "key_url": "https://platform.minimaxi.com/docs/token-plan/intro"
+  },
+  {
+   "id": "minimax-coding-plan",
+   "name": "MiniMax Token Plan (minimax.io)",
+   "style": "anthropic",
+   "base_url": "https://api.minimax.io/anthropic/v1",
+   "category": "cloud",
+   "key_url": "https://platform.minimax.io/docs/token-plan/intro"
+  },
+  {
+   "id": "moonshotai-cn",
+   "name": "Moonshot AI (China)",
+   "style": "openai",
+   "base_url": "https://api.moonshot.cn/v1",
+   "category": "cloud",
+   "key_url": "https://platform.moonshot.cn/docs/api/chat"
+  },
+  {
+   "id": "morph",
+   "name": "Morph",
+   "style": "openai",
+   "base_url": "https://api.morphllm.com/v1",
+   "category": "cloud",
+   "key_url": "https://docs.morphllm.com/api-reference/introduction"
+  },
+  {
+   "id": "nova",
+   "name": "Nova",
+   "style": "openai",
+   "base_url": "https://api.nova.amazon.com/v1",
+   "category": "cloud",
+   "key_url": "https://nova.amazon.com/dev/documentation"
+  },
+  {
+   "id": "poolside",
+   "name": "Poolside",
+   "style": "openai",
+   "base_url": "https://inference.poolside.ai/v1",
+   "category": "cloud",
+   "key_url": "https://platform.poolside.ai"
+  },
+  {
+   "id": "reflection",
+   "name": "Reflection",
+   "style": "openai",
+   "base_url": "https://api.reflection.ai/openai/v1",
+   "category": "cloud",
+   "key_url": "https://developers.reflection.ai/models"
+  },
+  {
+   "id": "sakana",
+   "name": "Sakana AI",
+   "style": "openai",
+   "base_url": "https://api.sakana.ai/v1",
+   "category": "cloud",
+   "key_url": "https://console.sakana.ai/models"
+  },
+  {
+   "id": "sarvam",
+   "name": "Sarvam AI",
+   "style": "openai",
+   "base_url": "https://api.sarvam.ai/v1",
+   "category": "cloud",
+   "key_url": "https://docs.sarvam.ai/api-reference-docs/getting-started/models"
+  },
+  {
+   "id": "sensenova",
+   "name": "SenseNova (China)",
+   "style": "openai",
+   "base_url": "https://token.sensenova.cn/v1",
+   "category": "cloud",
+   "key_url": "https://platform.sensenova.cn/docs"
+  },
+  {
+   "id": "stepfun",
+   "name": "StepFun (China)",
+   "style": "openai",
+   "base_url": "https://api.stepfun.com/v1",
+   "category": "cloud",
+   "key_url": "https://platform.stepfun.com/docs/zh/overview/concept"
+  },
+  {
+   "id": "stepfun-ai",
+   "name": "StepFun (Global)",
+   "style": "openai",
+   "base_url": "https://api.stepfun.ai/v1",
+   "category": "cloud",
+   "key_url": "https://platform.stepfun.ai/docs/en/overview/concept"
+  },
+  {
+   "id": "stepfun-step-plan",
+   "name": "StepFun Step Plan (China)",
+   "style": "openai",
+   "base_url": "https://api.stepfun.com/step_plan/v1",
+   "category": "cloud",
+   "key_url": "https://platform.stepfun.com/docs/zh/step-plan/integrations/reasoning-api"
+  },
+  {
+   "id": "stepfun-ai-step-plan",
+   "name": "StepFun Step Plan (Global)",
+   "style": "openai",
+   "base_url": "https://api.stepfun.ai/step_plan/v1",
+   "category": "cloud",
+   "key_url": "https://platform.stepfun.ai/docs/en/step-plan/integrations/reasoning-api"
+  },
+  {
+   "id": "tencent-coding-plan",
+   "name": "Tencent Coding Plan (China)",
+   "style": "openai",
+   "base_url": "https://api.lkeap.cloud.tencent.com/coding/v3",
+   "category": "cloud",
+   "key_url": "https://cloud.tencent.com/document/product/1772/128947"
+  },
+  {
+   "id": "tencent-token-plan",
+   "name": "Tencent Token Plan",
+   "style": "openai",
+   "base_url": "https://api.lkeap.cloud.tencent.com/plan/v3",
+   "category": "cloud",
+   "key_url": "https://cloud.tencent.com/document/product/1823/130060"
+  },
+  {
+   "id": "tencent-tokenhub",
+   "name": "Tencent TokenHub",
+   "style": "openai",
+   "base_url": "https://tokenhub.tencentmaas.com/v1",
+   "category": "cloud",
+   "key_url": "https://cloud.tencent.com/document/product/1823/130050"
+  },
+  {
+   "id": "thinkingmachines",
+   "name": "Thinking Machines",
+   "style": "anthropic",
+   "base_url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1",
+   "category": "cloud",
+   "key_url": "https://tinker-docs.thinkingmachines.ai/tinker/compatible-apis/anthropic/"
+  },
+  {
+   "id": "upstage",
+   "name": "Upstage",
+   "style": "openai",
+   "base_url": "https://api.upstage.ai/v1/solar",
+   "category": "cloud",
+   "key_url": "https://developers.upstage.ai/docs/apis/chat"
+  },
+  {
+   "id": "xiaomi",
+   "name": "Xiaomi",
+   "style": "openai",
+   "base_url": "https://api.xiaomimimo.com/v1",
+   "category": "cloud",
+   "key_url": "https://platform.xiaomimimo.com/#/docs"
+  },
+  {
+   "id": "xiaomi-token-plan-cn",
+   "name": "Xiaomi Token Plan (China)",
+   "style": "openai",
+   "base_url": "https://token-plan-cn.xiaomimimo.com/v1",
+   "category": "cloud",
+   "key_url": "https://platform.xiaomimimo.com/#/docs"
+  },
+  {
+   "id": "xiaomi-token-plan-ams",
+   "name": "Xiaomi Token Plan (Europe)",
+   "style": "openai",
+   "base_url": "https://token-plan-ams.xiaomimimo.com/v1",
+   "category": "cloud",
+   "key_url": "https://platform.xiaomimimo.com/#/docs"
+  },
+  {
+   "id": "xiaomi-token-plan-sgp",
+   "name": "Xiaomi Token Plan (Singapore)",
+   "style": "openai",
+   "base_url": "https://token-plan-sgp.xiaomimimo.com/v1",
+   "category": "cloud",
+   "key_url": "https://platform.xiaomimimo.com/#/docs"
+  },
+  {
+   "id": "zai-coding-plan",
+   "name": "Z.AI Coding Plan",
+   "style": "openai",
+   "base_url": "https://api.z.ai/api/coding/paas/v4",
+   "category": "cloud",
+   "key_url": "https://docs.z.ai/devpack/overview"
+  },
+  {
+   "id": "zhipuai",
+   "name": "Zhipu AI",
+   "style": "openai",
+   "base_url": "https://open.bigmodel.cn/api/paas/v4",
+   "category": "cloud",
+   "key_url": "https://docs.bigmodel.cn/cn/guide/start/pricing"
+  },
+  {
+   "id": "zhipuai-coding-plan",
+   "name": "Zhipu AI Coding Plan",
+   "style": "openai",
+   "base_url": "https://open.bigmodel.cn/api/coding/paas/v4",
+   "category": "cloud",
+   "key_url": "https://docs.bigmodel.cn/cn/coding-plan/overview"
+  },
+  {
+   "id": "302ai",
+   "name": "302.AI",
+   "style": "openai",
+   "base_url": "https://api.302.ai/v1",
+   "category": "router",
+   "key_url": "https://doc.302.ai"
+  },
+  {
+   "id": "abacus",
+   "name": "Abacus",
+   "style": "openai",
+   "base_url": "https://routellm.abacus.ai/v1",
+   "category": "router",
+   "key_url": "https://abacus.ai/help/api"
+  },
+  {
+   "id": "abliteration-ai",
+   "name": "abliteration.ai",
+   "style": "openai",
+   "base_url": "https://api.abliteration.ai/v1",
+   "category": "router",
+   "key_url": "https://docs.abliteration.ai/models"
+  },
+  {
+   "id": "above",
+   "name": "above.dev",
+   "style": "openai",
+   "base_url": "https://api.above.dev/v1",
+   "category": "router",
+   "key_url": "https://above.dev/docs"
+  },
+  {
+   "id": "agentrouter",
+   "name": "AgentRouter",
+   "style": "openai",
+   "base_url": "https://agentrouter.org/v1",
+   "category": "router",
+   "key_url": "https://agentrouter.org/docs/opencode.html"
+  },
+  {
+   "id": "agnes",
+   "name": "Agnes AI",
+   "style": "openai",
+   "base_url": "https://apihub.agnes-ai.com/v1",
+   "category": "router",
+   "key_url": "https://agnes-ai.com/doc"
+  },
+  {
+   "id": "aiand",
+   "name": "ai&",
+   "style": "openai",
+   "base_url": "https://api.aiand.com/v1",
+   "category": "router",
+   "key_url": "https://docs.aiand.com/"
+  },
+  {
+   "id": "ai-router",
+   "name": "AI-ROUTER",
+   "style": "openai",
+   "base_url": "https://api.ai-router.dev/v1",
+   "category": "router",
+   "key_url": "https://ai-router.dev/openai-compatible-api-gateway/"
+  },
+  {
+   "id": "aimlapi",
+   "name": "AI/ML API",
+   "style": "openai",
+   "base_url": "https://api.aimlapi.com/v1",
+   "category": "router",
+   "key_url": "https://docs.aimlapi.com"
+  },
+  {
+   "id": "ainetcafe",
+   "name": "ainetcafe",
+   "style": "openai",
+   "base_url": "https://microquickjs.com/v1",
+   "category": "router",
+   "key_url": "https://ainetcafe.com/k3/guides/"
+  },
+  {
+   "id": "aixy",
+   "name": "Aixy",
+   "style": "openai",
+   "base_url": "https://api.aixy-gateway.com/v1",
+   "category": "router",
+   "key_url": "https://docs.aixy-gateway.com/integrations/overview"
+  },
+  {
+   "id": "aki-io",
+   "name": "AKI.IO",
+   "style": "openai",
+   "base_url": "https://aki.io/v1",
+   "category": "router",
+   "key_url": "https://aki.io/docs/"
+  },
+  {
+   "id": "ambient",
+   "name": "Ambient",
+   "style": "openai",
+   "base_url": "https://api.ambient.xyz/v1",
+   "category": "router",
+   "key_url": "https://ambient.xyz"
+  },
+  {
+   "id": "amd",
+   "name": "AMD",
+   "style": "openai",
+   "base_url": "https://developer.amd.com.cn/radeon/api/v1",
+   "category": "router",
+   "key_url": "https://developer.amd.com.cn/radeon/tokenfactory"
+  },
+  {
+   "id": "anyapi",
+   "name": "AnyAPI",
+   "style": "openai",
+   "base_url": "https://api.anyapi.ai/v1",
+   "category": "router",
+   "key_url": "https://docs.anyapi.ai"
+  },
+  {
+   "id": "auriko",
+   "name": "Auriko",
+   "style": "openai",
+   "base_url": "https://api.auriko.ai/v1",
+   "category": "router",
+   "key_url": "https://docs.auriko.ai"
+  },
+  {
+   "id": "baseten",
+   "name": "Baseten",
+   "style": "openai",
+   "base_url": "https://inference.baseten.co/v1",
+   "category": "router",
+   "key_url": "https://docs.baseten.co/inference/model-apis/overview"
+  },
+  {
+   "id": "bee",
+   "name": "Bee by HEOSSI",
+   "style": "openai",
+   "base_url": "https://api.bee.heossi.com/bee",
+   "category": "router",
+   "key_url": "https://bee.heossi.com/docs/sdks"
+  },
+  {
+   "id": "berget",
+   "name": "Berget.AI",
+   "style": "openai",
+   "base_url": "https://api.berget.ai/v1",
+   "category": "router",
+   "key_url": "https://api.berget.ai"
+  },
+  {
+   "id": "blueclaw",
+   "name": "Blue Claw",
+   "style": "openai",
+   "base_url": "https://openai.blueclaw.network/v1",
+   "category": "router",
+   "key_url": "https://blueclaw.network"
+  },
+  {
+   "id": "bothub",
+   "name": "Bothub",
+   "style": "openai",
+   "base_url": "https://openai.bothub.ru/v1",
+   "category": "router",
+   "key_url": "https://bothub.ru/models"
+  },
+  {
+   "id": "boundless",
+   "name": "Boundless",
+   "style": "openai",
+   "base_url": "https://api.inference.boundless.network/v1",
+   "category": "router",
+   "key_url": "https://inference.boundless.network/models"
+  },
+  {
+   "id": "hyper",
+   "name": "Charm Hyper",
+   "style": "openai",
+   "base_url": "https://hyper.charm.land/v1",
+   "category": "router",
+   "key_url": "https://hyper.charm.land"
+  },
+  {
+   "id": "chutes",
+   "name": "Chutes",
+   "style": "openai",
+   "base_url": "https://llm.chutes.ai/v1",
+   "category": "router",
+   "key_url": "https://llm.chutes.ai/v1/models"
+  },
+  {
+   "id": "clarifai",
+   "name": "Clarifai",
+   "style": "openai",
+   "base_url": "https://api.clarifai.com/v2/ext/openai/v1",
+   "category": "router",
+   "key_url": "https://docs.clarifai.com/compute/inference/"
+  },
+  {
+   "id": "claudinio",
+   "name": "Claudinio",
+   "style": "openai",
+   "base_url": "https://api.claudin.io/v1",
+   "category": "router",
+   "key_url": "https://claudin.io"
+  },
+  {
+   "id": "cline-pass",
+   "name": "ClinePass",
+   "style": "openai",
+   "base_url": "https://api.cline.bot/api/v1",
+   "category": "router",
+   "key_url": "https://docs.cline.bot/getting-started/clinepass"
+  },
+  {
+   "id": "cloudferro-sherlock",
+   "name": "CloudFerro Sherlock",
+   "style": "openai",
+   "base_url": "https://api-sherlock.cloudferro.com/openai/v1",
+   "category": "router",
+   "key_url": "https://docs.sherlock.cloudferro.com/"
+  },
+  {
+   "id": "cloudflare-workers-ai",
+   "name": "Cloudflare Workers AI",
+   "style": "openai",
+   "base_url": "https://api.cloudflare.com/client/v4/accounts/YOUR-ACCOUNT-ID/ai/v1",
+   "category": "router",
+   "key_url": "https://developers.cloudflare.com/workers-ai/models/",
+   "notes": "Replace YOUR-ACCOUNT-ID in the base URL with your own."
+  },
+  {
+   "id": "commandcode",
+   "name": "CommandCode",
+   "style": "openai",
+   "base_url": "https://api.commandcode.ai/provider/v1",
+   "category": "router",
+   "key_url": "https://commandcode.ai/docs/provider"
+  },
+  {
+   "id": "coralbricks",
+   "name": "CoralBricks",
+   "style": "openai",
+   "base_url": "https://inference.coralbricks.ai/v1",
+   "category": "router",
+   "key_url": "https://www.coralbricks.ai/docs"
+  },
+  {
+   "id": "wandb",
+   "name": "CoreWeave",
+   "style": "openai",
+   "base_url": "https://api.inference.wandb.ai/v1",
+   "category": "router",
+   "key_url": "https://docs.wandb.ai/inference"
+  },
+  {
+   "id": "cortecs",
+   "name": "Cortecs",
+   "style": "openai",
+   "base_url": "https://api.cortecs.ai/v1",
+   "category": "router",
+   "key_url": "https://api.cortecs.ai/v1/models"
+  },
+  {
+   "id": "crossmodel",
+   "name": "CrossModel",
+   "style": "openai",
+   "base_url": "https://api.crossmodel.ai/v1",
+   "category": "router",
+   "key_url": "https://www.crossmodel.ai/docs"
+  },
+  {
+   "id": "crusoe",
+   "name": "Crusoe",
+   "style": "openai",
+   "base_url": "https://api.inference.crusoecloud.com/v1",
+   "category": "router",
+   "key_url": "https://docs.crusoecloud.com/managed-inference/overview"
+  },
+  {
+   "id": "drun",
+   "name": "D.Run (China)",
+   "style": "openai",
+   "base_url": "https://chat.d.run/v1",
+   "category": "router",
+   "key_url": "https://www.d.run"
+  },
+  {
+   "id": "daoxe",
+   "name": "DaoXE",
+   "style": "openai",
+   "base_url": "https://daoxe.com/v1",
+   "category": "router",
+   "key_url": "https://daoxe.com/pricing"
+  },
+  {
+   "id": "databricks",
+   "name": "Databricks",
+   "style": "openai",
+   "base_url": "https://YOUR-HOST/ai-gateway/mlflow/v1",
+   "category": "router",
+   "key_url": "https://docs.databricks.com/aws/en/machine-learning/foundation-models/",
+   "notes": "Replace YOUR-HOST in the base URL with your own."
+  },
+  {
+   "id": "llmgateway",
+   "name": "DevPass (LLM Gateway)",
+   "style": "openai",
+   "base_url": "https://api.llmgateway.io/v1",
+   "category": "router",
+   "key_url": "https://llmgateway.io/docs"
+  },
+  {
+   "id": "digitalocean",
+   "name": "DigitalOcean",
+   "style": "openai",
+   "base_url": "https://inference.do-ai.run/v1",
+   "category": "router",
+   "key_url": "https://docs.digitalocean.com/products/gradient-ai-platform/details/models/"
+  },
+  {
+   "id": "dinference",
+   "name": "DInference",
+   "style": "openai",
+   "base_url": "https://api.dinference.com/v1",
+   "category": "router",
+   "key_url": "https://dinference.com"
+  },
+  {
+   "id": "ebcloud",
+   "name": "EBCloud",
+   "style": "openai",
+   "base_url": "https://maas-api.ebcloud.com/v1",
+   "category": "router",
+   "key_url": "https://docs.ebtech.com/ai/model-api.html"
+  },
+  {
+   "id": "echo",
+   "name": "Echo",
+   "style": "openai",
+   "base_url": "https://echo.tracerml.ai/v1",
+   "category": "router",
+   "key_url": "https://echo.tracerml.ai/docs/api"
+  },
+  {
+   "id": "edenai",
+   "name": "Eden AI",
+   "style": "openai",
+   "base_url": "https://api.edenai.run/v3",
+   "category": "router",
+   "key_url": "https://docs.edenai.co"
+  },
+  {
+   "id": "empiriolabs",
+   "name": "EmpirioLabs AI",
+   "style": "openai",
+   "base_url": "https://api.empiriolabs.ai/v1",
+   "category": "router",
+   "key_url": "https://docs.empiriolabs.ai"
+  },
+  {
+   "id": "engy",
+   "name": "engy",
+   "style": "openai",
+   "base_url": "https://api.engy.ai/v1",
+   "category": "router",
+   "key_url": "https://engy.ai/pricing"
+  },
+  {
+   "id": "evroc",
+   "name": "evroc",
+   "style": "openai",
+   "base_url": "https://models.think.evroc.com/v1",
+   "category": "router",
+   "key_url": "https://docs.evroc.com/products/think/overview.html"
+  },
+  {
+   "id": "fastrouter",
+   "name": "FastRouter",
+   "style": "openai",
+   "base_url": "https://go.fastrouter.ai/api/v1",
+   "category": "router",
+   "key_url": "https://fastrouter.ai/models"
+  },
+  {
+   "id": "freemodel",
+   "name": "FreeModel",
+   "style": "anthropic",
+   "base_url": "https://cc.freemodel.dev/v1",
+   "category": "router",
+   "key_url": "https://freemodel.dev"
+  },
+  {
+   "id": "friendli",
+   "name": "Friendli",
+   "style": "openai",
+   "base_url": "https://api.friendli.ai/serverless/v1",
+   "category": "router",
+   "key_url": "https://friendli.ai/docs/guides/serverless_endpoints/introduction"
+  },
+  {
+   "id": "frogbot",
+   "name": "FrogBot",
+   "style": "openai",
+   "base_url": "https://app.frogbot.ai/api/v1",
+   "category": "router",
+   "key_url": "https://docs.frogbot.ai"
+  },
+  {
+   "id": "gmicloud",
+   "name": "GMI Cloud",
+   "style": "openai",
+   "base_url": "https://api.gmi-serving.com/v1",
+   "category": "router",
+   "key_url": "https://docs.gmicloud.ai/inference-engine/api-reference/llm-api-reference"
+  },
+  {
+   "id": "greenpt",
+   "name": "GreenPT",
+   "style": "openai",
+   "base_url": "https://api.greenpt.ai/v1",
+   "category": "router",
+   "key_url": "https://docs.greenpt.ai"
+  },
+  {
+   "id": "helicone",
+   "name": "Helicone",
+   "style": "openai",
+   "base_url": "https://ai-gateway.helicone.ai/v1",
+   "category": "router",
+   "key_url": "https://helicone.ai/models"
+  },
+  {
+   "id": "hetzner",
+   "name": "Hetzner",
+   "style": "openai",
+   "base_url": "https://inference.hetzner.com/api/v1",
+   "category": "router",
+   "key_url": "https://experiments.hetzner.com/docs/inference"
+  },
+  {
+   "id": "hpc-ai",
+   "name": "HPC-AI",
+   "style": "openai",
+   "base_url": "https://api.hpc-ai.com/inference/v1",
+   "category": "router",
+   "key_url": "https://www.hpc-ai.com/doc/docs/quickstart/"
+  },
+  {
+   "id": "impossibl",
+   "name": "Impossibl",
+   "style": "openai",
+   "base_url": "https://api.impossibl.com/v1",
+   "category": "router",
+   "key_url": "https://impossibl.com/docs/models"
+  },
+  {
+   "id": "inceptron",
+   "name": "Inceptron",
+   "style": "openai",
+   "base_url": "https://api.inceptron.io/v1",
+   "category": "router",
+   "key_url": "https://docs.inceptron.io"
+  },
+  {
+   "id": "inco",
+   "name": "Inco",
+   "style": "openai",
+   "base_url": "https://api.inco.ai/v1",
+   "category": "router",
+   "key_url": "https://platform.inco.ai/docs"
+  },
+  {
+   "id": "inference",
+   "name": "Inference",
+   "style": "openai",
+   "base_url": "https://inference.net/v1",
+   "category": "router",
+   "key_url": "https://inference.net/models"
+  },
+  {
+   "id": "inferx",
+   "name": "InferX",
+   "style": "openai",
+   "base_url": "https://model.inferx.net/endpoints/v1",
+   "category": "router",
+   "key_url": "https://model.inferx.net/endpoints"
+  },
+  {
+   "id": "infomaniak",
+   "name": "Infomaniak",
+   "style": "openai",
+   "base_url": "https://api.infomaniak.com/2/ai/YOUR-PRODUCT-ID/openai/v1",
+   "category": "router",
+   "key_url": "https://www.infomaniak.com/en/hosting/ai-services/open-source-models",
+   "notes": "Replace YOUR-PRODUCT-ID in the base URL with your own."
+  },
+  {
+   "id": "io-net",
+   "name": "IO.NET",
+   "style": "openai",
+   "base_url": "https://api.intelligence.io.solutions/api/v1",
+   "category": "router",
+   "key_url": "https://io.net/docs/guides/intelligence/io-intelligence"
+  },
+  {
+   "id": "iteracompute",
+   "name": "IteraCompute",
+   "style": "openai",
+   "base_url": "https://api.iteracompute.com/v1",
+   "category": "router",
+   "key_url": "https://iteracompute.com/docs.html"
+  },
+  {
+   "id": "jalapeno",
+   "name": "Jalapeno Cloud",
+   "style": "openai",
+   "base_url": "https://api.jalapeno-cloud.ai/v1",
+   "category": "router",
+   "key_url": "https://www.jalapeno-cloud.ai/docs/"
+  },
+  {
+   "id": "jiekou",
+   "name": "Jiekou.AI",
+   "style": "openai",
+   "base_url": "https://api.jiekou.ai/openai",
+   "category": "router",
+   "key_url": "https://docs.jiekou.ai/docs/support/quickstart?utm_source=github_models.dev"
+  },
+  {
+   "id": "kenari",
+   "name": "Kenari",
+   "style": "openai",
+   "base_url": "https://kenari.id/v1",
+   "category": "router",
+   "key_url": "https://kenari.id/docs"
+  },
+  {
+   "id": "kilo",
+   "name": "Kilo Gateway",
+   "style": "openai",
+   "base_url": "https://api.kilo.ai/api/gateway",
+   "category": "router",
+   "key_url": "https://kilo.ai"
+  },
+  {
+   "id": "klokintegration",
+   "name": "klokintegration.se",
+   "style": "openai",
+   "base_url": "https://api-gw.klok.ipaas.se/proxy/kloker-key/v1",
+   "category": "router",
+   "key_url": "https://klokintegration.se/docs/ai-api"
+  },
+  {
+   "id": "kosmik",
+   "name": "Kosmik Compute",
+   "style": "openai",
+   "base_url": "https://api.koscompute.com/v1",
+   "category": "router",
+   "key_url": "https://api.koscompute.com/docs/"
+  },
+  {
+   "id": "kuae-cloud-coding-plan",
+   "name": "KUAE Cloud Coding Plan",
+   "style": "openai",
+   "base_url": "https://coding-plan-endpoint.kuaecloud.net/v1",
+   "category": "router",
+   "key_url": "https://docs.mthreads.com/kuaecloud/kuaecloud-doc-online/coding_plan/"
+  },
+  {
+   "id": "lilac",
+   "name": "Lilac",
+   "style": "openai",
+   "base_url": "https://api.getlilac.com/v1",
+   "category": "router",
+   "key_url": "https://docs.getlilac.com/inference/models"
+  },
+  {
+   "id": "llmgateway-providers",
+   "name": "LLM Gateway",
+   "style": "openai",
+   "base_url": "https://api.llmgateway.io/v1",
+   "category": "router",
+   "key_url": "https://llmgateway.io/docs"
+  },
+  {
+   "id": "llmtech",
+   "name": "LLM Tech",
+   "style": "openai",
+   "base_url": "https://api.llmtech.eu/v1",
+   "category": "router",
+   "key_url": "https://llmtech.eu/models/qwen3.8-27b"
+  },
+  {
+   "id": "llmtr",
+   "name": "LLMTR",
+   "style": "openai",
+   "base_url": "https://llmtr.com/v1",
+   "category": "router",
+   "key_url": "https://llmtr.com/docs"
+  },
+  {
+   "id": "lowrouter",
+   "name": "LowRouter",
+   "style": "openai",
+   "base_url": "https://api.lowrouter.ai/v1",
+   "category": "router",
+   "key_url": "https://lowrouter.ai/docs/models/available"
+  },
+  {
+   "id": "lucidquery",
+   "name": "LucidQuery",
+   "style": "openai",
+   "base_url": "https://api.lucidquery.com/v1",
+   "category": "router",
+   "key_url": "https://lucidquery.com/docs"
+  },
+  {
+   "id": "meganova",
+   "name": "Meganova",
+   "style": "openai",
+   "base_url": "https://api.meganova.ai/v1",
+   "category": "router",
+   "key_url": "https://docs.meganova.ai"
+  },
+  {
+   "id": "melious",
+   "name": "Melious",
+   "style": "openai",
+   "base_url": "https://api.melious.ai/v1",
+   "category": "router",
+   "key_url": "https://melious.ai/docs/reference/models"
+  },
+  {
+   "id": "mirendil-router",
+   "name": "Mirendil Router",
+   "style": "openai",
+   "base_url": "https://router.mirendil.dev/v1",
+   "category": "router",
+   "key_url": "https://router.mirendil.dev"
+  },
+  {
+   "id": "mixlayer",
+   "name": "Mixlayer",
+   "style": "openai",
+   "base_url": "https://models.mixlayer.ai/v1",
+   "category": "router",
+   "key_url": "https://docs.mixlayer.com"
+  },
+  {
+   "id": "moark",
+   "name": "Moark",
+   "style": "openai",
+   "base_url": "https://moark.com/v1",
+   "category": "router",
+   "key_url": "https://moark.com/docs/openapi/v1#tag/%E6%96%87%E6%9C%AC%E7%94%9F%E6%88%90"
+  },
+  {
+   "id": "modal",
+   "name": "Modal",
+   "style": "openai",
+   "base_url": "https://inference.us-west.modal.direct/v1",
+   "category": "router",
+   "key_url": "https://modal.com/docs/guide/endpoints"
+  },
+  {
+   "id": "model-oracle-ai",
+   "name": "Model Oracle AI",
+   "style": "openai",
+   "base_url": "https://api.modeloracle.com/api/v1",
+   "category": "router",
+   "key_url": "https://modeloracle.com/setup/"
+  },
+  {
+   "id": "modelis",
+   "name": "Modelis",
+   "style": "openai",
+   "base_url": "https://modelishub.com/v1",
+   "category": "router",
+   "key_url": "https://modelishub.com/pricing"
+  },
+  {
+   "id": "modelscope",
+   "name": "ModelScope",
+   "style": "openai",
+   "base_url": "https://api-inference.modelscope.cn/v1",
+   "category": "router",
+   "key_url": "https://modelscope.cn/docs/model-service/API-Inference/intro"
+  },
+  {
+   "id": "modular",
+   "name": "Modular",
+   "style": "openai",
+   "base_url": "https://api.modular.com/v1",
+   "category": "router",
+   "key_url": "https://docs.modular.com/models"
+  },
+  {
+   "id": "munito",
+   "name": "Munito AI",
+   "style": "openai",
+   "base_url": "https://api.munito.ai/inference/v1",
+   "category": "router",
+   "key_url": "https://docs.munito.ai/models"
+  },
+  {
+   "id": "munito-eu",
+   "name": "Munito AI (EU)",
+   "style": "openai",
+   "base_url": "https://api.eu.munito.ai/inference/v1",
+   "category": "router",
+   "key_url": "https://docs.munito.ai/regions"
+  },
+  {
+   "id": "nan",
+   "name": "NaN",
+   "style": "openai",
+   "base_url": "https://api.nan.builders/v1",
+   "category": "router",
+   "key_url": "https://nan.builders/docs/models"
+  },
+  {
+   "id": "nano-gpt",
+   "name": "NanoGPT",
+   "style": "openai",
+   "base_url": "https://nano-gpt.com/api/v1",
+   "category": "router",
+   "key_url": "https://docs.nano-gpt.com"
+  },
+  {
+   "id": "nearai",
+   "name": "NEAR AI Cloud",
+   "style": "openai",
+   "base_url": "https://cloud-api.near.ai/v1",
+   "category": "router",
+   "key_url": "https://docs.near.ai/"
+  },
+  {
+   "id": "neuralwatt",
+   "name": "Neuralwatt",
+   "style": "openai",
+   "base_url": "https://api.neuralwatt.com/v1",
+   "category": "router",
+   "key_url": "https://portal.neuralwatt.com/docs"
+  },
+  {
+   "id": "oci",
+   "name": "OCI Generative AI",
+   "style": "openai",
+   "base_url": "https://inference.generativeai.us-chicago-1.oci.oraclecloud.com/openai/v1",
+   "category": "router",
+   "key_url": "https://docs.oracle.com/en-us/iaas/Content/generative-ai/pretrained-models.htm"
+  },
+  {
+   "id": "ofox",
+   "name": "Ofox",
+   "style": "openai",
+   "base_url": "https://api.ofox.ai/v1",
+   "category": "router",
+   "key_url": "https://ofox.ai/docs"
+  },
+  {
+   "id": "opencode",
+   "name": "OpenCode",
+   "style": "openai",
+   "base_url": "https://opencode.ai/inference/openai/v1",
+   "category": "router",
+   "key_url": "https://opencode.ai/v2/docs/console/models/"
+  },
+  {
+   "id": "opencode-go",
+   "name": "OpenCode Go",
+   "style": "openai",
+   "base_url": "https://opencode.ai/inference/go/openai/v1",
+   "category": "router",
+   "key_url": "https://opencode.ai/v2/docs/console/go/"
+  },
+  {
+   "id": "openreason",
+   "name": "OpenReason",
+   "style": "openai",
+   "base_url": "https://api.openreason.app/v1",
+   "category": "router",
+   "key_url": "https://openreason.app/docs"
+  },
+  {
+   "id": "opper",
+   "name": "Opper",
+   "style": "openai",
+   "base_url": "https://api.opper.ai/v3/compat",
+   "category": "router",
+   "key_url": "https://opper.ai/models"
+  },
+  {
+   "id": "orcarouter",
+   "name": "OrcaRouter",
+   "style": "openai",
+   "base_url": "https://api.orcarouter.ai/v1",
+   "category": "router",
+   "key_url": "https://docs.orcarouter.ai"
+  },
+  {
+   "id": "ovhcloud",
+   "name": "OVHcloud AI Endpoints",
+   "style": "openai",
+   "base_url": "https://oai.endpoints.kepler.ai.cloud.ovh.net/v1",
+   "category": "router",
+   "key_url": "https://www.ovhcloud.com/en/public-cloud/ai-endpoints/catalog//"
+  },
+  {
+   "id": "pareto",
+   "name": "Pareto Inference",
+   "style": "openai",
+   "base_url": "https://api.paretoinference.com/v1",
+   "category": "router",
+   "key_url": "https://docs.paretoinference.com/"
+  },
+  {
+   "id": "pendra",
+   "name": "Pendra",
+   "style": "openai",
+   "base_url": "https://api.pendra.ai/api/v1",
+   "category": "router",
+   "key_url": "https://pendra.ai/docs/integrations/opencode"
+  },
+  {
+   "id": "pioneer",
+   "name": "Pioneer",
+   "style": "openai",
+   "base_url": "https://api.fastino.ai/v1",
+   "category": "router",
+   "key_url": "https://agent.pioneer.ai/llms.txt"
+  },
+  {
+   "id": "poe",
+   "name": "Poe",
+   "style": "openai",
+   "base_url": "https://api.poe.com/v1",
+   "category": "router",
+   "key_url": "https://creator.poe.com/docs/external-applications/openai-compatible-api"
+  },
+  {
+   "id": "prime",
+   "name": "Prime Inference",
+   "style": "openai",
+   "base_url": "https://api.pinference.ai/api/v1",
+   "category": "router",
+   "key_url": "https://docs.primeintellect.ai/inference/overview"
+  },
+  {
+   "id": "qihang-ai",
+   "name": "QiHang",
+   "style": "openai",
+   "base_url": "https://api.qhaigc.net/v1",
+   "category": "router",
+   "key_url": "https://www.qhaigc.net/docs"
+  },
+  {
+   "id": "qiniu-ai",
+   "name": "Qiniu",
+   "style": "openai",
+   "base_url": "https://api.qnaigc.com/v1",
+   "category": "router",
+   "key_url": "https://developer.qiniu.com/aitokenapi"
+  },
+  {
+   "id": "regolo-ai",
+   "name": "Regolo AI",
+   "style": "openai",
+   "base_url": "https://api.regolo.ai/v1",
+   "category": "router",
+   "key_url": "https://docs.regolo.ai/"
+  },
+  {
+   "id": "requesty",
+   "name": "Requesty",
+   "style": "openai",
+   "base_url": "https://router.requesty.ai/v1",
+   "category": "router",
+   "key_url": "https://requesty.ai/solution/llm-routing/models"
+  },
+  {
+   "id": "routing-run",
+   "name": "routing.run",
+   "style": "openai",
+   "base_url": "https://api.routing.run/v1",
+   "category": "router",
+   "key_url": "https://docs.routing.run/api-reference/models"
+  },
+  {
+   "id": "runinfra",
+   "name": "RunInfra",
+   "style": "openai",
+   "base_url": "https://api.runinfra.ai/v1",
+   "category": "router",
+   "key_url": "https://runinfra.ai/docs"
+  },
+  {
+   "id": "scaleway",
+   "name": "Scaleway",
+   "style": "openai",
+   "base_url": "https://api.scaleway.ai/v1",
+   "category": "router",
+   "key_url": "https://www.scaleway.com/en/docs/generative-apis/"
+  },
+  {
+   "id": "scnet-token-plan",
+   "name": "SCNet Token Plan",
+   "style": "openai",
+   "base_url": "https://api.scnet.cn/api/llm/v1",
+   "category": "router",
+   "key_url": "https://www.scnet.cn/ac/openapi/doc/2.0/moduleapi/plans/token-plan.html"
+  },
+  {
+   "id": "scx-ai",
+   "name": "SCX.ai",
+   "style": "openai",
+   "base_url": "https://api.scx.ai/v1",
+   "category": "router",
+   "key_url": "https://platform.scx.ai/docs"
+  },
+  {
+   "id": "siliconflow",
+   "name": "SiliconFlow",
+   "style": "openai",
+   "base_url": "https://api.siliconflow.com/v1",
+   "category": "router",
+   "key_url": "https://cloud.siliconflow.com/models"
+  },
+  {
+   "id": "siliconflow-cn",
+   "name": "SiliconFlow (China)",
+   "style": "openai",
+   "base_url": "https://api.siliconflow.cn/v1",
+   "category": "router",
+   "key_url": "https://cloud.siliconflow.com/models"
+  },
+  {
+   "id": "snowflake-cortex",
+   "name": "Snowflake Cortex",
+   "style": "openai",
+   "base_url": "https://YOUR-ACCOUNT.snowflakecomputing.com/api/v2/cortex/v1",
+   "category": "router",
+   "key_url": "https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-rest-api",
+   "notes": "Replace YOUR-ACCOUNT in the base URL with your own."
+  },
+  {
+   "id": "stackit",
+   "name": "STACKIT",
+   "style": "openai",
+   "base_url": "https://api.openai-compat.model-serving.eu01.onstackit.cloud/v1",
+   "category": "router",
+   "key_url": "https://docs.stackit.cloud/products/data-and-ai/ai-model-serving/basics/available-shared-models"
+  },
+  {
+   "id": "standardcompute",
+   "name": "Standard Compute",
+   "style": "openai",
+   "base_url": "https://api.stdcmpt.com/v1",
+   "category": "router",
+   "key_url": "https://docs.standardcompute.com/models"
+  },
+  {
+   "id": "subconscious",
+   "name": "Subconscious",
+   "style": "anthropic",
+   "base_url": "https://api.subconscious.dev/v1",
+   "category": "router",
+   "key_url": "https://docs.subconscious.dev"
+  },
+  {
+   "id": "submodel",
+   "name": "submodel",
+   "style": "openai",
+   "base_url": "https://llm.submodel.ai/v1",
+   "category": "router",
+   "key_url": "https://submodel.gitbook.io"
+  },
+  {
+   "id": "synthetic",
+   "name": "Synthetic",
+   "style": "openai",
+   "base_url": "https://api.synthetic.new/openai/v1",
+   "category": "router",
+   "key_url": "https://synthetic.new/pricing"
+  },
+  {
+   "id": "tempr",
+   "name": "Tempr Gateway",
+   "style": "openai",
+   "base_url": "https://api.temprhq.io/v1",
+   "category": "router",
+   "key_url": "https://temprhq.io/docs/gateway-reference.html"
+  },
+  {
+   "id": "tensorx",
+   "name": "TensorX",
+   "style": "openai",
+   "base_url": "https://api.tensorx.ai/v1",
+   "category": "router",
+   "key_url": "https://docs.tensorx.ai/"
+  },
+  {
+   "id": "the-grid-ai",
+   "name": "The Grid AI",
+   "style": "openai",
+   "base_url": "https://api.thegrid.ai/v1",
+   "category": "router",
+   "key_url": "https://thegrid.ai/docs"
+  },
+  {
+   "id": "tinfoil",
+   "name": "Tinfoil",
+   "style": "openai",
+   "base_url": "https://inference.tinfoil.sh/v1",
+   "category": "router",
+   "key_url": "https://docs.tinfoil.sh"
+  },
+  {
+   "id": "tokengo",
+   "name": "TokenGo",
+   "style": "openai",
+   "base_url": "https://api.tokengo.com/v1",
+   "category": "router",
+   "key_url": "https://www.tokengo.com/docs"
+  },
+  {
+   "id": "tokenrouter",
+   "name": "TokenRouter",
+   "style": "openai",
+   "base_url": "https://api.tokenrouter.com/v1",
+   "category": "router",
+   "key_url": "https://www.tokenrouter.com/docs/tokenrouter-feature-guide/"
+  },
+  {
+   "id": "trustedrouter",
+   "name": "TrustedRouter",
+   "style": "openai",
+   "base_url": "https://api.trustedrouter.com/v1",
+   "category": "router",
+   "key_url": "https://trustedrouter.com/docs"
+  },
+  {
+   "id": "umans-ai",
+   "name": "Umans AI",
+   "style": "openai",
+   "base_url": "https://api.code.umans.ai/v1",
+   "category": "router",
+   "key_url": "https://app.umans.ai/offers/code/docs/orgs"
+  },
+  {
+   "id": "umans-ai-coding-plan",
+   "name": "Umans AI Coding Plan",
+   "style": "openai",
+   "base_url": "https://api.code.umans.ai/v1",
+   "category": "router",
+   "key_url": "https://app.umans.ai/offers/code/docs"
+  },
+  {
+   "id": "unorouter",
+   "name": "UnoRouter",
+   "style": "openai",
+   "base_url": "https://api.unorouter.com/v1",
+   "category": "router",
+   "key_url": "https://unorouter.com/models"
+  },
+  {
+   "id": "vancine",
+   "name": "Vancine",
+   "style": "openai",
+   "base_url": "https://vancine.com/v1",
+   "category": "router",
+   "key_url": "https://vancine.com/docs"
+  },
+  {
+   "id": "vispark",
+   "name": "Vispark",
+   "style": "openai",
+   "base_url": "https://api.lab.vispark.in/v1",
+   "category": "router",
+   "key_url": "https://lab.vispark.in/#vision"
+  },
+  {
+   "id": "volcengine",
+   "name": "Volcengine Ark",
+   "style": "openai",
+   "base_url": "https://ark.cn-beijing.volces.com/api/v3",
+   "category": "router",
+   "key_url": "https://www.volcengine.com/docs/82379/1330310"
+  },
+  {
+   "id": "volcengine-coding-plan",
+   "name": "Volcengine Ark Coding Plan",
+   "style": "openai",
+   "base_url": "https://ark.cn-beijing.volces.com/api/coding/v3",
+   "category": "router",
+   "key_url": "https://www.volcengine.com/docs/82379/1928261"
+  },
+  {
+   "id": "vultr",
+   "name": "Vultr",
+   "style": "openai",
+   "base_url": "https://api.vultrinference.com/v1",
+   "category": "router",
+   "key_url": "https://api.vultrinference.com/"
+  },
+  {
+   "id": "wafer.ai",
+   "name": "Wafer",
+   "style": "openai",
+   "base_url": "https://pass.wafer.ai/v1",
+   "category": "router",
+   "key_url": "https://docs.wafer.ai/wafer-pass"
+  },
+  {
+   "id": "wallaby",
+   "name": "Wallaby",
+   "style": "openai",
+   "base_url": "https://api.wallabytoken.com/v1",
+   "category": "router",
+   "key_url": "https://wallabytoken.com/docs"
+  },
+  {
+   "id": "xpersona",
+   "name": "Xpersona",
+   "style": "openai",
+   "base_url": "https://www.xpersona.co/v1",
+   "category": "router",
+   "key_url": "https://www.xpersona.co/docs"
+  },
+  {
+   "id": "zeldoc",
+   "name": "Zeldoc",
+   "style": "openai",
+   "base_url": "https://api.zeldoc.ai/v1",
+   "category": "router",
+   "key_url": "https://docs.zeldoc.ai"
+  },
+  {
+   "id": "zenifra",
+   "name": "Zenifra",
+   "style": "openai",
+   "base_url": "https://ai.zenifra.com/v1",
+   "category": "router",
+   "key_url": "https://docs.zenifra.com"
+  },
+  {
+   "id": "zenmux",
+   "name": "ZenMux",
+   "style": "openai",
+   "base_url": "https://zenmux.ai/api/v1",
+   "category": "router",
+   "key_url": "https://docs.zenmux.ai"
+  }
+ ]
+}
