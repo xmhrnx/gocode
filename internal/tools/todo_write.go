@@ -25,7 +25,8 @@ func (TodoWrite) Spec() llm.ToolSpec {
 		Name: "todo_write",
 		Description: "Create or update your task list, shown to the user. Use it for tasks with three or more steps or when the user gives several tasks; " +
 			"skip it for simple one-step requests. Each call replaces the whole list. " +
-			"Keep exactly one item in_progress while working, mark items completed as soon as they are done, and add items you discover along the way.",
+			"Keep exactly one item in_progress while working, mark items completed as soon as they are done, and add items you discover along the way. " +
+			"Before your final reply, call it once more so the list shows what was done: every finished item completed, and items you won't do removed.",
 		Parameters: json.RawMessage(`{
   "type": "object",
   "properties": {

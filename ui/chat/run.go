@@ -116,6 +116,10 @@ func (c *ChatTab) finishRun(err error) {
 		}
 		c.composer.restoreQueued(queued) // the run stopped; let the user decide
 	}
+	// The plan shows the run's progress; a model that didn't tick its
+	// last items off would otherwise leave a stale plan on screen. The
+	// list stays in the transcript, in its todo_write calls.
+	c.todos = nil
 	switch {
 	case err == nil && !interrupted:
 		c.services.PlaySound(chime.Done)
