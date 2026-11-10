@@ -20,7 +20,7 @@ func Resolve(id string) Theme {
 		return Find(id)
 	}
 	if dark, err := giode.SystemDarkMode(); err == nil && !dark {
-		return Find("paper")
+		return Find(DefaultLight)
 	}
-	return Find("midnight")
+	return Find(DefaultDark)
 }

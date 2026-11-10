@@ -24,7 +24,7 @@ func appearanceEntries(s *core.Services) []entry {
 		return fmt.Sprintf("%d fps", v)
 	}
 	return []entry{
-		{title: "Theme", description: "Pick a look; System follows your OS light or dark mode.",
+		{title: "Theme", description: "Pick a look; System follows your OS: Obsidian when it is dark, Sand when it is light.",
 			keywords: "theme color dark light palette appearance", wide: true, control: newThemeGrid(s)},
 		{title: "Text size", description: "Size of the interface and chat text.",
 			keywords: "font size text scale zoom", control: intChoice(s, &a.UIFontSize, []int{12, 13, 14, 15, 16, 17, 18}, points)},

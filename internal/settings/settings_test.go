@@ -111,3 +111,17 @@ func TestMigrateTurnsSoundsOn(t *testing.T) {
 		t.Fatalf("sounds %+v", s.Sounds)
 	}
 }
+
+func TestMigrateMovesTheOldDefaultThemeToSystem(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "settings.json")
+	if err := os.WriteFile(path, []byte(`{"version": 6, "appearance": {"theme": "midnight"}}`), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	s, err := Load(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if s.Appearance.Theme != "system" {
+		t.Fatalf("theme %q", s.Appearance.Theme)
+	}
+}

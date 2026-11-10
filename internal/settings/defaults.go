@@ -6,7 +6,7 @@ func Default() Settings {
 		Version: currentVersion,
 		General: General{RestoreTabs: true, ConfirmCloseBusy: true, AutoTitle: true},
 		Appearance: Appearance{
-			Theme: "midnight", UIFontSize: 14, CodeFontSize: 13, ChatWidth: 820,
+			Theme: "system", UIFontSize: 14, CodeFontSize: 13, ChatWidth: 820,
 			TitleBarStyle: "windows", MaxFPS: 120,
 		},
 		Chat: Chat{

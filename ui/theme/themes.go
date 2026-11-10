@@ -11,16 +11,28 @@ type Theme struct {
 	Palette giode.Palette
 }
 
-// SystemID picks a dark or light theme following the operating system.
+// SystemID picks a dark or light theme following the operating system:
+// DefaultDark or DefaultLight.
 const SystemID = "system"
+
+// The themes System uses in dark and light mode.
+const (
+	DefaultDark  = "obsidian"
+	DefaultLight = "sand"
+)
 
 // All returns the built-in themes, dark ones first.
 func All() []Theme { return themes }
 
-// Find returns the theme with the given ID, or the default theme.
+// Find returns the theme with the given ID, or the default dark theme.
 func Find(id string) Theme {
 	for _, t := range themes {
 		if t.ID == id {
+			return t
+		}
+	}
+	for _, t := range themes {
+		if t.ID == DefaultDark {
 			return t
 		}
 	}

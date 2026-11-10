@@ -1,7 +1,7 @@
 package settings
 
 // currentVersion is the settings format written by this build.
-const currentVersion = 6
+const currentVersion = 7
 
 // migrate updates settings written by older builds.
 func (s *Settings) migrate() {
@@ -30,6 +30,11 @@ func (s *Settings) migrate() {
 	}
 	if s.Version < 6 {
 		s.Sounds = Default().Sounds // new: on, for every event
+	}
+	if s.Version < 7 && s.Appearance.Theme == "midnight" {
+		// Midnight was the default; the default now follows the system
+		// (Obsidian when dark, Sand when light).
+		s.Appearance.Theme = "system"
 	}
 	s.Version = currentVersion
 }
