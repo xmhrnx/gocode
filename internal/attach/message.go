@@ -16,7 +16,7 @@ func BuildMessage(text string, attachments []Attachment) llm.Message {
 			msg.Parts = append(msg.Parts, llm.ImagePart(att.MediaType, att.Data))
 		case KindDocument:
 			msg.Parts = append(msg.Parts, llm.DocumentPart(llm.Document{
-				Name: att.Name, MediaType: att.MediaType, Data: att.Data, Text: att.Text,
+				Name: att.Name, MediaType: att.MediaType, Data: att.Data, Text: att.Text, Path: att.Path,
 			}))
 		case KindText:
 			msg.Parts = append(msg.Parts, llm.TextPart(fileBlock(att.Name, string(att.Data))))

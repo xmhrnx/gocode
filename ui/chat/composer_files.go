@@ -25,6 +25,7 @@ func (c *composer) pickFiles() {
 		}
 		for _, f := range files {
 			att, err := attach.Read(f.Name, f, limits)
+			att.Path = f.Path // empty where the system doesn't say
 			f.Close()
 			c.post(att, err)
 		}
@@ -47,7 +48,9 @@ func readPath(path string, limits attach.Limits) (attach.Attachment, error) {
 		return attach.Attachment{}, err
 	}
 	defer f.Close()
-	return attach.Read(filepath.Base(path), f, limits)
+	att, err := attach.Read(filepath.Base(path), f, limits)
+	att.Path = path
+	return att, err
 }
 
 // post hands a read attachment, or the reason it failed, to the UI.

@@ -51,8 +51,11 @@ type Document struct {
 	Name      string `json:"name"`
 	MediaType string `json:"media_type"`
 	Data      []byte `json:"data"`
-	// Text is the document's text, for providers that can't read it.
+	// Text is the document's text, or a description of an audio or video
+	// file, for providers that can't take it.
 	Text string `json:"text,omitempty"`
+	// Path is where the file is on disk, if known.
+	Path string `json:"path,omitempty"`
 }
 
 // ToolCall is the model asking to run a tool.

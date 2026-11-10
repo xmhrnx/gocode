@@ -70,7 +70,10 @@ webview or JavaScript runtime inside. The UI is drawn straight to the GPU.
   as documents, and as their text to the rest. Word, Excel, PowerPoint,
   OpenDocument and EPUB files are sent as text, as are text and code files
   (UTF-8 or UTF-16). Images (PNG, JPEG, GIF, WebP, BMP, TIFF) are scaled
-  down before sending.
+  down before sending. Audio (WAV, MP3, AAC, FLAC, Ogg, AIFF, M4A) and video
+  (MP4, MOV, WebM, AVI, MPEG, FLV, WMV, 3GP) go to Gemini whole, WAV and MP3
+  to OpenAI and OpenRouter audio models; other models get a description of
+  the file and where it is, so the agent can work on it with its tools.
 - **Selecting text**: drag across the conversation to select
   text, even across messages or blocks, and copy it with Ctrl/⌘+C.
 - **Messages**: copy, retry, and edit-and-resend. Replies render as Markdown

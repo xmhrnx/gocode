@@ -52,6 +52,17 @@ func modelParts(msg llm.Message) []wirePart {
 	return parts
 }
 
+// inlineTypes are the documents Gemini takes inline, with the type it
+// names each by; others are sent as their text or description.
+var inlineTypes = map[string]string{
+	"application/pdf": "application/pdf",
+	"audio/wav":       "audio/wav", "audio/mpeg": "audio/mp3", "audio/aiff": "audio/aiff",
+	"audio/aac": "audio/aac", "audio/ogg": "audio/ogg", "audio/flac": "audio/flac",
+	"video/mp4": "video/mp4", "video/mpeg": "video/mpeg", "video/quicktime": "video/mov",
+	"video/avi": "video/avi", "video/x-flv": "video/x-flv", "video/webm": "video/webm",
+	"video/x-ms-wmv": "video/wmv", "video/3gpp": "video/3gpp",
+}
+
 // userParts puts function responses first, answering the previous turn's
 // calls, then the user's text and images.
 func userParts(msg llm.Message) []wirePart {
@@ -65,7 +76,11 @@ func userParts(msg llm.Message) []wirePart {
 		case part.Kind == llm.PartImage && part.Image != nil:
 			rest = append(rest, wirePart{InlineData: &inlineData{MimeType: part.Image.MediaType, Data: part.Image.Data}})
 		case part.Kind == llm.PartDocument && part.Document != nil:
-			rest = append(rest, wirePart{InlineData: &inlineData{MimeType: part.Document.MediaType, Data: part.Document.Data}})
+			if mime, ok := inlineTypes[part.Document.MediaType]; ok {
+				rest = append(rest, wirePart{InlineData: &inlineData{MimeType: mime, Data: part.Document.Data}})
+			} else {
+				rest = append(rest, wirePart{Text: textPtr(llm.DocumentText(*part.Document))})
+			}
 		}
 	}
 	return append(responses, rest...)

@@ -1,6 +1,8 @@
 package chat
 
 import (
+	"strings"
+
 	"github.com/xmhrnx/giode"
 
 	"gocode/internal/attach"
@@ -29,7 +31,7 @@ func (a *attachmentChip) Layout(gtx giode.Context) giode.Dimensions {
 	preview := a.thumbnail
 	if preview == nil {
 		preview = giode.Box(giode.Styles{Width: 28, Height: 28, BorderRadius: 5, Background: theme.Hover,
-			Align: giode.AlignCenter, Justify: giode.JustifyCenter}, theme.Icon(fileIcon(a.attachment.Kind), 14, theme.Muted))
+			Align: giode.AlignCenter, Justify: giode.JustifyCenter}, theme.Icon(fileIcon(a.attachment.Kind, a.attachment.MediaType), 14, theme.Muted))
 	}
 	return giode.Row(giode.Styles{
 		Align: giode.AlignCenter, Gap: 8, Wrap: giode.WrapNoWrap,
@@ -43,11 +45,15 @@ func (a *attachmentChip) Layout(gtx giode.Context) giode.Dimensions {
 	).Layout(gtx)
 }
 
-func fileIcon(kind attach.Kind) string {
-	switch kind {
-	case attach.KindImage:
+func fileIcon(kind attach.Kind, mediaType string) string {
+	switch {
+	case kind == attach.KindImage:
 		return "image"
-	case attach.KindDocument:
+	case strings.HasPrefix(mediaType, "audio/"):
+		return "file-audio"
+	case strings.HasPrefix(mediaType, "video/"):
+		return "file-video-camera"
+	case kind == attach.KindDocument:
 		return "file"
 	}
 	return "file-text"

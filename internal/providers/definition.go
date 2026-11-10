@@ -32,6 +32,8 @@ type Definition struct {
 	// WebSearchTool names the provider's own web search tool, if it has
 	// one for every model (OpenRouter's "openrouter:web_search").
 	WebSearchTool string `json:"web_search_tool,omitempty"`
+	// AudioInput marks a provider whose audio models take WAV and MP3.
+	AudioInput bool `json:"audio_input,omitempty"`
 	// FileInput marks a provider that reads PDFs sent as files.
 	FileInput       bool     `json:"file_input,omitempty"`
 	SuggestedModels []string `json:"suggested_models,omitempty"`

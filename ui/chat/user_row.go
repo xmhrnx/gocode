@@ -39,14 +39,14 @@ func (r *userRow) Layout(gtx giode.Context) giode.Dimensions {
 	}
 	for _, part := range msg.Parts {
 		if part.Kind == llm.PartDocument && part.Document != nil {
-			content = append(content, fileChip(part.Document.Name))
+			content = append(content, fileChip(part.Document.Name, fileIcon(attach.KindDocument, part.Document.MediaType)))
 			continue
 		}
 		if part.Kind != llm.PartText {
 			continue
 		}
 		if name, isFile := attach.FileBlockName(part.Text); isFile {
-			content = append(content, fileChip(name))
+			content = append(content, fileChip(name, "file-text"))
 			continue
 		}
 		content = append(content, giode.Text(part.Text, theme.Body()))
@@ -61,17 +61,17 @@ func (r *userRow) Layout(gtx giode.Context) giode.Dimensions {
 	).Layout(gtx)
 }
 
-func fileChip(name string) giode.Element {
+func fileChip(name, icon string) giode.Element {
 	return giode.Row(giode.Styles{Gap: 6, Align: giode.AlignCenter, Padding: giode.SymmetricInset(8, 4),
 		BorderRadius: 6, Background: theme.Hover},
-		theme.Icon("file-text", 13, theme.Muted),
+		theme.Icon(icon, 13, theme.Muted),
 		giode.Text(name, giode.Styles{Color: theme.Text, FontSize: theme.Sizes.Small}))
 }
 
 func imagePreview(img *llm.Image) giode.Element {
 	preview, err := attach.Preview(img.Data, 320)
 	if err != nil {
-		return fileChip("image (" + img.MediaType + ")")
+		return fileChip("image ("+img.MediaType+")", "image")
 	}
 	return giode.Image(preview, giode.Styles{MaxWidth: 220, MaxHeight: 160, BorderRadius: 8, Fit: giode.FitContain})
 }

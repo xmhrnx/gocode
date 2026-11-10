@@ -15,3 +15,11 @@ func TestDocumentsGoInline(t *testing.T) {
 		t.Fatalf("sent %s", sent)
 	}
 }
+
+func TestAudioGoesInlineUnderGeminisName(t *testing.T) {
+	doc := llm.Document{Name: "a.mp3", MediaType: "audio/mpeg", Data: []byte("ID3")}
+	sent, _ := json.Marshal(convertContents([]llm.Message{{Role: llm.RoleUser, Parts: []llm.Part{llm.DocumentPart(doc)}}}))
+	if !strings.Contains(string(sent), `"mimeType":"audio/mp3"`) {
+		t.Fatalf("sent %s", sent)
+	}
+}

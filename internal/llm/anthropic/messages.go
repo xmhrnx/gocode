@@ -63,6 +63,9 @@ func userBlocks(msg llm.Message) []any {
 			blocks = append(blocks, toolResultBlock{Type: "tool_result", ToolUseID: result.CallID, Content: result.Content, IsError: result.IsError})
 		case part.Kind == llm.PartText && part.Text != "":
 			blocks = append(blocks, textBlock{Type: "text", Text: part.Text})
+		case part.Kind == llm.PartDocument && part.Document != nil && part.Document.MediaType != "application/pdf":
+			// Claude takes PDFs, not audio or video: those are described.
+			blocks = append(blocks, textBlock{Type: "text", Text: llm.DocumentText(*part.Document)})
 		case part.Kind == llm.PartDocument && part.Document != nil:
 			doc := part.Document
 			blocks = append(blocks, documentBlock{Type: "document", Title: doc.Name, Source: imageSource{

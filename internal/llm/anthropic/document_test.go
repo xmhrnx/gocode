@@ -16,3 +16,11 @@ func TestDocumentsGoAsDocumentBlocks(t *testing.T) {
 		t.Fatalf("sent %s", sent)
 	}
 }
+
+func TestAudioIsDescribed(t *testing.T) {
+	doc := llm.Document{Name: "a.wav", MediaType: "audio/wav", Data: []byte("RIFF"), Text: "Audio file, WAV.", Path: "/tmp/a.wav"}
+	sent, _ := json.Marshal(convertMessages([]llm.Message{{Role: llm.RoleUser, Parts: []llm.Part{llm.DocumentPart(doc)}}}))
+	if strings.Contains(string(sent), `"document"`) || !strings.Contains(string(sent), "The file is at /tmp/a.wav") {
+		t.Fatalf("sent %s", sent)
+	}
+}

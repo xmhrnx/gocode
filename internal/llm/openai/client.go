@@ -40,6 +40,9 @@ type Options struct {
 	// FileInput sends attached PDFs as files ("file" content parts),
 	// which OpenAI and OpenRouter read; without it they go as their text.
 	FileInput bool
+	// AudioInput sends attached WAV and MP3 files as input_audio, which
+	// OpenAI's and OpenRouter's audio models take.
+	AudioInput bool
 }
 
 // Client streams chat completions from one provider.

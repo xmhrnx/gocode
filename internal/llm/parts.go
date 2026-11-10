@@ -13,14 +13,26 @@ func ImagePart(mediaType string, data []byte) Part {
 // DocumentPart returns a document part.
 func DocumentPart(doc Document) Part { return Part{Kind: PartDocument, Document: &doc} }
 
-// DocumentText is how a document goes to a provider that can't read it:
-// its text, in the same <file> tags as an attached text file.
+// DocumentText is how a document goes to a provider that can't take it:
+// its text, or for audio and video a description, in the same <file>
+// tags as an attached text file, with where the file is when known.
 func DocumentText(doc Document) string {
 	text := doc.Text
-	if strings.TrimSpace(text) == "" {
+	switch {
+	case doc.IsMedia():
+		text += " This model can't receive the file's content itself."
+	case strings.TrimSpace(text) == "":
 		text = "(No text could be extracted from this document; it may be scanned images.)"
 	}
+	if doc.Path != "" {
+		text += "\nThe file is at " + doc.Path
+	}
 	return "<file name=\"" + doc.Name + "\">\n" + text + "\n</file>"
+}
+
+// IsMedia reports whether the document is audio or video.
+func (d Document) IsMedia() bool {
+	return strings.HasPrefix(d.MediaType, "audio/") || strings.HasPrefix(d.MediaType, "video/")
 }
 
 // ToolResultPart returns a tool result part.

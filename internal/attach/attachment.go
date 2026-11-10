@@ -23,8 +23,12 @@ type Attachment struct {
 	Data      []byte
 	// Thumbnail is a small preview of an image attachment.
 	Thumbnail image.Image
-	// Text is a document's extracted text.
+	// Text is a document's extracted text, or what an audio or video
+	// file is.
 	Text string
+	// Path is where the file is on disk, when known, so the agent can
+	// work with it through its tools.
+	Path string
 }
 
 // Limits bounds what can be attached.
@@ -36,8 +40,8 @@ type Limits struct {
 const (
 	KindText Kind = iota
 	KindImage
-	// KindDocument is a PDF, sent as a document where the provider reads
-	// them and as its text elsewhere.
+	// KindDocument is a PDF, audio or video file, sent whole where the
+	// provider takes it and as its text or a description elsewhere.
 	KindDocument
 )
 
@@ -56,6 +60,9 @@ func Read(name string, r io.Reader, limits Limits) (Attachment, error) {
 		return readImage(name, data)
 	case bytes.HasPrefix(data, []byte("%PDF-")):
 		return readPDF(name, data, limits)
+	case isMedia(name, data):
+		media, _ := mediaType(name, data)
+		return readMedia(name, media, data), nil
 	case isPacked(name):
 		text, err := unpackText(name, data)
 		if err != nil {
@@ -66,9 +73,14 @@ func Read(name string, r io.Reader, limits Limits) (Attachment, error) {
 	text, ok := decodeText(data)
 	if !ok {
 		return Attachment{}, fmt.Errorf("%s can't be attached (%s): attach text, code, images, PDFs, "+
-			"Word, Excel, PowerPoint, OpenDocument or EPUB files", name, http.DetectContentType(data))
+			"Word, Excel, PowerPoint, OpenDocument, EPUB, audio or video files", name, http.DetectContentType(data))
 	}
 	return textAttachment(name, text, limits)
+}
+
+func isMedia(name string, data []byte) bool {
+	_, ok := mediaType(name, data)
+	return ok
 }
 
 // textAttachment inlines text, if it isn't too long to.
