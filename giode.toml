@@ -6,7 +6,7 @@ build = 1
 icon = "assets/icon.png"
 package = "."
 platforms = ["windows", "macos", "linux"]
-publisher = "GoCode"
+publisher = "Mehran Zahiroddini"
 description = "A native, lightweight coding agent."
 website = "https://xmhrnx.github.io/gocode/"
 
