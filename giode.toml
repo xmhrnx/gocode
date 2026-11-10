@@ -6,12 +6,47 @@ build = 1
 icon = "assets/icon.png"
 package = "."
 platforms = ["windows", "macos", "linux"]
+publisher = "GoCode"
 description = "A native, lightweight coding agent."
+website = "https://xmhrnx.github.io/gocode/"
 
 [ci]
 trigger = "release"
 arch = ["amd64", "arm64"]
 test = "go vet ./... && go test ./..."
 
+[macos]
+min_os = 11
+# Developer ID signing and notarization for the .dmg on GitHub come from
+# the MACOS_CERT_* and GIODE_NOTARY_* repository secrets; see RELEASING.md.
+
+[macos.plist]
+LSApplicationCategoryType = "public.app-category.developer-tools"
+# GoCode only uses the system's HTTPS, which is exempt from export
+# rules; this spares the question on every App Store upload.
+ITSAppUsesNonExemptEncryption = false
+
+# The Mac App Store build (giode build mas). The profile comes from the
+# MACOS_PROFILE_BASE64 secret in CI ($GIODE_MACOS_STORE_PROFILE locally).
+[macos.store]
+entitlements = [
+  "network.client",                 # the model providers, MCP servers and web tools
+  "files.user-selected.read-write", # project folders the user opens
+  "files.downloads.read-write",     # files the agent saves for the user
+]
+
+# The privacy manifest the App Store requires. GoCode collects nothing for
+# its developer: chats go only to the providers the user sets up.
+[privacy]
+tracking = false
+
 [windows.msix]
-publisher = "CN=GoCode"
+# Both come from Partner Center (Product identity) once the name is
+# reserved; see RELEASING.md.
+publisher = "CN=REPLACE-WITH-PARTNER-CENTER-PUBLISHER-ID"
+identity_name = "REPLACE.WithPartnerCenterIdentityName"
+
+[linux]
+categories = ["Development", "Utility"]
+description = "A coding agent and model chat for the desktop, drawn straight to the GPU with no browser engine inside. It works with 34 providers, local models and custom endpoints."
+license = "Apache-2.0"
