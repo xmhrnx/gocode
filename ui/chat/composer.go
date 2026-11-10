@@ -30,6 +30,7 @@ type composer struct {
 	model       *components.PillButton
 	picker      *modelpicker.Picker
 	queued      *queuedPanel
+	todos       *todoPanel
 }
 
 // pendingAttachment is an attachment waiting in the composer.
@@ -47,6 +48,7 @@ func newComposer(tab *ChatTab) *composer {
 	c.pasteButton = components.NewIconButton("image", "Paste an image from the clipboard  ("+giode.FormatShortcut("Mod+V")+")", c.pasteImage)
 	c.send = newSendButton(tab)
 	c.queued = newQueuedPanel(tab)
+	c.todos = newTodoPanel(tab)
 	c.modes = newModeMenu(tab)
 	c.effort = newEffortMenu(tab)
 	c.picker = modelpicker.New(tab.services, func(ref string) { tab.selectModel(ref) })
@@ -100,7 +102,7 @@ func (c *composer) view() giode.Element {
 	c.model.SetLabel(modelLabel(c.tab.model.Model))
 	return giode.Row(giode.Styles{Width: -1, Justify: giode.JustifyCenter, Padding: giode.Inset{Left: 20, Right: 20, Bottom: 16}},
 		giode.Stack(giode.Styles{Width: -1, MaxWidth: chatWidth(c.tab), Gap: 8},
-			todoPanel(c.tab),
+			c.todos,
 			c.queued,
 			c.card(),
 			c.picker,

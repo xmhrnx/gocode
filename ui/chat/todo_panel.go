@@ -4,22 +4,42 @@ import (
 	"github.com/xmhrnx/giode"
 
 	"gocode/internal/tools"
+	"gocode/ui/components"
 	"gocode/ui/theme"
 )
 
 // todoPanel shows the agent's task list above the composer while some of
-// it is unfinished.
-func todoPanel(c *ChatTab) giode.Element {
-	if !hasOpenTodos(c.todos) {
-		return giode.Box(giode.Styles{Display: giode.DisplayNone})
+// it is unfinished. Closing it hides the list until the agent writes a
+// new one.
+type todoPanel struct {
+	tab   *ChatTab
+	close *components.IconButton
+}
+
+func newTodoPanel(tab *ChatTab) *todoPanel {
+	p := &todoPanel{tab: tab}
+	p.close = components.NewIconButton("x", "Hide the plan", func() {
+		tab.todos = nil
+		tab.changed()
+	}).SetSize(13)
+	return p
+}
+
+func (p *todoPanel) Layout(gtx giode.Context) giode.Dimensions {
+	todos := p.tab.todos
+	if !hasOpenTodos(todos) {
+		return giode.Dimensions{}
 	}
-	rows := []giode.Element{giode.Text("Plan", giode.Styles{Color: theme.Muted, FontSize: theme.Sizes.Tiny,
-		FontWeight: giode.FontWeightSemiBold, TextTransform: giode.TextTransformUppercase})}
-	for _, todo := range c.todos {
+	header := giode.Row(giode.Styles{Width: -1, Align: giode.AlignCenter, Wrap: giode.WrapNoWrap},
+		giode.Text("Plan", giode.Styles{Color: theme.Muted, FontSize: theme.Sizes.Tiny, FlexGrow: 1,
+			FontWeight: giode.FontWeightSemiBold, TextTransform: giode.TextTransformUppercase}),
+		p.close)
+	rows := []giode.Element{header}
+	for _, todo := range todos {
 		rows = append(rows, todoRow(todo))
 	}
-	return giode.Stack(giode.Styles{Width: -1, Gap: 5, Padding: giode.SymmetricInset(14, 10), BorderRadius: 12,
-		Background: theme.Panel, BorderWidth: 1, BorderColor: theme.SoftBorder}, rows...)
+	return giode.Stack(giode.Styles{Width: -1, Gap: 5, Padding: giode.Inset{Left: 14, Right: 8, Top: 6, Bottom: 10}, BorderRadius: 12,
+		Background: theme.Panel, BorderWidth: 1, BorderColor: theme.SoftBorder}, rows...).Layout(gtx)
 }
 
 func todoRow(todo tools.Todo) giode.Element {
