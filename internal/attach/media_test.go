@@ -41,7 +41,9 @@ func TestWAVAttachesWithItsDetails(t *testing.T) {
 }
 
 func TestMediaTypes(t *testing.T) {
-	ftyp := func(brand string) []byte { return append([]byte{0, 0, 0, 24, 'f', 't', 'y', 'p'}, []byte(brand+"\x00\x00\x00\x00mp41")...) }
+	ftyp := func(brand string) []byte {
+		return append([]byte{0, 0, 0, 24, 'f', 't', 'y', 'p'}, []byte(brand+"\x00\x00\x00\x00mp41")...)
+	}
 	cases := []struct {
 		name string
 		data []byte

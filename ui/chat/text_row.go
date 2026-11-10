@@ -43,7 +43,7 @@ func (r *textRow) Layout(gtx giode.Context) giode.Dimensions {
 	children := []giode.Element{markdown(r.tab, text)}
 	if r.it.turnEnd && r.tab.run == nil {
 		children = append(children, giode.Row(giode.Styles{Gap: 2, Align: giode.AlignCenter, Margin: giode.Inset{Left: -6}},
-			r.copy, r.retry))
+			r.copy, r.retry, turnStatsLabel(r.tab, r.it.message)))
 	}
 	return giode.Stack(giode.Styles{Width: -1, Gap: 6, Padding: giode.SymmetricInset(0, 6)}, children...).Layout(gtx)
 }

@@ -2,7 +2,10 @@
 // provider adapter translates to and from.
 package llm
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"time"
+)
 
 // Role is who authored a message.
 type Role string
@@ -16,6 +19,19 @@ type PartKind string
 type Message struct {
 	Role  Role   `json:"role"`
 	Parts []Part `json:"parts"`
+	// Stats times the model call that wrote an assistant message; it is
+	// never sent to a provider.
+	Stats *ReplyStats `json:"stats,omitempty"`
+}
+
+// ReplyStats is how long a model call took and how much it wrote.
+type ReplyStats struct {
+	Started time.Time `json:"started"`
+	// FirstOutput is when the first text, reasoning or tool call arrived;
+	// zero if none did.
+	FirstOutput  time.Time `json:"first_output"`
+	Ended        time.Time `json:"ended"`
+	OutputTokens int       `json:"output_tokens"`
 }
 
 // Part is one piece of a message. Exactly one of the payload fields is set,

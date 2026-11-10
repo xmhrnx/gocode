@@ -1,18 +1,33 @@
 package agent
 
-import "gocode/internal/llm"
+import (
+	"time"
+
+	"gocode/internal/llm"
+)
 
 // replyBuilder assembles streamed events into an assistant message.
 type replyBuilder struct {
 	parts   llm.PartBuilder
 	started bool
+	// stats times the call; Started is set when it begins.
+	stats llm.ReplyStats
 	// stopReason is why the model stopped, once it has.
 	stopReason string
 }
 
-func newReplyBuilder() *replyBuilder { return &replyBuilder{} }
+func newReplyBuilder() *replyBuilder {
+	return &replyBuilder{stats: llm.ReplyStats{Started: time.Now()}}
+}
 
 func (b *replyBuilder) add(ev llm.Event, emit func(Event)) {
+	if b.stats.FirstOutput.IsZero() && (ev.Kind == llm.EventText || ev.Kind == llm.EventReasoning ||
+		ev.Kind == llm.EventToolCall || ev.Kind == llm.EventPart) {
+		b.stats.FirstOutput = time.Now()
+	}
+	if ev.Kind == llm.EventUsage && ev.Usage != nil {
+		b.stats.OutputTokens = ev.Usage.OutputTokens // the totals so far
+	}
 	switch ev.Kind {
 	case llm.EventText, llm.EventReasoning:
 		b.started = true
@@ -50,5 +65,7 @@ func (b *replyBuilder) addText(ev llm.Event, emit func(Event)) {
 }
 
 func (b *replyBuilder) message() llm.Message {
-	return llm.Message{Role: llm.RoleAssistant, Parts: b.parts.Parts()}
+	stats := b.stats
+	stats.Ended = time.Now()
+	return llm.Message{Role: llm.RoleAssistant, Parts: b.parts.Parts(), Stats: &stats}
 }
