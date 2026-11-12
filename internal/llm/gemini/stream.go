@@ -32,6 +32,7 @@ type streamResponse struct {
 type streamState struct {
 	emit         func(llm.Event)
 	callCount    int
+	mediaCount   int
 	finishReason string
 }
 
@@ -85,6 +86,8 @@ func (s *streamState) handlePart(part wirePart) {
 	switch {
 	case part.FunctionCall != nil:
 		s.emit(llm.Event{Kind: llm.EventToolCall, ToolCall: s.toolCall(part)})
+	case part.InlineData != nil && len(part.InlineData.Data) > 0:
+		s.emitMedia(part)
 	case part.Thought:
 		s.emitText(llm.EventReasoning, part)
 	case part.Text != nil:
@@ -98,6 +101,15 @@ func (s *streamState) emitText(kind llm.EventKind, part wirePart) {
 	if part.text() != "" || part.ThoughtSignature != "" {
 		s.emit(llm.Event{Kind: kind, Text: part.text(), Signature: part.ThoughtSignature})
 	}
+}
+
+// emitMedia sends an image or audio clip the model made, with the
+// thought signature the API wants back with it.
+func (s *streamState) emitMedia(part wirePart) {
+	s.mediaCount++
+	media := llm.MediaPart(part.InlineData.MimeType, part.InlineData.Data, s.mediaCount)
+	media.Signature = part.ThoughtSignature
+	s.emit(llm.Event{Kind: llm.EventPart, Part: &media})
 }
 
 func (s *streamState) toolCall(part wirePart) *llm.ToolCall {

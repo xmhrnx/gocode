@@ -21,7 +21,8 @@ type Event struct {
 	Summary string
 	Result  *tools.Result
 	Message *llm.Message
-	// Part is a provider part (a search the provider ran), for EventPart.
+	// Part is a provider part (a search the provider ran) or media the
+	// model made, for EventPart.
 	Part  *llm.Part
 	Usage *llm.Usage
 	// Parent is the ID of the task call whose sub-agent produced the
@@ -72,7 +73,7 @@ const (
 	// EventCompacted reports that the conversation sent to the model was
 	// replaced by the summary in Text.
 	EventCompacted
-	// EventPart reports a provider part of the reply, in Part.
+	// EventPart reports a provider or media part of the reply, in Part.
 	EventPart
 )
 

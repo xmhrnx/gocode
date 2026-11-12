@@ -30,6 +30,8 @@ func writePart(b *strings.Builder, role llm.Role, part llm.Part) {
 		fmt.Fprintf(b, "\n[%s]\n%s\n", role, part.Text)
 	case llm.PartImage:
 		fmt.Fprintf(b, "\n[%s attached an image]\n", role)
+	case llm.PartMedia:
+		fmt.Fprintf(b, "\n[%s made %s]\n", role, part.Media.Name)
 	case llm.PartDocument:
 		fmt.Fprintf(b, "\n[%s attached a document]\n%s\n", role, clip(llm.DocumentText(*part.Document), maxToolResultInSummary))
 	case llm.PartToolCall:

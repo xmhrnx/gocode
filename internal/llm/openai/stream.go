@@ -30,6 +30,7 @@ type streamState struct {
 	calls        toolCallAccumulator
 	finishReason string
 	sawDone      bool
+	mediaCount   int
 }
 
 // errIncomplete reports a stream that closed before the reply finished.
@@ -73,18 +74,37 @@ func (s *streamState) handleDelta(delta chunkDelta) {
 		s.emit(llm.Event{Kind: llm.EventReasoning, Text: reasoning})
 	}
 	for _, piece := range contentPieces(delta.Content) {
-		if piece.text == "" {
-			continue
-		}
-		if piece.reasoning {
+		switch {
+		case piece.imageURL != "":
+			s.emitImage(piece.imageURL)
+		case piece.text == "":
+		case piece.reasoning:
 			s.emit(llm.Event{Kind: llm.EventReasoning, Text: piece.text})
-		} else {
+		default:
 			s.think.feed(piece.text, s.emitSplit)
 		}
+	}
+	for _, image := range delta.Images {
+		s.emitImage(image.ImageURL.URL)
 	}
 	for _, call := range delta.ToolCalls {
 		s.calls.add(call)
 	}
+}
+
+// emitImage sends an image the model made. One given as a link instead
+// of data is shown as that link.
+func (s *streamState) emitImage(url string) {
+	mediaType, data, ok := llm.ParseDataURL(url)
+	if !ok {
+		if strings.HasPrefix(url, "https://") || strings.HasPrefix(url, "http://") {
+			s.emit(llm.Event{Kind: llm.EventText, Text: "\n\n[Image](" + url + ")\n\n"})
+		}
+		return
+	}
+	s.mediaCount++
+	media := llm.MediaPart(mediaType, data, s.mediaCount)
+	s.emit(llm.Event{Kind: llm.EventPart, Part: &media})
 }
 
 func (s *streamState) emitSplit(reasoning bool, text string) {

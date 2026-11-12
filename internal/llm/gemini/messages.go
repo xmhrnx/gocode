@@ -47,6 +47,10 @@ func modelParts(msg llm.Message) []wirePart {
 			})
 		case part.Kind == llm.PartProvider && part.Provider == providerName && len(part.Raw) > 0:
 			parts = append(parts, wirePart{raw: part.Raw})
+		case part.Kind == llm.PartMedia && part.Media != nil && part.Media.IsImage():
+			// Images go back so the model can edit them in a later turn.
+			parts = append(parts, wirePart{InlineData: &inlineData{MimeType: part.Media.MediaType, Data: part.Media.Data},
+				ThoughtSignature: part.Signature})
 		}
 	}
 	return parts

@@ -34,7 +34,7 @@ const (
 	EventReasoning
 	// EventToolCall carries one complete tool call.
 	EventToolCall
-	// EventPart carries a complete PartProvider part in Part.
+	// EventPart carries a complete PartProvider or PartMedia part in Part.
 	EventPart
 	// EventUsage reports token usage; it may arrive more than once, each
 	// time with the totals so far.

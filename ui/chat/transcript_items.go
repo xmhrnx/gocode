@@ -38,6 +38,7 @@ const (
 	itemPermission
 	itemStatus
 	itemSearch
+	itemMedia
 )
 
 // buildItems lays the conversation out as rows: user messages, assistant
@@ -89,6 +90,11 @@ func (c *ChatTab) appendMessageItems(items []item, msg llm.Message, index int, d
 				continue // search results and the like are for the model
 			}
 			it.kind = itemSearch
+		case llm.PartMedia:
+			if part.Media == nil {
+				continue
+			}
+			it.kind = itemMedia
 		case llm.PartToolCall:
 			it.kind = itemTool
 			it.version = c.toolVersion(part.ToolCall.ID)

@@ -16,6 +16,15 @@ type chunkDelta struct {
 	Reasoning        json.RawMessage   `json:"reasoning"`
 	ReasoningDetails []reasoningDetail `json:"reasoning_details"`
 	ToolCalls        []toolCallDelta   `json:"tool_calls"`
+	// Images are pictures the model made (OpenRouter and others).
+	Images []imageItem `json:"images"`
+}
+
+// imageItem is an image in a reply: a data: URL, or a link to it.
+type imageItem struct {
+	ImageURL struct {
+		URL string `json:"url"`
+	} `json:"image_url"`
 }
 
 // reasoningDetail is an OpenRouter reasoning_details entry.
@@ -28,12 +37,14 @@ type contentItem struct {
 	Type     string          `json:"type"`
 	Text     string          `json:"text"`
 	Thinking json.RawMessage `json:"thinking"`
+	imageItem
 }
 
-// contentPiece is a run of reply text or reasoning.
+// contentPiece is a run of reply text or reasoning, or an image.
 type contentPiece struct {
 	text      string
 	reasoning bool
+	imageURL  string
 }
 
 // reasoningText returns the delta's reasoning. Routers such as OpenRouter
@@ -73,6 +84,8 @@ func contentPieces(raw json.RawMessage) []contentPiece {
 			pieces = append(pieces, contentPiece{text: item.Text})
 		case "thinking":
 			pieces = append(pieces, contentPiece{text: thinkingText(item.Thinking), reasoning: true})
+		case "image_url":
+			pieces = append(pieces, contentPiece{imageURL: item.ImageURL.URL})
 		}
 	}
 	return pieces

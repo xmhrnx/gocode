@@ -98,6 +98,8 @@ func (t *transcript) newRow(it item) rowView {
 		return newStatusRow(t.tab)
 	case itemSearch:
 		return newSearchRow(t.tab, it)
+	case itemMedia:
+		return newMediaRow(t.tab, it)
 	default:
 		return newNoticeRow(it.notice)
 	}

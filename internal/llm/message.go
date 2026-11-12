@@ -41,6 +41,7 @@ type Part struct {
 	Text       string      `json:"text,omitempty"`
 	Image      *Image      `json:"image,omitempty"`
 	Document   *Document   `json:"document,omitempty"`
+	Media      *Media      `json:"media,omitempty"`
 	ToolCall   *ToolCall   `json:"tool_call,omitempty"`
 	ToolResult *ToolResult `json:"tool_result,omitempty"`
 	// Signature authenticates a reasoning part; some providers require it
