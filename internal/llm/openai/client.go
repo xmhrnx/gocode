@@ -75,6 +75,7 @@ func (c *Client) Stream(ctx context.Context, req llm.Request, emit func(llm.Even
 	}
 	defer resp.Body.Close()
 	stream := newStreamState(emit)
+	stream.fetch = c.fetchImage(ctx)
 	if err := sse.ForEach(resp.Body, stream.handle); err != nil {
 		return err
 	}

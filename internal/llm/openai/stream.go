@@ -31,6 +31,8 @@ type streamState struct {
 	finishReason string
 	sawDone      bool
 	mediaCount   int
+	// fetch downloads images given as links; nil leaves them as links.
+	fetch imageFetcher
 }
 
 // errIncomplete reports a stream that closed before the reply finished.
@@ -92,15 +94,22 @@ func (s *streamState) handleDelta(delta chunkDelta) {
 	}
 }
 
-// emitImage sends an image the model made. One given as a link instead
-// of data is shown as that link.
+// emitImage sends an image the model made. One given as a link is
+// downloaded, or shown as that link when it can't be.
 func (s *streamState) emitImage(url string) {
 	mediaType, data, ok := llm.ParseDataURL(url)
 	if !ok {
-		if strings.HasPrefix(url, "https://") || strings.HasPrefix(url, "http://") {
-			s.emit(llm.Event{Kind: llm.EventText, Text: "\n\n[Image](" + url + ")\n\n"})
+		if !strings.HasPrefix(url, "https://") && !strings.HasPrefix(url, "http://") {
+			return
 		}
-		return
+		var err error
+		if s.fetch != nil {
+			mediaType, data, err = s.fetch(url)
+		}
+		if s.fetch == nil || err != nil {
+			s.emit(llm.Event{Kind: llm.EventText, Text: "\n\n[Image](" + url + ")\n\n"})
+			return
+		}
 	}
 	s.mediaCount++
 	media := llm.MediaPart(mediaType, data, s.mediaCount)

@@ -7,8 +7,8 @@ import (
 )
 
 func TestStreamInlineDataBecomesMedia(t *testing.T) {
-	body := data(`{"candidates":[{"content":{"role":"model","parts":[`+
-		`{"inlineData":{"mimeType":"image/jpeg","data":"/9j/"},"thoughtSignature":"sig"},`+
+	body := data(`{"candidates":[{"content":{"role":"model","parts":[` +
+		`{"inlineData":{"mimeType":"image/jpeg","data":"/9j/"},"thoughtSignature":"sig"},` +
 		`{"inlineData":{"mimeType":"audio/L16;codec=pcm;rate=16000","data":"AAABAA=="}}]},"finishReason":"STOP"}]}`)
 	server, _ := newServer(t, 200, body)
 	events, err := collect(t, server, llm.Request{Model: "m", Messages: []llm.Message{{Role: llm.RoleUser, Parts: []llm.Part{llm.TextPart("hi")}}}})

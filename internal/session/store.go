@@ -43,6 +43,9 @@ func (s Store) Load(id string) (*Session, error) {
 
 // Delete removes the session.
 func (s Store) Delete(id string) error {
+	if dir := MediaCacheDir(id); dir != "" {
+		_ = os.RemoveAll(dir) // only copies made for opening
+	}
 	return os.Remove(s.path(id))
 }
 

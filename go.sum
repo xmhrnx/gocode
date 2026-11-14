@@ -30,6 +30,8 @@ github.com/srwiley/rasterx v0.0.0-20220730225603-2ab79fcdd4ef h1:Ch6Q+AZUxDBCVqd
 github.com/srwiley/rasterx v0.0.0-20220730225603-2ab79fcdd4ef/go.mod h1:nXTWP6+gD5+LUJ8krVhhoeHjvHTutPxMYl5SvkcnJNE=
 github.com/xmhrnx/giode v1.0.23-alpha.1 h1:0OEzj8J5ZWFYhwFpmdjwi66yyi7uzL8eJoZnRSnqn28=
 github.com/xmhrnx/giode v1.0.23-alpha.1/go.mod h1:7HSO4zuPJmKi3t1KhKkk6XjEv40yfEhQCb9frVULMdA=
+github.com/xmhrnx/giode v1.0.24-alpha.1 h1:0yUAnHirvpPbXzZmKvau/8+LHtv102B+v5DoREVIwnQ=
+github.com/xmhrnx/giode v1.0.24-alpha.1/go.mod h1:7HSO4zuPJmKi3t1KhKkk6XjEv40yfEhQCb9frVULMdA=
 github.com/yuin/goldmark v1.4.13 h1:fVcFKWvrslecOb/tg+Cc05dkeYx540o0FuFt3nUVDoE=
 github.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5taEt/CY=
 golang.org/x/exp v0.0.0-20250408133849-7e4ce0ab07d0 h1:R84qjqJb5nVJMxqWYb3np9L5ZsaDtB+a39EqjV0JSUM=

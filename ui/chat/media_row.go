@@ -13,12 +13,14 @@ import (
 )
 
 // mediaRow shows an image, audio clip or video the model made: images
-// in the chat, the others as a file, each with a button to save it.
+// in the chat, the others as a file, each with buttons to open it in
+// another app and to save it.
 type mediaRow struct {
 	rowBase
 	media   *llm.Media
 	preview giode.Element
 	save    *components.IconButton
+	open    *components.IconButton
 }
 
 // mediaPreviewSide is the longest side, in pixels, of an image's preview,
@@ -36,6 +38,7 @@ func newMediaRow(tab *ChatTab, it item) *mediaRow {
 		r.media = &llm.Media{Name: "file"}
 	}
 	r.save = components.NewIconButton("download", "Save "+r.media.Name, func() { tab.saveMedia(*r.media) }).SetSize(14)
+	r.open = components.NewIconButton("external-link", "Open in another app", func() { tab.openMedia(r.it, *r.media) }).SetSize(14)
 	if r.media.IsImage() {
 		if img, err := attach.Preview(r.media.Data, mediaPreviewSide); err == nil {
 			w, h := fitInside(img.Bounds().Dx(), img.Bounds().Dy(), mediaShownSide)
@@ -54,7 +57,7 @@ func (r *mediaRow) Layout(gtx giode.Context) giode.Dimensions {
 	}
 	return giode.Stack(giode.Styles{Gap: 2, Padding: giode.SymmetricInset(0, 6), Align: giode.AlignStart},
 		content,
-		giode.Row(giode.Styles{Gap: 2, Align: giode.AlignCenter, Margin: giode.Inset{Left: -6}}, r.save),
+		giode.Row(giode.Styles{Gap: 2, Align: giode.AlignCenter, Margin: giode.Inset{Left: -6}}, r.open, r.save),
 	).Layout(gtx)
 }
 
