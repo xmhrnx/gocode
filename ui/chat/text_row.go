@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/xmhrnx/giode"
+	_ "github.com/xmhrnx/giode/formula" // typesets the math in replies
 
 	"gocode/ui/components"
 	"gocode/ui/theme"
@@ -54,6 +55,7 @@ func markdown(tab *ChatTab, text string) giode.Element {
 		Styles:         theme.Body(),
 		CodeFont:       "JetBrains Mono",
 		CodeBackground: theme.CodeBack,
+		Math:           true,
 		OnLink: func(url string) {
 			go func() {
 				if err := tab.services.App.OpenURL(context.Background(), url); err != nil {

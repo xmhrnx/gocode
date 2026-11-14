@@ -4,7 +4,7 @@ go 1.26.6
 
 require (
 	github.com/ledongthuc/pdf v0.0.0-20261020125853-5e46805f718e
-	github.com/xmhrnx/giode v1.0.24-alpha.1
+	github.com/xmhrnx/giode v1.0.24-alpha.1.0.20261114205357-75854b99e0d8
 	golang.org/x/image v0.26.0
 	golang.org/x/net v0.48.0
 )
@@ -17,6 +17,7 @@ require (
 	git.sr.ht/~jackmordaunt/go-toast v1.0.0 // indirect
 	git.wow.st/gmp/jni v0.0.0-20210610011705-34026c7e22d0 // indirect
 	github.com/esiqveland/notify v0.11.0 // indirect
+	github.com/go-fonts/stix v0.2.2 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/go-text/typesetting v0.3.4 // indirect
 	github.com/godbus/dbus/v5 v5.1.0 // indirect
