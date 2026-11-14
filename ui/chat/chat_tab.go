@@ -45,6 +45,7 @@ type ChatTab struct {
 
 	header     *header
 	transcript *transcript
+	scrollDown *scrollDownButton
 	composer   *composer
 }
 
@@ -78,6 +79,7 @@ func newTab(services *core.Services, sess *session.Session, prompt string) *Chat
 	})
 	c.header = newHeader(c)
 	c.transcript = newTranscript(c)
+	c.scrollDown = newScrollDownButton(c)
 	c.composer = newComposer(c)
 	c.composer.editor.SetText(prompt)
 	c.composer.applySettings()
@@ -95,7 +97,7 @@ func (c *ChatTab) View() giode.Element {
 	}
 	return giode.Stack(giode.Styles{Width: -1, Height: -1, Background: "theme.background"},
 		c.header,
-		giode.Box(giode.Styles{Width: -1, FlexGrow: 1}, c.transcript.element()),
+		giode.Box(giode.Styles{Width: -1, FlexGrow: 1}, c.transcript.element(), c.scrollDown.element()),
 		c.composer.view(),
 	)
 }
