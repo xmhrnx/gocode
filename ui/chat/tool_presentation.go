@@ -12,7 +12,7 @@ var toolIcons = map[string]string{
 	"read_file": "file-text", "write_file": "file-plus", "edit_file": "file-pen-line",
 	"list_dir": "list-tree", "glob": "folder-open", "grep": "text-search",
 	"bash": "terminal", "web_fetch": "globe", "web_search": "search", "todo_write": "list-todo",
-	"task": "bot", "skill": "sparkles",
+	"task": "bot", "skill": "sparkles", "browser": "app-window",
 }
 
 func toolIcon(name string) string {

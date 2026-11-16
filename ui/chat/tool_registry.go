@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"slices"
 
+	"gocode/internal/browser"
 	"gocode/internal/secrets"
 	"gocode/internal/skills"
 	"gocode/internal/tools"
@@ -12,12 +13,15 @@ import (
 )
 
 // toolRegistry returns the tools for a run: the built-in ones, web search
-// when a service is set up, the skill loader, and the tools of the
-// connected MCP servers.
+// when a service is set up, the browser when its bridge is on, the skill
+// loader, and the tools of the connected MCP servers.
 func (c *ChatTab) toolRegistry() *tools.Registry {
 	all := append(tools.Builtin(), skills.NewTool(c.skillLister()))
 	if search, ok := c.webSearchTool(); ok {
 		all = append(all, search)
+	}
+	if c.services.Settings.Browser.Enabled {
+		all = append(all, browser.Tool{Bridge: c.services.Browser})
 	}
 	all = append(all, c.services.MCP.Tools()...)
 	return tools.NewRegistry(all...)

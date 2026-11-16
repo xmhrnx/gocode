@@ -12,6 +12,7 @@ import (
 	"github.com/xmhrnx/giode"
 
 	"gocode/assets"
+	"gocode/internal/browser"
 	"gocode/internal/catalog"
 	"gocode/internal/mcp"
 	"gocode/internal/secrets"
@@ -50,8 +51,15 @@ func run() error {
 	services.Models = catalog.NewModelStore(services.Keys, services.HTTP, func() { app.Post(func() {}) })
 	services.MCP.OnChange(func() { app.Post(func() {}) })
 	services.MCP.Sync(services.Settings.MCPServers)
-	services.OnSettingsChanged(func() { services.MCP.Sync(services.Settings.MCPServers) })
+	services.Browser.OnChange(func() { app.Post(func() {}) })
+	syncBrowser := func() { services.Browser.Sync(services.Settings.Browser.Enabled, services.Settings.Browser.Port) }
+	syncBrowser()
+	services.OnSettingsChanged(func() {
+		services.MCP.Sync(services.Settings.MCPServers)
+		syncBrowser()
+	})
 	defer services.MCP.Close()
+	defer services.Browser.Close()
 	root = ui.New(services)
 	if settingsErr != nil {
 		services.Error(settingsErr.Error() + " Using defaults.")
@@ -77,6 +85,7 @@ func newServices(dir string) (*core.Services, error) {
 		Sessions:  session.Store{Dir: filepath.Join(dir, "sessions")},
 		HTTP:      platform.NewHTTPClient(timeout),
 		MCP:       mcp.NewManager(),
+		Browser:   browser.New(),
 		SkillsDir: filepath.Join(dir, "skills"),
 		TabsPath:  filepath.Join(dir, "tabs.json"),
 	}, err

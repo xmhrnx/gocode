@@ -47,6 +47,7 @@ var categories = []category{
 	{"Skills", "sparkles"},
 	{"MCP servers", "server"},
 	{"Web search", "search"},
+	{"Browser", "app-window"},
 	{"Sounds", "volume-2"},
 	{"Network", "globe"},
 	{"Shortcuts", "keyboard"},

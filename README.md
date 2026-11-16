@@ -44,6 +44,13 @@ webview or JavaScript runtime inside. The UI is drawn straight to the GPU.
 - **Tools**: `read_file`, `write_file`, `edit_file` (exact replacement with a
   diff), `list_dir`, `glob`, `grep`, `bash` (with timeout and process-group
   kill), `web_fetch`, `web_search` and `todo_write`.
+- **Browser**: the `browser` tool drives your browser through the GoCode
+  extension in `browser-extension/` (Chrome, Edge and other Chromium
+  browsers). Click its toolbar button to open a new tab for the agent or share
+  the one you're on; the agent can only use tabs you share and tabs it opens.
+  It reads pages as text with numbered elements, then clicks, types, selects,
+  scrolls, navigates and runs JavaScript. The app listens on 127.0.0.1 for
+  browser extensions only (Settings → Browser).
 - **Web search**: the `web_search` tool uses Brave Search, Tavily, Exa or your
   own SearXNG (Settings → Web search). Anthropic, Gemini 3 and OpenRouter
   models can use their provider's own search instead, and the MCP server
@@ -136,6 +143,8 @@ visitor's OS and CPU from the latest release.
 | `internal/skills` | Skill discovery, installation and the `skill` tool |
 | `internal/tools` | The agent's tools |
 | `internal/websearch` | Search services behind the `web_search` tool |
+| `internal/browser` | The bridge the browser extension connects to, and the `browser` tool |
+| `browser-extension/` | The browser extension, in TypeScript |
 | `internal/prompts` | System prompts (defaults in `defaults/*.md`) |
 | `internal/{settings,session,secrets,catalog,attach,shell}` | Preferences, chat storage, keys, model lists, attachments, the agent's shell |
 | `ui/` | Window root, shortcuts; one component per file in `chat/`, `settingsview/`, `modelpicker/`, `history/`, `workspace/`, `components/`, `theme/` |

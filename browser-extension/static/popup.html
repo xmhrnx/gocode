@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>GoCode</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <img src="icon-32.png" alt="" width="20" height="20">
+    <h1>GoCode</h1>
+    <span id="state" data-state="off">Not connected</span>
+  </header>
+  <p id="error" class="error"></p>
+  <button id="open" class="primary">Open a new tab for GoCode</button>
+  <button id="share">Share this tab</button>
+  <section id="shared" hidden>
+    <h2>Shared tabs</h2>
+    <ul id="tabs"></ul>
+  </section>
+  <footer>
+    <label>Port <input id="port" type="number" min="1" max="65535"></label>
+    <span class="hint">Same as Settings → Browser in GoCode</span>
+  </footer>
+  <script type="module" src="popup.js"></script>
+</body>
+</html>

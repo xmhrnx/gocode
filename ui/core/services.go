@@ -10,6 +10,7 @@ import (
 	"github.com/xmhrnx/giode"
 	"github.com/xmhrnx/giode/components/toaster"
 
+	"gocode/internal/browser"
 	"gocode/internal/catalog"
 	"gocode/internal/mcp"
 	"gocode/internal/secrets"
@@ -30,6 +31,9 @@ type Services struct {
 	HTTP     *http.Client
 	// MCP connects to the user's MCP servers; safe from any goroutine.
 	MCP *mcp.Manager
+	// Browser is the bridge to the browser extension; safe from any
+	// goroutine.
+	Browser *browser.Bridge
 	// SkillsDir is where installed skills live.
 	SkillsDir string
 	// TabsPath is where the open tabs are remembered.

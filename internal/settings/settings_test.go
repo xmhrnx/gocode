@@ -125,3 +125,17 @@ func TestMigrateMovesTheOldDefaultThemeToSystem(t *testing.T) {
 		t.Fatalf("theme %q", s.Appearance.Theme)
 	}
 }
+
+func TestMigrateTurnsOnTheBrowserBridge(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "settings.json")
+	if err := os.WriteFile(path, []byte(`{"version": 7}`), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	s, err := Load(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !s.Browser.Enabled || s.Browser.Port != 47821 {
+		t.Fatalf("browser %+v", s.Browser)
+	}
+}

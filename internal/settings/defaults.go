@@ -22,6 +22,7 @@ func Default() Settings {
 		Network:   Network{RequestTimeoutSeconds: 300, MaxRetries: 3},
 		WebSearch: WebSearch{Results: 5},
 		Sounds:    Sounds{Enabled: true, Done: true, Permission: true, Errors: true, Volume: 60},
+		Browser:   Browser{Enabled: true, Port: 47821},
 	}
 }
 
@@ -52,6 +53,7 @@ func (s *Settings) fillDefaults() {
 	setPolicy(&s.Agent.ExecutePolicy, def.Agent.ExecutePolicy)
 	setPolicy(&s.Agent.NetworkPolicy, def.Agent.NetworkPolicy)
 	setInt(&s.Network.RequestTimeoutSeconds, def.Network.RequestTimeoutSeconds)
+	setInt(&s.Browser.Port, def.Browser.Port)
 }
 
 func setString(field *string, fallback string) {

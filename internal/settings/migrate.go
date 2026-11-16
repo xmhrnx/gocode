@@ -1,7 +1,7 @@
 package settings
 
 // currentVersion is the settings format written by this build.
-const currentVersion = 7
+const currentVersion = 8
 
 // migrate updates settings written by older builds.
 func (s *Settings) migrate() {
@@ -35,6 +35,9 @@ func (s *Settings) migrate() {
 		// Midnight was the default; the default now follows the system
 		// (Obsidian when dark, Sand when light).
 		s.Appearance.Theme = "system"
+	}
+	if s.Version < 8 {
+		s.Browser = Default().Browser // new: on, so the extension just works
 	}
 	s.Version = currentVersion
 }
