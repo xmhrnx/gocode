@@ -30,8 +30,8 @@ github.com/ledongthuc/pdf v0.0.0-20261020125853-5e46805f718e h1:U2Z+V2xqvjJg0azb
 github.com/ledongthuc/pdf v0.0.0-20261020125853-5e46805f718e/go.mod h1:1fEHWurg7pvf5SG6XNE5Q8UZmOwex51Mkx3SLhrW5B4=
 github.com/srwiley/rasterx v0.0.0-20220730225603-2ab79fcdd4ef h1:Ch6Q+AZUxDBCVqdkI8FSpFyZDtCVBc2VmejdNrm5rRQ=
 github.com/srwiley/rasterx v0.0.0-20220730225603-2ab79fcdd4ef/go.mod h1:nXTWP6+gD5+LUJ8krVhhoeHjvHTutPxMYl5SvkcnJNE=
-github.com/xmhrnx/giode v1.0.24-alpha.1.0.20261114205357-75854b99e0d8 h1:VjatyboGLL1hOM1tIxSzChyubfjVXKbSqW9ouUS+RPs=
-github.com/xmhrnx/giode v1.0.24-alpha.1.0.20261114205357-75854b99e0d8/go.mod h1:7HSO4zuPJmKi3t1KhKkk6XjEv40yfEhQCb9frVULMdA=
+github.com/xmhrnx/giode v1.0.25-alpha.1 h1:DxBCR84ej9/xBNaSW63q+OtcKnfB6VbnNwFqG4GdVow=
+github.com/xmhrnx/giode v1.0.25-alpha.1/go.mod h1:7HSO4zuPJmKi3t1KhKkk6XjEv40yfEhQCb9frVULMdA=
 github.com/yuin/goldmark v1.4.13 h1:fVcFKWvrslecOb/tg+Cc05dkeYx540o0FuFt3nUVDoE=
 github.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5taEt/CY=
 golang.org/x/exp v0.0.0-20250408133849-7e4ce0ab07d0 h1:R84qjqJb5nVJMxqWYb3np9L5ZsaDtB+a39EqjV0JSUM=
