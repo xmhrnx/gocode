@@ -10,6 +10,10 @@ publisher = "Mehran Zahiroddini"
 description = "A native, lightweight coding agent."
 website = "https://xmhrnx.github.io/gocode/"
 
+# GitHub Actions: giode ci -f writes .github/workflows/release.yml from
+# this. After regenerating, redo two edits by hand: pin the CLI
+# (giode-cli/cmd/giode@v0.1.35-alpha.1, not @latest) and use
+# go-version-file: go.mod instead of go-version: stable.
 [ci]
 trigger = "release"
 arch = ["amd64", "arm64"]
@@ -40,11 +44,14 @@ entitlements = [
 [privacy]
 tracking = false
 
+# The Microsoft Store package (giode build msix). Same Partner Center
+# account as EasySend and AnyFile; the Store signs the package.
 [windows.msix]
-# Both come from Partner Center (Product identity) once the name is
-# reserved; see RELEASING.md.
-publisher = "CN=REPLACE-WITH-PARTNER-CENTER-PUBLISHER-ID"
-identity_name = "REPLACE.WithPartnerCenterIdentityName"
+publisher = "CN=B40E8F57-A7E0-40BB-8E74-5D051D0B578B"
+publisher_display_name = "Mehran Zahiroddini"
+# Must match Partner Center → GoCode → Product identity →
+# Package/Identity/Name once the name is reserved; confirm it there.
+identity_name = "MehranZahir.GoCode"
 
 [linux]
 categories = ["Development", "Utility"]

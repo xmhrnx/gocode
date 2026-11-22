@@ -4,7 +4,9 @@ Publishing a GitHub release with a tag like `v1.0.0` runs
 `.github/workflows/release.yml`. The tag sets the version. The workflow tests,
 builds every package and attaches them to the release. The workflow is written
 by the Giode CLI from `giode.toml`: after changing `[ci]` or a store section,
-run `giode ci -f` instead of editing it.
+run `giode ci -f` instead of editing it, then redo the two pins by hand (the
+CLI at `giode-cli/cmd/giode@v0.1.35-alpha.1` instead of `@latest`, and
+`go-version-file: go.mod` instead of `go-version: stable`).
 
 | Where | What the release gets | Needs |
 | --- | --- | --- |
@@ -45,8 +47,9 @@ rest of the release still builds.
 5. In App Store Connect, fill in the listing:
    - **App Privacy:** "Data Not Collected". GoCode sends chats only to the
      providers the user sets up, never to its developer.
+   - **Privacy Policy URL:** https://xmhrnx.github.io/gocode/#privacy
    - **Category:** Developer Tools (already set in the build).
-   - **Screenshots and description:** from the website.
+   - **Screenshots and description:** see Store listing below.
    - **Export compliance:** answered in the build
      (`ITSAppUsesNonExemptEncryption = false`).
 
@@ -69,18 +72,57 @@ the full agent to it.
 
 ## Microsoft Store
 
-1. Open a Partner Center developer account.
-2. Reserve the name "GoCode".
-3. In the product's Product identity page, copy these into `giode.toml`:
-   - **Package/Identity/Name** → `identity_name` under `[windows.msix]`.
-   - **Package/Identity/Publisher** (`CN=...`) → `publisher` under `[windows.msix]`.
-   - **Package/Properties/PublisherDisplayName** → `publisher` under `[app]`.
-4. Commit and publish a release. It gets `GoCode-<version>-amd64.msix` and
+1. In Partner Center (the same account as EasySend and AnyFile), reserve the
+   name "GoCode".
+2. `giode.toml` already has the account's values under `[windows.msix]`:
+   `publisher = "CN=B40E8F57-A7E0-40BB-8E74-5D051D0B578B"` and
+   `publisher_display_name = "Mehran Zahiroddini"`. `identity_name` is set to
+   `MehranZahir.GoCode`: once the name is reserved, open the product's Product
+   identity page and check that **Package/Identity/Name** matches it exactly;
+   if not, change it and commit before the release.
+3. Publish a release. It gets `GoCode-<version>-amd64.msix` and
    `GoCode-<version>-arm64.msix`; upload both in a Partner Center submission.
    The Store signs them, so they need no certificate here.
-5. GoCode is a full-trust desktop app (it runs commands and reads project
+4. GoCode is a full-trust desktop app (it runs commands and reads project
    folders). When the submission asks why it uses the `runFullTrust`
    capability, explain that.
+5. **Privacy policy URL:** https://xmhrnx.github.io/gocode/#privacy. Age
+   rating: no content of its own; it shows text from the AI models the user
+   connects, so answer the questionnaire's user-generated / unrestricted
+   content questions accordingly.
+
+## Store listing
+
+**Name:** GoCode
+
+**Subtitle / short description (≤ 80 characters):**
+A native coding agent and model chat. No browser engine inside.
+
+**Keywords (Apple, ≤ 100 characters):**
+coding agent,ai,llm,code,developer,chat,ollama,openai,claude,mcp,terminal,programming
+
+**Description:**
+
+> GoCode is a coding agent for the desktop, written in Go and drawn straight to
+> the GPU. There is no browser engine inside, so it opens instantly and stays
+> fast through long chats.
+>
+> Point it at a project folder and it reads, searches and edits your files and
+> runs your builds and tests, streaming as it works. Send messages while it
+> works; it picks them up at the next step.
+>
+> Bring your own model: over 200 providers, local models and custom
+> OpenAI-compatible endpoints. Add MCP servers, web search and skills.
+>
+> Your keys are kept in the system's credential store, and your chats stay on
+> your computer. GoCode sends nothing to its developer.
+
+**Category:** Developer Tools (Mac App Store), Developer tools (Microsoft
+Store).
+
+**Screenshots:** the website draws its app window in HTML, so there are no
+screenshot files yet. Capture the app with a project open and the agent
+working: Mac 2880 × 1800 (or 1440 × 900), Microsoft Store 1920 × 1080.
 
 ## Linux
 

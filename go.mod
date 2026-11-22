@@ -4,7 +4,7 @@ go 1.26.6
 
 require (
 	github.com/ledongthuc/pdf v0.0.0-20261020125853-5e46805f718e
-	github.com/xmhrnx/giode v1.0.24-alpha.1.0.20261114205357-75854b99e0d8
+	github.com/xmhrnx/giode v1.0.25-alpha.1
 	golang.org/x/image v0.26.0
 	golang.org/x/net v0.48.0
 )
