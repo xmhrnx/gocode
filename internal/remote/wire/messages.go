@@ -73,3 +73,15 @@ type Decide struct {
 type Failure struct {
 	Error string `json:"error"`
 }
+
+// Hello is what a phone says in the handshake: its name, and the pairing
+// token the first time it connects.
+type Hello struct {
+	Name  string `json:"name"`
+	Token string `json:"token,omitempty"`
+}
+
+// Welcome is the desktop's answer to an accepted hello.
+type Welcome struct {
+	Name string `json:"name"`
+}
