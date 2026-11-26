@@ -17,12 +17,14 @@ import (
 type header struct {
 	tab     *ChatTab
 	folder  *components.PillButton
+	open    *components.IconButton
 	compact *components.IconButton
 }
 
 func newHeader(tab *ChatTab) *header {
 	h := &header{tab: tab}
 	h.folder = components.NewPillButton("folder", "Change the project folder", h.pickFolder)
+	h.open = components.NewIconButton("folder-open", "Open the folder in the file manager", h.openFolder).SetSize(15)
 	h.compact = components.NewIconButton("layers", "Compact the conversation: summarize it so the model has room again", tab.compactNow).SetSize(15)
 	return h
 }
@@ -32,11 +34,30 @@ func (h *header) Layout(gtx giode.Context) giode.Dimensions {
 	return giode.Row(giode.Styles{Width: -1, Align: giode.AlignCenter, Wrap: giode.WrapNoWrap,
 		Padding: giode.Inset{Left: 12, Right: 12, Top: 6, Bottom: 2}},
 		h.folder,
+		h.openButton(),
 		giode.Box(giode.Styles{FlexGrow: 1}),
 		contextLabel(h.tab),
 		usageLabel(h.tab),
 		h.compact,
 	).Layout(gtx)
+}
+
+// openButton is the open-folder button, once the chat has a folder.
+func (h *header) openButton() giode.Element {
+	if h.tab.session.WorkDir == "" {
+		return giode.Box(giode.Styles{})
+	}
+	return h.open
+}
+
+// openFolder shows the chat's folder in the file manager.
+func (h *header) openFolder() {
+	services, dir := h.tab.services, h.tab.session.WorkDir
+	go func() {
+		if err := services.App.OpenFolder(context.Background(), dir); err != nil {
+			services.Error("Couldn't open the folder: " + err.Error())
+		}
+	}()
 }
 
 func (h *header) pickFolder() {
