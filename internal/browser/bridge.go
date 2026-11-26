@@ -51,6 +51,8 @@ type Bridge struct {
 	err      error
 	current  *peer
 	onChange func()
+	// retry tries a taken port again until it is free or listening stops.
+	retry *time.Timer
 }
 
 // New returns a bridge that isn't listening yet; call Sync.
@@ -88,6 +90,10 @@ func (b *Bridge) Close() {
 	b.mu.Lock()
 	server, current := b.server, b.current
 	b.server, b.current, b.listenOK, b.err, b.port = nil, nil, false, nil, 0
+	if b.retry != nil {
+		b.retry.Stop()
+		b.retry = nil
+	}
 	b.mu.Unlock()
 	if server != nil {
 		_ = server.Close()
@@ -129,14 +135,40 @@ func (b *Bridge) listen(port int) {
 	defer b.mu.Unlock()
 	b.port = port
 	if err != nil {
-		b.err = fmt.Errorf("couldn't listen on port %d: %w", port, err)
+		b.err = listenError(port, err)
+		b.retry = time.AfterFunc(retryEvery, func() { b.retryListen(port) })
 		return
 	}
+	b.err = nil
 	mux := http.NewServeMux()
 	mux.Handle(Path, websocket.Server{Handshake: allowExtensionOrigin, Handler: b.serve})
 	b.server = &http.Server{Handler: mux, ReadHeaderTimeout: 10 * time.Second}
 	b.listenOK = true
 	go func(server *http.Server) { _ = server.Serve(listener) }(b.server)
+}
+
+// retryEvery is how often a taken port is tried again.
+const retryEvery = 5 * time.Second
+
+// retryListen tries the port again if listening on it still failed and
+// nothing changed since.
+func (b *Bridge) retryListen(port int) {
+	b.mu.Lock()
+	still := b.err != nil && b.port == port && b.server == nil
+	b.retry = nil
+	b.mu.Unlock()
+	if still {
+		b.listen(port)
+		b.changed()
+	}
+}
+
+// listenError explains why the port couldn't be used.
+func listenError(port int, err error) error {
+	if isAddrInUse(err) {
+		return fmt.Errorf("Port %d is in use, maybe by another GoCode window. GoCode tries again every few seconds, or pick another port here and in the extension.", port)
+	}
+	return fmt.Errorf("couldn't listen on port %d: %w", port, err)
 }
 
 // allowExtensionOrigin accepts only browser extensions. Browsers always

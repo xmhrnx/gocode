@@ -19,7 +19,7 @@ func browserEntries(s *core.Services) []entry {
 		{title: "Port", description: "Where GoCode listens for the extension. If you change it, set the same port in the extension.",
 			keywords: "browser extension port websocket", control: number(s, &b.Port, 1024, 65535)},
 		{title: "Status", description: "Whether a browser is connected now.",
-			keywords: "browser extension status connected", control: browserStatus{s}},
+			keywords: "browser extension status connected", control: browserStatus{s}, wide: true},
 	}
 }
 

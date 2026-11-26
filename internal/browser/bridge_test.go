@@ -165,3 +165,22 @@ func TestToolSummary(t *testing.T) {
 		t.Fatalf("summary = %q", got)
 	}
 }
+
+func TestTakenPortIsExplainedAndRetried(t *testing.T) {
+	port := freePort(t)
+	taken, err := net.Listen("tcp", fmt.Sprintf("127.0.0.1:%d", port))
+	if err != nil {
+		t.Fatal(err)
+	}
+	b := New()
+	b.Sync(true, port)
+	t.Cleanup(b.Close)
+	if st := b.Status(); st.Listening || !strings.Contains(st.Err, "in use") {
+		t.Fatalf("status = %+v", st)
+	}
+	taken.Close()
+	b.retryListen(port) // what the timer does
+	if st := b.Status(); !st.Listening || st.Err != "" {
+		t.Fatalf("after the port was freed: %+v", st)
+	}
+}
