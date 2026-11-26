@@ -1,4 +1,4 @@
-package remoteui
+package mobile
 
 import (
 	"encoding/json"

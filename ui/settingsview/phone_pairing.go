@@ -2,8 +2,8 @@ package settingsview
 
 import (
 	"context"
-	"fmt"
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/xmhrnx/giode"

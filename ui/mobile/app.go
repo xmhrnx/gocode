@@ -1,6 +1,6 @@
-// Package remoteui is the GoCode phone app: pair with desktops, see
+// Package mobile is GoCode on a phone: pair with desktops, see
 // their chats, follow the agent and steer it.
-package remoteui
+package mobile
 
 import (
 	"github.com/xmhrnx/giode"

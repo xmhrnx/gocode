@@ -157,7 +157,8 @@ async function detectPlatform() {
   if (/win/i.test(platform) || /Windows/.test(ua)) os = "windows";
   else if (/mac/i.test(platform) || /Mac OS X/.test(ua)) os = "macos";
   else if (/linux/i.test(platform) || /Linux|X11/.test(ua)) os = "linux";
-  if (/Android|iPhone|iPad/.test(ua)) os = "mobile";
+  if (/Android/.test(ua)) os = "android";
+  else if (/iPhone|iPad/.test(ua)) os = "mobile";
 
   let arch = /aarch64|arm64|armv8/i.test(ua + platform) ? "arm64" : "x64";
   if (navigator.userAgentData && navigator.userAgentData.getHighEntropyValues) {
@@ -179,6 +180,7 @@ function describeAsset(name) {
   if (/\.deb$/i.test(name)) return { os: "linux", label: `Linux ${cpu} .deb` };
   if (/\.rpm$/i.test(name)) return { os: "linux", label: `Linux ${cpu} .rpm` };
   if (/\.AppImage$/i.test(name)) return { os: "linux", label: `Linux ${cpu} AppImage` };
+  if (/\.apk$/i.test(name)) return { os: "android", label: "Android (remote for your desktop)" };
   return null;
 }
 
@@ -190,15 +192,16 @@ function pickAsset(assets, { os, arch }) {
     windows: [/setup\.exe$/i, /\.exe$/i],
     macos: [/universal\.dmg$/i, /\.dmg$/i],
     linux: [/\.deb$/i, /\.AppImage$/i, /\.rpm$/i],
+    android: [/\.apk$/i],
   }[os] || [];
   for (const pattern of preferences) {
-    const match = assets.find((a) => pattern.test(a.name) && sameCpu(a)) || (os === "macos" && assets.find((a) => pattern.test(a.name)));
+    const match = assets.find((a) => pattern.test(a.name) && sameCpu(a)) || ((os === "macos" || os === "android") && assets.find((a) => pattern.test(a.name)));
     if (match) return match;
   }
   return null;
 }
 
-const osNames = { windows: "Windows", macos: "macOS", linux: "Linux" };
+const osNames = { windows: "Windows", macos: "macOS", linux: "Linux", android: "Android" };
 const megabytes = (bytes) => `${Math.max(1, Math.round(bytes / 1048576))} MB`;
 
 async function setupDownload() {
@@ -208,7 +211,7 @@ async function setupDownload() {
   const detected = document.querySelector("[data-download-detected]");
   const list = document.querySelector("[data-download-list]");
   const target = await detectPlatform();
-  const cpuName = target.os === "macos" ? "" : target.arch === "arm64" ? " (ARM64)" : " (x64)";
+  const cpuName = target.os === "macos" || target.os === "android" ? "" : target.arch === "arm64" ? " (ARM64)" : " (x64)";
   const osName = osNames[target.os];
 
   if (osName) {

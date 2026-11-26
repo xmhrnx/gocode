@@ -130,17 +130,21 @@ The `.deb` and `.rpm` are attached to the release, and the website's download
 button offers the right one. They list the system libraries they need, so
 `apt` and `dnf` install those too.
 
-## Phone app (GoCode Remote)
+## Phones
 
-The phone app is in `mobile/`, with its own `giode.toml` (app ID
-`dev.gocode.remote`, Android and iOS). It isn't built by the release
-workflow. Build it from that folder:
+GoCode on Android and iOS is the same app, with the same ID. On a phone it
+doesn't run the agent: it pairs with GoCode on a desktop and follows and
+steers the agent there (`mobile_app.go` and `ui/mobile`; desktops build
+`desktop_app.go` instead). A release builds both:
 
-```sh
-cd mobile
-giode build android            # an .apk to test; -release for Play
-giode build ios                # needs a Mac with Xcode
-```
+| Where | What the release gets | Needs |
+| --- | --- | --- |
+| Android | an `.apk` to install and an `.aab` for Google Play | a keystore for Play: `ANDROID_KEYSTORE_BASE64` and `GIODE_KEYSTORE_PASS` |
+| iOS | an `.ipa` for the App Store | `IOS_CERT_BASE64`, `IOS_CERT_PASS`, `IOS_PROFILE_BASE64` and `IOS_TEAM_ID`; without them CI only checks that it builds |
+
+Make the Android keystore once with
+`keytool -genkey -keystore release.keystore -alias gocode -keyalg RSA -validity 10000`
+and keep it: every update must be signed with the same key.
 
 - **Pairing** goes through the public Magic Wormhole server. To use your own,
   set `GOCODE_PAIRING_SERVER` to its WebSocket address on both devices.

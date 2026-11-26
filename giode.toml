@@ -5,7 +5,7 @@ version = "0.1.0"
 build = 1
 icon = "assets/icon.png"
 package = "."
-platforms = ["windows", "macos", "linux"]
+platforms = ["windows", "macos", "linux", "android", "ios"]
 publisher = "Mehran Zahiroddini"
 description = "A native, lightweight coding agent."
 website = "https://xmhrnx.github.io/gocode/"
@@ -57,3 +57,19 @@ identity_name = "MehranZahir.GoCode"
 categories = ["Development", "Utility"]
 description = "A coding agent and model chat for the desktop, drawn straight to the GPU with no browser engine inside. It works with over 200 providers, local models and custom endpoints."
 license = "Apache-2.0"
+
+# On a phone GoCode is the remote for a paired desktop (mobile_app.go):
+# it connects to the desktop and finds it on the Wi-Fi.
+[android]
+target_sdk = 35
+permissions = ["network", "networkstate", "android.permission.ACCESS_WIFI_STATE"]
+notifications = false
+keystore = "release.keystore"         # written in CI from ANDROID_KEYSTORE_BASE64
+keystore_pass_env = "GIODE_KEYSTORE_PASS"
+
+[ios]
+min_os = 15
+
+[ios.plist]
+NSLocalNetworkUsageDescription = "GoCode finds and connects to GoCode on your computer over your local network."
+ITSAppUsesNonExemptEncryption = false
