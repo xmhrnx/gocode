@@ -103,7 +103,10 @@ func (c *ChatTab) View() giode.Element {
 }
 
 // changed marks the transcript as changed, so rows rebuild.
-func (c *ChatTab) changed() { c.revision++ }
+func (c *ChatTab) changed() {
+	c.revision++
+	c.services.NotifyPhones()
+}
 
 func initialModel(services *core.Services, sess *session.Session) catalog.ModelRef {
 	if ref := catalog.ParseRef(sess.Model); !ref.IsZero() {

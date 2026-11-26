@@ -48,6 +48,7 @@ var categories = []category{
 	{"MCP servers", "server"},
 	{"Web search", "search"},
 	{"Browser", "app-window"},
+	{"Phone", "smartphone"},
 	{"Sounds", "volume-2"},
 	{"Network", "globe"},
 	{"Shortcuts", "keyboard"},

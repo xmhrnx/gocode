@@ -21,6 +21,7 @@ type Settings struct {
 	MCPServers []MCPServer        `json:"mcp_servers"`
 	Skills     Skills             `json:"skills"`
 	Browser    Browser            `json:"browser"`
+	Phone      Phone              `json:"phone"`
 }
 
 // General holds app-wide behavior.

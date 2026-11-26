@@ -96,6 +96,15 @@ func (w *Workspace) Close(id int) {
 // CloseActive closes the shown tab.
 func (w *Workspace) CloseActive() { w.Close(w.activeID) }
 
+// Tabs returns the open tabs in order.
+func (w *Workspace) Tabs() []core.Tab {
+	tabs := make([]core.Tab, len(w.entries))
+	for i, e := range w.entries {
+		tabs[i] = e.tab
+	}
+	return tabs
+}
+
 // Active returns the shown tab, or nil.
 func (w *Workspace) Active() core.Tab {
 	if index := w.indexOf(w.activeID); index >= 0 {

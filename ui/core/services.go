@@ -13,6 +13,7 @@ import (
 	"gocode/internal/browser"
 	"gocode/internal/catalog"
 	"gocode/internal/mcp"
+	"gocode/internal/remote/host"
 	"gocode/internal/secrets"
 	"gocode/internal/session"
 	"gocode/internal/settings"
@@ -34,6 +35,9 @@ type Services struct {
 	// Browser is the bridge to the browser extension; safe from any
 	// goroutine.
 	Browser *browser.Bridge
+	// Phone serves the GoCode mobile app; safe from any goroutine. Nil
+	// in tests.
+	Phone *host.Host
 	// SkillsDir is where installed skills live.
 	SkillsDir string
 	// TabsPath is where the open tabs are remembered.
@@ -105,4 +109,11 @@ func (s *Services) Error(message string) {
 // Info shows an informational toast; safe from any goroutine.
 func (s *Services) Info(message string) {
 	s.Toasts.Show(giode.ToastInfo, message)
+}
+
+// NotifyPhones tells connected phones that a chat changed.
+func (s *Services) NotifyPhones() {
+	if s.Phone != nil {
+		s.Phone.Changed()
+	}
 }

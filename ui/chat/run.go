@@ -43,23 +43,33 @@ func (c *ChatTab) send() {
 		return
 	}
 	c.composer.editor.Focus()
+	if err := c.submit(msg); err != nil {
+		c.composer.restore(msg)
+		c.services.Error(err.Error())
+	}
+}
+
+// errNoModel is why a message can't be sent before a model is picked.
+var errNoModel = errors.New("Pick a model first: click the model button below the message box.")
+
+// submit sends msg: queued while the agent works, else starting a run.
+func (c *ChatTab) submit(msg llm.Message) error {
 	if c.run != nil {
 		c.queue.push(msg) // delivered at the agent's next step
 		c.changed()
-		return
+		return nil
 	}
 	if c.model.IsZero() {
-		c.composer.restore(msg)
-		c.services.Error("Pick a model first: click the model button below the message box.")
-		return
+		return errNoModel
 	}
 	c.session.Messages = append(c.session.Messages, msg)
 	if c.session.WorkDir == "" {
 		c.nameThenRun(msg)
-		return
+		return nil
 	}
 	c.maybeGenerateTitle(msg.Text())
 	c.startRun()
+	return nil
 }
 
 // startRun runs the agent on the conversation so far.

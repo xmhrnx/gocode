@@ -93,8 +93,14 @@ func (r *Root) DropFiles(paths []string) {
 }
 
 // View builds the window's content; it runs every frame.
+// Tabs returns the open tabs, for the phone remote.
+func (r *Root) Tabs() []core.Tab { return r.workspace.Tabs() }
+
 func (r *Root) View() giode.Element {
 	r.registerShortcuts()
+	if r.services.Phone != nil {
+		r.services.Phone.SetWorking(r.workspace.AnyBusy()) // the relay room is held only then
+	}
 	content := giode.Element(giode.Box(giode.Styles{}))
 	if tab := r.workspace.Active(); tab != nil {
 		content = tab.View()

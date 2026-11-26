@@ -181,3 +181,26 @@ func (h *Host) changed() {
 		fn()
 	}
 }
+
+// Devices is the list of paired phones.
+func (h *Host) Devices() *Devices { return h.cfg.Devices }
+
+// Unpair removes a paired phone and drops its connections.
+func (h *Host) Unpair(key string) error {
+	if err := h.cfg.Devices.Remove(key); err != nil {
+		return err
+	}
+	h.mu.Lock()
+	var drop []*session
+	for s := range h.conns {
+		if secure.EncodeKey(s.conn.Peer) == key {
+			drop = append(drop, s)
+		}
+	}
+	h.mu.Unlock()
+	for _, s := range drop {
+		s.close()
+	}
+	h.changed()
+	return nil
+}
