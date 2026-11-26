@@ -18,14 +18,6 @@ func TestWorkingTime(t *testing.T) {
 	}
 }
 
-func TestTokenCount(t *testing.T) {
-	for n, want := range map[int]string{950: "950", 2412: "2.4k", 12345: "12k", 1_340_000: "1.3M"} {
-		if got := tokenCount(n); got != want {
-			t.Errorf("tokenCount(%d) = %q, want %q", n, got, want)
-		}
-	}
-}
-
 func TestCleanTitle(t *testing.T) {
 	for reply, want := range map[string]string{
 		"\"Fix the parser\"\n":           "Fix the parser",

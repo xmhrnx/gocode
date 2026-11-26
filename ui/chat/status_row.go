@@ -28,11 +28,11 @@ func (r *statusRow) elapsed() time.Duration {
 }
 
 // progress is how long the run has worked and, once the model has
-// written something, how many tokens: "1m 05s · 2.4k tokens".
+// written something, how fast: "1m 05s · 63 tok/s".
 func (r *statusRow) progress(run *activeRun) string {
 	text := workingTime(r.elapsed())
-	if tokens := run.tokens(); tokens > 0 {
-		text += " · " + tokenCount(tokens) + " tokens"
+	if perSecond := run.tokensPerSecond(); perSecond > 0 {
+		text += fmt.Sprintf(" · %.0f tok/s", perSecond)
 	}
 	return text
 }
@@ -48,19 +48,6 @@ func workingTime(d time.Duration) string {
 		return fmt.Sprintf("%dm %02ds", s/60, s%60)
 	}
 	return fmt.Sprintf("%dh %02dm", s/3600, s%3600/60)
-}
-
-// tokenCount shortens a token count: 950, 2.4k, 12k, 1.3M.
-func tokenCount(n int) string {
-	switch {
-	case n < 1000:
-		return fmt.Sprint(n)
-	case n < 10_000:
-		return fmt.Sprintf("%.1fk", float64(n)/1000)
-	case n < 1_000_000:
-		return fmt.Sprintf("%dk", n/1000)
-	}
-	return fmt.Sprintf("%.1fM", float64(n)/1_000_000)
 }
 
 func (r *statusRow) Layout(gtx giode.Context) giode.Dimensions {

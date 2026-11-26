@@ -22,10 +22,14 @@ type activeRun struct {
 	// them to the conversation together.
 	finished  map[string]llm.ToolResult
 	callUsage llm.Usage
-	// outputTokens counts what the run's finished model calls wrote, and
-	// streamedBytes the text and reasoning of the current call so far.
+	// outputTokens counts what the run's finished model calls wrote and
+	// writing how long they spent writing it; streamedBytes is the text
+	// and reasoning of the current call so far, which began arriving at
+	// callWriting.
 	outputTokens  int
+	writing       time.Duration
 	streamedBytes int
+	callWriting   time.Time
 	status        string
 	ask           *pendingPermission
 	// subagents holds the progress of running tasks, by task call ID.
@@ -87,10 +91,37 @@ func (c *ChatTab) startRun() {
 }
 
 // stop cancels the run in progress.
-// tokens is how many tokens the run has written: the usage the provider
-// reported, or while a call streams, an estimate from its text.
-func (r *activeRun) tokens() int {
-	return r.outputTokens + r.callTokens()
+// tokensPerSecond is how fast the run's model calls have written,
+// counting only the time they were writing; 0 until there is enough to
+// tell.
+func (r *activeRun) tokensPerSecond() float64 {
+	tokens, writing := r.outputTokens, r.writing
+	if !r.callWriting.IsZero() {
+		tokens += r.callTokens()
+		writing += time.Since(r.callWriting)
+	}
+	if tokens == 0 || writing < 500*time.Millisecond {
+		return 0
+	}
+	return float64(tokens) / writing.Seconds()
+}
+
+// streamed counts text or reasoning that arrived, starting the call's
+// writing time with the first.
+func (r *activeRun) streamed(text string) {
+	if r.callWriting.IsZero() {
+		r.callWriting = time.Now()
+	}
+	r.streamedBytes += len(text)
+}
+
+// callEnded adds the finished call's output and writing time.
+func (r *activeRun) callEnded() {
+	if !r.callWriting.IsZero() {
+		r.outputTokens += r.callTokens()
+		r.writing += time.Since(r.callWriting)
+	}
+	r.callUsage, r.streamedBytes, r.callWriting = llm.Usage{}, 0, time.Time{}
 }
 
 // callTokens is the current call's output: as reported, or about four
