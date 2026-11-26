@@ -22,8 +22,12 @@ type activeRun struct {
 	// them to the conversation together.
 	finished  map[string]llm.ToolResult
 	callUsage llm.Usage
-	status    string
-	ask       *pendingPermission
+	// outputTokens counts what the run's finished model calls wrote, and
+	// streamedBytes the text and reasoning of the current call so far.
+	outputTokens  int
+	streamedBytes int
+	status        string
+	ask           *pendingPermission
 	// subagents holds the progress of running tasks, by task call ID.
 	subagents map[string]*subagentProgress
 }
@@ -45,11 +49,11 @@ func (c *ChatTab) send() {
 		c.services.Error("Pick a model first: click the model button below the message box.")
 		return
 	}
-	if !c.ensureFolder(msg.Text()) {
-		c.composer.restore(msg)
+	c.session.Messages = append(c.session.Messages, msg)
+	if c.session.WorkDir == "" {
+		c.nameThenRun(msg)
 		return
 	}
-	c.session.Messages = append(c.session.Messages, msg)
 	c.maybeGenerateTitle(msg.Text())
 	c.startRun()
 }
@@ -64,7 +68,7 @@ func (c *ChatTab) startRun() {
 	cfg := c.agentConfig()
 	history := c.session.ModelHistory(agent.SummaryMessage)
 	ctx, cancel := context.WithCancel(context.Background())
-	c.run = &activeRun{cancel: cancel, started: time.Now(), running: map[string]bool{}, finished: map[string]llm.ToolResult{}}
+	c.run = newActiveRun(cancel)
 	c.services.Settings.Models.MarkUsed(c.model.String())
 	c.services.SettingsChanged()
 	app, keys, httpClient, vars := c.services.App, c.services.Keys, c.services.HTTP, c.promptVars()
@@ -83,6 +87,18 @@ func (c *ChatTab) startRun() {
 }
 
 // stop cancels the run in progress.
+// tokens is how many tokens the run has written: the usage the provider
+// reported, or while a call streams, an estimate from its text.
+func (r *activeRun) tokens() int {
+	return r.outputTokens + r.callTokens()
+}
+
+// callTokens is the current call's output: as reported, or about four
+// bytes of text per token until it is.
+func (r *activeRun) callTokens() int {
+	return max(r.callUsage.OutputTokens, r.streamedBytes/4)
+}
+
 func (c *ChatTab) stop() {
 	if c.run != nil {
 		c.run.cancel()

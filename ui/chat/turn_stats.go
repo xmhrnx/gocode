@@ -56,10 +56,11 @@ func turnStatsLabel(c *ChatTab, index int) giode.Element {
 		giode.Text(text, giode.Styles{Color: theme.Faint, FontSize: theme.Sizes.Tiny}))
 }
 
-// formatDuration shows a duration in seconds, or minutes and seconds.
+// formatDuration shows a turn's length: tenths of a second under a
+// minute, then as the working time is shown.
 func formatDuration(d time.Duration) string {
 	if d < time.Minute {
-		return fmt.Sprintf("%.1f s", d.Seconds())
+		return fmt.Sprintf("%.1fs", d.Seconds())
 	}
-	return fmt.Sprintf("%d min %d s", int(d.Minutes()), int(d.Seconds())%60)
+	return workingTime(d)
 }

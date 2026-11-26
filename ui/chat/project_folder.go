@@ -5,13 +5,13 @@ import (
 )
 
 // ensureFolder gives a chat without a folder a new one in the projects
-// folder, named after its first message, and reports whether the chat
-// has a folder now.
-func (c *ChatTab) ensureFolder(firstMessage string) bool {
+// folder, named after the chat, and reports whether the chat has a
+// folder now.
+func (c *ChatTab) ensureFolder(name string) bool {
 	if c.session.WorkDir != "" {
 		return true
 	}
-	dir, err := projects.Create(c.projectsDir(), firstMessage)
+	dir, err := projects.Create(c.projectsDir(), name)
 	if err != nil {
 		c.services.Error("Couldn't create a folder for this chat: " + err.Error())
 		return false

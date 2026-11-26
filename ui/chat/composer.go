@@ -58,8 +58,8 @@ func newComposer(tab *ChatTab) *composer {
 // takeMessage empties the composer into a user message; ok is false when
 // there is nothing to send.
 func (c *composer) takeMessage() (llm.Message, bool) {
-	text := c.editor.Text()
-	if len(c.attachments) == 0 && isBlank(text) {
+	text := strings.TrimSpace(c.editor.Text())
+	if len(c.attachments) == 0 && text == "" {
 		return llm.Message{}, false
 	}
 	files := make([]attach.Attachment, len(c.attachments))

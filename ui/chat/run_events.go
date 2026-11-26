@@ -17,8 +17,10 @@ func (c *ChatTab) handleEvent(ev agent.Event) {
 	switch ev.Kind {
 	case agent.EventText:
 		run.draft.AppendText(llm.PartText, ev.Text)
+		run.streamedBytes += len(ev.Text)
 	case agent.EventReasoning:
 		run.draft.AppendText(llm.PartReasoning, ev.Text)
+		run.streamedBytes += len(ev.Text)
 	case agent.EventToolStarted:
 		run.running[ev.Call.ID] = true
 	case agent.EventToolFinished:
@@ -54,7 +56,8 @@ func (c *ChatTab) commitMessage(msg llm.Message) {
 	c.session.Messages = append(c.session.Messages, msg)
 	if msg.Role == llm.RoleAssistant {
 		c.session.Usage = c.session.Usage.Add(c.run.callUsage)
-		c.run.callUsage = llm.Usage{}
+		c.run.outputTokens += c.run.callTokens()
+		c.run.callUsage, c.run.streamedBytes = llm.Usage{}, 0
 		c.run.draft = llm.PartBuilder{}
 	}
 	c.save()
