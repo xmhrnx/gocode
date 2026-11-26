@@ -3,7 +3,9 @@ module gocode
 go 1.26.6
 
 require (
+	github.com/flynn/noise v1.1.0
 	github.com/ledongthuc/pdf v0.0.0-20261020125853-5e46805f718e
+	github.com/psanford/wormhole-william v1.0.8
 	github.com/xmhrnx/giode v1.0.25-alpha.1
 	golang.org/x/image v0.26.0
 	golang.org/x/net v0.48.0
@@ -21,9 +23,14 @@ require (
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/go-text/typesetting v0.3.4 // indirect
 	github.com/godbus/dbus/v5 v5.1.0 // indirect
+	github.com/gorilla/websocket v1.5.3 // indirect
+	github.com/klauspost/compress v1.17.11 // indirect
 	github.com/srwiley/rasterx v0.0.0-20220730225603-2ab79fcdd4ef // indirect
 	github.com/yuin/goldmark v1.4.13 // indirect
+	golang.org/x/crypto v0.46.0 // indirect
 	golang.org/x/exp/shiny v0.0.0-20250408133849-7e4ce0ab07d0 // indirect
 	golang.org/x/sys v0.39.0 // indirect
 	golang.org/x/text v0.32.0 // indirect
+	nhooyr.io/websocket v1.8.17 // indirect
+	salsa.debian.org/vasudev/gospake2 v0.0.0-20210510093858-d91629950ad1 // indirect
 )
