@@ -2,6 +2,7 @@ package settingsview
 
 import (
 	"context"
+	"fmt"
 	"errors"
 	"time"
 
@@ -108,7 +109,7 @@ func (p *pairingControl) Layout(gtx giode.Context) giode.Dimensions {
 				FontFamily: "JetBrains Mono"}),
 			p.copy),
 		giode.Text("Type this code in the GoCode phone app, on the same Wi-Fi as this computer. It works for "+
-			left.String()+" more.", theme.Caption()),
+			fmt.Sprintf("%d:%02d", int(left.Minutes()), int(left.Seconds())%60)+" more.", theme.Caption()),
 		giode.Row(giode.Styles{}, p.cancel),
 	).Layout(gtx)
 }

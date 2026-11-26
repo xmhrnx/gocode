@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"os"
 	"strings"
 
 	"github.com/psanford/wormhole-william/wormhole"
@@ -17,6 +18,19 @@ const AppID = "gocode.dev/remote-pairing"
 // the offer; the code and the server never see the devices' secrets.
 const DefaultServer = "ws://relay.magic-wormhole.io:4000/v1"
 
+// ServerEnv names an environment variable that sets another Magic
+// Wormhole server, such as one you run yourself.
+const ServerEnv = "GOCODE_PAIRING_SERVER"
+
+// serverOr is server, else the one ServerEnv names, else "" for the
+// public one.
+func serverOr(server string) string {
+	if server != "" {
+		return server
+	}
+	return os.Getenv(ServerEnv)
+}
+
 // maxOffer bounds what a phone reads from a wormhole.
 const maxOffer = 64 << 10
 
@@ -27,7 +41,7 @@ func Send(ctx context.Context, server string, o Offer) (code string, done <-chan
 	if err != nil {
 		return "", nil, err
 	}
-	client := wormhole.Client{AppID: AppID, RendezvousURL: server}
+	client := wormhole.Client{AppID: AppID, RendezvousURL: serverOr(server)}
 	code, status, err := client.SendText(ctx, text)
 	if err != nil {
 		return "", nil, fmt.Errorf("couldn't reach the pairing server: %w", err)
@@ -46,7 +60,7 @@ func Send(ctx context.Context, server string, o Offer) (code string, done <-chan
 // Receive takes the offer sent under code through server (empty: the
 // public one).
 func Receive(ctx context.Context, server, code string) (Offer, error) {
-	client := wormhole.Client{AppID: AppID, RendezvousURL: server}
+	client := wormhole.Client{AppID: AppID, RendezvousURL: serverOr(server)}
 	msg, err := client.Receive(ctx, strings.TrimSpace(code))
 	if err != nil {
 		return Offer{}, fmt.Errorf("couldn't get the offer: %w", err)

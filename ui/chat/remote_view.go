@@ -56,6 +56,8 @@ func (c *ChatTab) RemoteView() wire.ChatView {
 // remoteRows lays the conversation and notices out as rows.
 func (c *ChatTab) remoteRows() []wire.Row {
 	var rows []wire.Row
+	// The transcript's own index is only fresh while the tab is shown.
+	results := indexToolResults(c.session.Messages)
 	notices := c.notices
 	addNotices := func(before int) {
 		for len(notices) > 0 && notices[0].after <= before {
@@ -65,16 +67,16 @@ func (c *ChatTab) remoteRows() []wire.Row {
 	}
 	for i, msg := range c.session.Messages {
 		addNotices(i)
-		rows = c.appendRemoteRows(rows, msg)
+		rows = c.appendRemoteRows(rows, msg, results)
 	}
 	addNotices(len(c.session.Messages))
 	if c.run != nil {
-		rows = c.appendRemoteRows(rows, c.run.draftMessage())
+		rows = c.appendRemoteRows(rows, c.run.draftMessage(), results)
 	}
 	return rows
 }
 
-func (c *ChatTab) appendRemoteRows(rows []wire.Row, msg llm.Message) []wire.Row {
+func (c *ChatTab) appendRemoteRows(rows []wire.Row, msg llm.Message, results map[string]*llm.ToolResult) []wire.Row {
 	if msg.Role == llm.RoleUser {
 		if hasUserContent(msg) {
 			rows = append(rows, wire.Row{Kind: wire.RowUser, Text: clipText(userText(msg))})
@@ -86,9 +88,9 @@ func (c *ChatTab) appendRemoteRows(rows []wire.Row, msg llm.Message) []wire.Row 
 		case part.Kind == llm.PartText && strings.TrimSpace(part.Text) != "":
 			rows = append(rows, wire.Row{Kind: wire.RowText, Text: clipText(part.Text)})
 		case part.Kind == llm.PartReasoning && part.Text != "":
-			rows = append(rows, wire.Row{Kind: wire.RowReasoning, Text: clipText(part.Text)})
+			rows = append(rows, wire.Row{Kind: wire.RowReasoning, Text: clipEnd(part.Text)})
 		case part.Kind == llm.PartToolCall && part.ToolCall != nil:
-			rows = append(rows, c.remoteToolRow(*part.ToolCall))
+			rows = append(rows, c.remoteToolRow(*part.ToolCall, results))
 		case part.Kind == llm.PartMedia && part.Media != nil:
 			rows = append(rows, wire.Row{Kind: wire.RowMedia, Text: part.Media.Name})
 		case part.Kind == llm.PartProvider && part.Text != "":
@@ -98,9 +100,15 @@ func (c *ChatTab) appendRemoteRows(rows []wire.Row, msg llm.Message) []wire.Row 
 	return rows
 }
 
-func (c *ChatTab) remoteToolRow(call llm.ToolCall) wire.Row {
+func (c *ChatTab) remoteToolRow(call llm.ToolCall, results map[string]*llm.ToolResult) wire.Row {
 	row := wire.Row{Kind: wire.RowTool, Tool: call.Name, Text: c.toolSummary(call.Name, call.Arguments), State: wire.StateRunning}
-	if result := c.toolResult(call.ID); result != nil {
+	result := results[call.ID]
+	if result == nil && c.run != nil {
+		if finished, ok := c.run.finished[call.ID]; ok {
+			result = &finished
+		}
+	}
+	if result != nil {
 		row.State = wire.StateDone
 		if result.IsError {
 			row.State = wire.StateFailed
@@ -137,6 +145,19 @@ func clipText(text string) string {
 		cut--
 	}
 	return text[:cut] + "\n…"
+}
+
+// clipEnd keeps a phone's copy of a long text to its end, for reasoning,
+// whose latest lines matter while it streams.
+func clipEnd(text string) string {
+	if len(text) <= remoteText {
+		return text
+	}
+	cut := len(text) - remoteText
+	for cut < len(text) && !utf8Start(text[cut]) {
+		cut++
+	}
+	return "…" + text[cut:]
 }
 
 func utf8Start(b byte) bool { return b&0xC0 != 0x80 }

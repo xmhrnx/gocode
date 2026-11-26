@@ -129,3 +129,25 @@ working: Mac 2880 × 1800 (or 1440 × 900), Microsoft Store 1920 × 1080.
 The `.deb` and `.rpm` are attached to the release, and the website's download
 button offers the right one. They list the system libraries they need, so
 `apt` and `dnf` install those too.
+
+## Phone app (GoCode Remote)
+
+The phone app is in `mobile/`, with its own `giode.toml` (app ID
+`dev.gocode.remote`, Android and iOS). It isn't built by the release
+workflow. Build it from that folder:
+
+```sh
+cd mobile
+giode build android            # an .apk to test; -release for Play
+giode build ios                # needs a Mac with Xcode
+```
+
+- **Pairing** goes through the public Magic Wormhole server. To use your own,
+  set `GOCODE_PAIRING_SERVER` to its WebSocket address on both devices.
+- **Away from home**, phones reach a desktop through the relay Worker in
+  `relay/` while one of its chats is working. Deploy it as `relay/README.md`
+  says and put its address in Settings → Phone.
+- **iOS** asks for local network access the first time; the reason is set in
+  `giode.toml`. Finding a desktop by broadcast on iOS needs Apple's multicast
+  networking entitlement. Without it, the phone still reaches the desktop at
+  the addresses it had when pairing, and through the relay.
